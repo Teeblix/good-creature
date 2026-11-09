@@ -26,3 +26,6 @@ dist-ssr
 # Original Figma PNG exports — re-encoded to WebP by scripts/optimise-images.mjs.
 # Figma is the source of truth; these are kept locally only.
 assets-source
+
+# Generated submission bundles
+submission
