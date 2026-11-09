@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Brand palette, taken from the Figma styles */
+  --color-ink: #171717; /* text black-500 */
+  --color-ink-soft: #454545; /* text black-400 */
+  --color-cream: #f5f5f5; /* text white-500 / page background */
+  --color-navy: #23425a; /* primary button */
+  --color-sand: #f7eedf; /* services section background */
+  --color-plum: #52182e; /* service + approach number badge */
+  --color-powder: #d3e1fc; /* journey step badge */
+  --color-line: #d8d8d8; /* journey card border */
+
+  --font-display: 'Viaoda Libre', serif;
+  --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
