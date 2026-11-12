@@ -176,7 +176,10 @@ function PinnedStage() {
             </motion.p>
           </div>
 
-          <div className="relative flex min-h-[474px] w-full max-w-[1352px] items-center justify-between">
+          {/* The row has to be at least as tall as the doorway, or the arch —
+              which is centred on it and taller than the cards — overhangs the
+              top edge and swallows the gap below the heading. */}
+          <div className="relative flex min-h-[min(586px,62dvh)] w-full max-w-[1352px] items-center justify-between">
             <div className="flex flex-col gap-[30px]">
               {CARDS.filter((card) => card.side === 'left').map((card) => (
                 <ScrollCard
