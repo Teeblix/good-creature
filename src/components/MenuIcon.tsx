@@ -8,9 +8,9 @@ type MenuIconProps = {
  * The vuesax menu glyph rebuilt as three bars so they can move independently:
  * 19.5 × 1.5px, 5px apart, matching the exported SVG's geometry.
  *
- * Opening, the middle bar slides out of the frame first and the outer two then
- * swing together into a cross. Closing runs it back the other way, the middle
- * bar returning last.
+ * Opening, the middle bar nudges 4px to the right and fades, and the outer two
+ * then swing together into a cross. Closing runs it back the other way, the
+ * middle bar returning last.
  */
 export function MenuIcon({ open, tone }: MenuIconProps) {
   const bar =
@@ -26,7 +26,7 @@ export function MenuIcon({ open, tone }: MenuIconProps) {
       />
       <span
         className={`${bar} ${middle} top-[11.25px] ${
-          open ? 'translate-x-[28px] opacity-0' : 'translate-x-0 opacity-100'
+          open ? 'translate-x-[4px] opacity-0' : 'translate-x-0 opacity-100'
         }`}
       />
       <span
