@@ -46,7 +46,11 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px]"
+      // Pinned from the xl breakpoint up so the sections that follow ride up
+      // over it. The offset holds the whole hero on screen first: it scrolls
+      // until its bottom meets the viewport bottom, then sticks.
+      data-sticky-hero
+      className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px] xl:sticky xl:top-[min(0px,calc(100dvh-994px))] xl:z-0"
       data-node-id="96:9714"
     >
       {/* Photograph, easing out of a slow zoom, under the design's scrims.

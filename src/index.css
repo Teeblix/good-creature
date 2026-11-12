@@ -35,4 +35,9 @@ body {
   html {
     scroll-behavior: auto;
   }
+
+  /* The sections riding over a pinned hero is motion too — let it scroll. */
+  [data-sticky-hero] {
+    position: static;
+  }
 }

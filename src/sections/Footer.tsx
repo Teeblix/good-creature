@@ -87,7 +87,11 @@ const COLUMNS: Column[] = [
 
 export function Footer() {
   return (
-    <footer id="contact" className="flex w-full items-center bg-sand" data-node-id="61:53961">
+    <footer
+      id="contact"
+      className="relative z-10 flex w-full items-center bg-sand"
+      data-node-id="61:53961"
+    >
       <div className="mx-auto flex w-full max-w-[1920px] flex-1 items-center px-4 py-15 lg:p-20">
         <div className="flex w-full flex-1 flex-col items-start gap-10">
           <div className="flex w-full flex-col items-start gap-5">

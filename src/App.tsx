@@ -16,14 +16,18 @@ function App() {
       <NavigationBar />
       <main>
         <Hero />
-        <TrustStrip />
-        <About />
-        <Services />
-        <Journey />
-        <Approach />
-        <Testimonials />
-        <Faq />
-        <Cta />
+        {/* Everything after the hero shares one opaque layer, so it slides up
+            over the pinned hero instead of scrolling alongside it. */}
+        <div className="relative z-10">
+          <TrustStrip />
+          <About />
+          <Services />
+          <Journey />
+          <Approach />
+          <Testimonials />
+          <Faq />
+          <Cta />
+        </div>
       </main>
       <Footer />
     </>
