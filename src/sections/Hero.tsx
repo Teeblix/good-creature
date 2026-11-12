@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { useEffect, useState } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
 import { StaggerLines } from '../components/StaggerLines'
 import { StaggerText } from '../components/StaggerText'
@@ -42,15 +43,33 @@ const FACTS = [
 
 export function Hero() {
   const reduceMotion = useReducedMotion()
+  const { scrollY } = useScroll()
+
+  // The hero keeps moving as the page scrolls, just slower than the sections
+  // that follow — so they gradually ride over it. Laptops and desktops only.
+  const [drift, setDrift] = useState(false)
+  useEffect(() => {
+    const query = window.matchMedia(
+      '(min-width: 1280px) and (prefers-reduced-motion: no-preference)',
+    )
+    const update = () => setDrift(query.matches)
+    update()
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
+
+  // Over one hero's worth of scrolling it travels 180px of its own, which puts
+  // it at roughly four fifths of the page's pace.
+  const driftY = useTransform(scrollY, [0, 994], [0, -180], { clamp: true })
 
   return (
-    <section
+    <motion.section
       id="top"
-      // Pinned from the xl breakpoint up so the sections that follow ride up
-      // over it. The offset holds the whole hero on screen first: it scrolls
-      // until its bottom meets the viewport bottom, then sticks.
+      // From the xl breakpoint up the hero is held by the viewport bottom and
+      // then drifts upward under the sections sliding over it.
       data-sticky-hero
       className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px] xl:sticky xl:top-[min(0px,calc(100dvh-994px))] xl:z-0"
+      style={drift ? { y: driftY } : undefined}
       data-node-id="96:9714"
     >
       {/* Photograph, easing out of a slow zoom, under the design's scrims.
@@ -151,6 +170,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }
