@@ -9,6 +9,11 @@ type StaggerTextProps = {
   playOnMount?: boolean
   stagger?: number
   delay?: number
+  /**
+   * 'mask' slides each line up out of a hidden row; 'blur' resolves it out of
+   * a blur in place, with no edge for it to travel past.
+   */
+  variant?: 'mask' | 'blur'
 }
 
 /**
@@ -25,6 +30,7 @@ export function StaggerText({
   playOnMount = false,
   stagger = 0.1,
   delay = 0,
+  variant = 'mask',
 }: StaggerTextProps) {
   const reduceMotion = useReducedMotion()
   const measureRef = useRef<HTMLSpanElement>(null)
@@ -95,17 +101,35 @@ export function StaggerText({
           aria-label={text}
         >
           {lines.map((line, index) => (
-            <span key={index} className="block overflow-hidden" aria-hidden>
+            <span
+              key={index}
+              className={variant === 'mask' ? 'block overflow-hidden' : 'block'}
+              aria-hidden
+            >
               <motion.span
                 className="block"
-                variants={{
-                  hidden: reduceMotion ? { opacity: 0 } : { y: '110%', opacity: 0 },
-                  visible: {
-                    y: '0%',
-                    opacity: 1,
-                    transition: { duration: reduceMotion ? 0.3 : 0.8, ease: EASE_OUT },
-                  },
-                }}
+                variants={
+                  variant === 'mask'
+                    ? {
+                        hidden: reduceMotion ? { opacity: 0 } : { y: '110%', opacity: 0 },
+                        visible: {
+                          y: '0%',
+                          opacity: 1,
+                          transition: { duration: reduceMotion ? 0.3 : 0.8, ease: EASE_OUT },
+                        },
+                      }
+                    : {
+                        hidden: reduceMotion
+                          ? { opacity: 0 }
+                          : { y: '0.5em', opacity: 0, filter: 'blur(7px)' },
+                        visible: {
+                          y: '0em',
+                          opacity: 1,
+                          filter: 'blur(0px)',
+                          transition: { duration: reduceMotion ? 0.3 : 0.7, ease: EASE_OUT },
+                        },
+                      }
+                }
               >
                 {line}
               </motion.span>
