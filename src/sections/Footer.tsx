@@ -97,7 +97,7 @@ export function Footer() {
           <div className="flex w-full flex-col items-start gap-5">
             <StaggerLines
               as="h2"
-              lines={['Small steps. A kinder visit.']}
+              lines={['Small Steps. A Kinder Visit.']}
               className="w-full font-display text-[36px] text-black lg:text-[60px] lg:leading-[72.7px]"
             />
 

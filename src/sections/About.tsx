@@ -15,14 +15,14 @@ import dogMotif from '../assets/about-dog.webp'
 
 /** The statement, authored line by line — the stagger is per line, never per word. */
 const HEADLINE: ReactNode[] = [
-  'A small practice built',
+  'A Small Practice Built',
   <>
-    around <span className="text-ember">calm</span> care
+    Around <span className="text-ember">Calm</span> Care
   </>,
 ]
 
 /** The same sentence as plain text, for screen readers and the still version. */
-const HEADLINE_TEXT = 'A small practice built around calm care'
+const HEADLINE_TEXT = 'A Small Practice Built Around Calm Care'
 
 /**
  * The paragraph that takes its place in the same spot, also authored by line.
@@ -227,7 +227,7 @@ function StillStatement() {
         className="pointer-events-none absolute bottom-[9vh] right-[5vw] w-[clamp(84px,10vw,184px)] -scale-x-100"
       />
       <h2 className="relative w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink sm:text-[52px] lg:text-[76px]">
-        A small practice built around <span className="text-ember">calm</span> care
+        A Small Practice Built Around <span className="text-ember">Calm</span> Care
       </h2>
       <p className="relative w-full max-w-[1000px] text-center font-sans text-[18px] leading-[1.5] text-ink-soft sm:text-[27px] lg:text-[40px] lg:leading-[1.35]">
         {BODY.join(' ')}

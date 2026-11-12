@@ -157,7 +157,7 @@ export function Services() {
               <StaggerLines
                 as="h2"
                 id="services-heading"
-                lines={['Care for every', 'stage of their life.']}
+                lines={['Care for Every', 'Stage of Their Life.']}
                 className="w-full max-w-[650px] font-display text-[36px] text-ink lg:text-[60px] lg:leading-[72.7px]"
               />
               <Reveal delay={0.15}>

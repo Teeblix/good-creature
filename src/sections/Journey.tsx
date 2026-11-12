@@ -57,7 +57,7 @@ export function Journey() {
               <StaggerLines
                 as="h2"
                 id="journey-heading"
-                lines={['One small step at a time.']}
+                lines={['One Small Step at a Time.']}
                 className="w-full max-w-[650px] font-display text-[36px] text-ink lg:text-[60px] lg:leading-[72.7px]"
               />
               <Reveal delay={0.15}>

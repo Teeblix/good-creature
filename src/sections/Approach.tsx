@@ -44,7 +44,7 @@ export function Approach() {
                 <StaggerLines
                   as="h2"
                   id="approach-heading"
-                  lines={['Kind people, brave', 'creatures.']}
+                  lines={['Kind People, Brave', 'Creatures.']}
                   className="w-full font-display text-[36px] text-ink lg:text-[60px] lg:leading-[72.7px]"
                 />
               </div>

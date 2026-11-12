@@ -120,7 +120,7 @@ export function Hero() {
         {/* Headline */}
         <h1 className="w-full max-w-[850px] font-grotesk leading-[1.15] text-cream">
           <StaggerText
-            text="Braver Visits Start with Kinder Care"
+            text="Braver Visits Start With Kinder Care"
             playOnMount
             delay={0.35}
             className="block text-[46px] lg:hidden"
@@ -128,7 +128,7 @@ export function Hero() {
           <StaggerLines
             playOnMount
             delay={0.35}
-            lines={['Braver Visits', 'Start with Kinder Care']}
+            lines={['Braver Visits', 'Start With Kinder Care']}
             className="hidden text-[80px] lg:block"
           />
         </h1>

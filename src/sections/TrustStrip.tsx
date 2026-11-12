@@ -174,7 +174,7 @@ function PinnedStage() {
               style={{ opacity: headingOpacity, y: headingY, filter: headingBlur }}
               className="max-w-[650px] font-grotesk text-[60px] leading-[70px] text-ink"
             >
-              Why families stay
+              Why Families Stay
             </motion.h2>
             <motion.p
               style={{ opacity: subOpacity, y: subY }}
@@ -234,7 +234,7 @@ function StackedCards() {
     <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-10 px-4 py-15 md:px-10">
       <div className="flex w-full flex-col items-center gap-1 text-center">
         <h2 className="max-w-[650px] font-grotesk text-[36px] leading-[1.14] text-ink md:text-[48px]">
-          Why families stay
+          Why Families Stay
         </h2>
         <p className="max-w-[400px] text-[16px] text-ink-soft">
           Fast answers, gentle handling and prices agreed before treatment.

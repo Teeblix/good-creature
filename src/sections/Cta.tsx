@@ -35,7 +35,7 @@ export function Cta() {
             <StaggerLines
               as="h2"
               id="cta-heading"
-              lines={['Ready when you are.']}
+              lines={['Ready When You Are.']}
               className="w-full max-w-[650px] font-display text-[36px] text-ink lg:text-[60px] lg:leading-[72.7px]"
             />
             <Reveal delay={0.15}>

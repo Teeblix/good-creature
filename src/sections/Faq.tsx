@@ -51,7 +51,7 @@ export function Faq() {
               <StaggerLines
                 as="h2"
                 id="faq-heading"
-                lines={['Good questions,', 'straight answers.']}
+                lines={['Good Questions,', 'Straight Answers.']}
                 className="w-full max-w-[650px] font-display text-[36px] text-ink lg:text-[60px] lg:leading-[72.7px]"
               />
               <Reveal delay={0.15}>
