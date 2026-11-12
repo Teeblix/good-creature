@@ -13,6 +13,9 @@
 
   --font-display: 'Viaoda Libre', serif;
   --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  /* Stand-in for Neue Montreal, which the redesign uses but is a commercial
+     licence with no CDN. Switzer is the closest free neo-grotesque. */
+  --font-grotesk: 'Switzer', ui-sans-serif, system-ui, sans-serif;
 }
 
 html {

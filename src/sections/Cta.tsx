@@ -28,7 +28,7 @@ export function Cta() {
         className="pointer-events-none absolute inset-0 size-full max-w-none object-cover"
       />
 
-      <div className="relative mx-auto flex w-full max-w-[1512px] flex-col items-center justify-center gap-6 px-4 py-15 lg:p-20">
+      <div className="relative mx-auto flex w-full max-w-[1920px] flex-col items-center justify-center gap-6 px-4 py-15 lg:p-20">
         <div className="flex w-full flex-col items-center gap-1">
           <Eyebrow tone="dark">Let’s get started</Eyebrow>
           <div className="flex w-full flex-col items-center justify-center gap-1 text-center">

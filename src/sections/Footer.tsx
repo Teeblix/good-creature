@@ -88,7 +88,7 @@ const COLUMNS: Column[] = [
 export function Footer() {
   return (
     <footer id="contact" className="flex w-full items-center bg-sand" data-node-id="61:53961">
-      <div className="mx-auto flex w-full max-w-[1512px] flex-1 items-center px-4 py-15 lg:p-20">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 items-center px-4 py-15 lg:p-20">
         <div className="flex w-full flex-1 flex-col items-start gap-10">
           <div className="flex w-full flex-col items-start gap-5">
             <StaggerLines
@@ -125,8 +125,9 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Oversized wordmark — 149px at the 1512px design width, scaled below it */}
-          <p className="w-full font-display text-[36px] text-ink lg:text-[min(9.85vw,149px)]">
+          {/* Oversized wordmark — scales with the container, capped so it spans
+              the 1920px max width without overflowing */}
+          <p className="w-full font-display text-[36px] text-ink lg:text-[min(9.85vw,194px)]">
             © 2026 Good Creature
           </p>
         </div>

@@ -15,7 +15,9 @@ const ARCHIVE = 'assets-source'
 
 /** Target width in CSS pixels × 2, capped at the export's own width. */
 const WIDTHS = {
-  'hero-desktop': 2400, // full-bleed background
+  'hero-desktop': 2400, // full-bleed background (superseded by hero-v2)
+  'hero-v2': 1512, // redesigned hero background, exported at 1512
+  'logo-v2': 128, // 44×46 wordmark lockup
   cta: 2400, // full-bleed background
   approach: 2400, // full-width illustration
   about: 1400, // half-width column, 845px tall

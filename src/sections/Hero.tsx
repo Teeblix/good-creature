@@ -1,9 +1,36 @@
 import { motion, useReducedMotion } from 'motion/react'
-import { Button } from '../components/Button'
-import { Eyebrow } from '../components/Eyebrow'
+import { ArrowButton } from '../components/ArrowButton'
 import { StaggerLines } from '../components/StaggerLines'
 import { EASE_OUT } from '../lib/motion'
-import heroImage from '../assets/hero-desktop.webp'
+import heroImage from '../assets/hero-v2.webp'
+import clockIcon from '../assets/icon-clock.svg'
+import heartIcon from '../assets/icon-heart.svg'
+import tickIcon from '../assets/icon-tick-circle.svg'
+
+/** The four stacked scrims from the design, which sit over the photograph. */
+const SCRIM =
+  'linear-gradient(0deg, rgba(36, 18, 8, 0.78) 0%, rgba(36, 18, 8, 0.5) 30%, rgba(36, 18, 8, 0.1) 65%, rgba(36, 18, 8, 0) 100%), ' +
+  'linear-gradient(180deg, rgba(36, 18, 8, 0.45) 0%, rgba(36, 18, 8, 0.15) 40%, rgba(36, 18, 8, 0) 100%), ' +
+  'linear-gradient(90deg, rgba(36, 18, 8, 0.5) 0%, rgba(36, 18, 8, 0.3) 50%, rgba(36, 18, 8, 0) 80%), ' +
+  'linear-gradient(90deg, rgba(36, 18, 8, 0.05) 0%, rgba(36, 18, 8, 0.05) 100%)'
+
+const FACTS = [
+  {
+    icon: clockIcon,
+    title: 'Same day sick visits',
+    body: 'Unwell pets seen without delay',
+  },
+  {
+    icon: heartIcon,
+    title: 'Quiet, patient handling',
+    body: 'Calm rooms and no rushing, so nervous pets settle',
+  },
+  {
+    icon: tickIcon,
+    title: 'Prices agreed first',
+    body: 'You approve every plan and cost before we begin',
+  },
+]
 
 export function Hero() {
   const reduceMotion = useReducedMotion()
@@ -11,66 +38,85 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[866px] w-full flex-col items-center justify-end overflow-hidden"
-      data-node-id="61:52667"
+      className="relative flex min-h-[760px] w-full flex-col overflow-hidden lg:min-h-[994px]"
+      data-node-id="96:9714"
     >
-      {/* Background image — a subtle settle on load, plus the 25% scrim from the design */}
+      {/* Photograph, easing out of a slow zoom, under the design's scrims */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <motion.img
           src={heroImage}
           alt=""
           fetchPriority="high"
-          initial={reduceMotion ? { opacity: 1 } : { scale: 1.08, opacity: 0 }}
+          initial={reduceMotion ? { opacity: 1, scale: 1 } : { scale: 1.12, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: reduceMotion ? 0.3 : 1.6, ease: EASE_OUT }}
+          transition={{
+            scale: { duration: reduceMotion ? 0 : 2.4, ease: EASE_OUT },
+            opacity: { duration: reduceMotion ? 0.3 : 1.2, ease: EASE_OUT },
+          }}
           className="absolute inset-0 size-full max-w-none object-cover"
         />
-        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0" style={{ backgroundImage: SCRIM }} />
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-[1512px] flex-col items-start px-4 py-10 lg:px-20">
-        <div className="flex w-full flex-col items-start justify-center gap-10 lg:flex-row lg:items-end lg:gap-10">
-          {/* Headline block */}
-          <div className="flex w-full flex-col items-start gap-1 lg:min-w-0 lg:flex-1">
-            <Eyebrow tone="light" playOnMount>
-              Gentle vet care
-            </Eyebrow>
+      <div className="relative mx-auto flex w-full max-w-[1920px] flex-1 flex-col justify-between gap-16 px-4 pt-[120px] pb-10 lg:px-20">
+        {/* Headline */}
+        <StaggerLines
+          as="h1"
+          playOnMount
+          delay={0.35}
+          lines={['Braver Visits', 'Start with Kinder Care']}
+          className="w-full max-w-[850px] font-grotesk text-[40px] leading-[1.15] text-cream sm:text-[56px] lg:text-[80px]"
+        />
 
-            <div className="flex w-full flex-col items-start gap-[11px] text-cream lg:gap-6">
-              <StaggerLines
-                as="h1"
-                playOnMount
-                delay={0.15}
-                lines={['Braver visits.', 'Happier days ahead.']}
-                className="w-full max-w-[850px] font-display text-[56px] leading-tight lg:text-[100px] lg:leading-[110px]"
-              />
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
+        {/* Reassurances left, promise and call to action right */}
+        <div className="flex w-full flex-col items-start justify-between gap-10 lg:flex-row lg:items-end">
+          <ul className="flex w-full flex-col items-start justify-center gap-5 lg:w-[380px] lg:max-w-[380px] lg:shrink-0">
+            {FACTS.map((fact, index) => (
+              <motion.li
+                key={fact.title}
+                className="flex w-full items-center gap-3"
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: reduceMotion ? 0.3 : 0.8, ease: EASE_OUT, delay: 0.55 }}
-                className="w-full max-w-[550px] text-[18px]"
+                transition={{
+                  duration: reduceMotion ? 0.3 : 0.7,
+                  ease: EASE_OUT,
+                  delay: 0.9 + index * 0.12,
+                }}
               >
-                Calm, skilled veterinary care for your pet, and clear answers for you. We take every
-                visit one small step at a time, so nervous paws and worried owners feel at ease from
-                the first hello.
-              </motion.p>
+                <img src={fact.icon} alt="" className="size-10 shrink-0" />
+                <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 text-cream">
+                  <p className="w-full font-grotesk text-[18px] font-medium">{fact.title}</p>
+                  <p className="w-full text-[14px]">{fact.body}</p>
+                </div>
+              </motion.li>
+            ))}
+          </ul>
+
+          <div className="flex w-full flex-col justify-center lg:min-w-0 lg:flex-1 lg:items-end">
+            {/* 632px in the design; Switzer sets wider than Neue Montreal, so the
+                box is widened just enough to keep the design's two-line break. */}
+            <div className="flex w-full flex-col items-start justify-center gap-6 lg:w-[680px]">
+              <StaggerLines
+                as="p"
+                playOnMount
+                delay={0.6}
+                lines={[
+                  'We take every step with you and your pet,',
+                  'and nothing happens until you say yes',
+                ]}
+                className="w-full font-grotesk text-[24px] leading-[1.25] text-cream lg:text-[36px]"
+              />
+              <motion.div
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: reduceMotion ? 0.3 : 0.7, ease: EASE_OUT, delay: 1.15 }}
+              >
+                <ArrowButton variant="light" href="#plan-a-visit">
+                  Book a visit
+                </ArrowButton>
+              </motion.div>
             </div>
           </div>
-
-          {/* Call to action */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduceMotion ? 0.3 : 0.8, ease: EASE_OUT, delay: 0.7 }}
-            className="flex w-[196px] shrink-0 flex-col items-start gap-3"
-          >
-            <Button variant="light" href="#plan-a-visit" className="w-full">
-              Plan your first visit
-            </Button>
-            <p className="w-full text-[14px] text-cream lg:text-right">
-              Same day sick visits available. Call [000 000 0000].
-            </p>
-          </motion.div>
         </div>
       </div>
     </section>

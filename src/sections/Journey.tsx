@@ -48,7 +48,7 @@ export function Journey() {
       data-node-id="61:53145"
       aria-labelledby="journey-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1512px] flex-col items-start px-4 py-15 lg:p-20">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-col items-start px-4 py-15 lg:p-20">
         <div className="flex w-full flex-col items-center gap-[50px]">
           {/* Section header */}
           <div className="flex w-full flex-col items-center gap-1">

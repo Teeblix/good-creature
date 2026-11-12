@@ -34,7 +34,7 @@ export function Approach() {
       data-node-id="61:53143"
       aria-labelledby="approach-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1512px] flex-col items-start px-4 py-15 lg:p-20">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-col items-start px-4 py-15 lg:p-20">
         <div className="flex w-full flex-col items-start gap-10 lg:gap-20">
           <div className="flex w-full flex-col items-start gap-10 lg:gap-20">
             {/* Heading left, supporting copy right */}

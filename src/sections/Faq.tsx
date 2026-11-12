@@ -42,7 +42,7 @@ export function Faq() {
       data-node-id="61:53520"
       aria-labelledby="faq-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1512px] flex-1 items-center px-4 py-15 lg:p-20">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 items-center px-4 py-15 lg:p-20">
         <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row">
           {/* Heading */}
           <div className="flex w-full flex-col items-start justify-center gap-1 lg:min-w-0 lg:flex-1">

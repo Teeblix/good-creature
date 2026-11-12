@@ -8,7 +8,7 @@ import aboutImage from '../assets/about.webp'
 export function About() {
   return (
     <section id="about-us" className="w-full bg-cream" data-node-id="61:52682">
-      <div className="mx-auto flex w-full max-w-[1512px] flex-col items-start px-4 py-15 lg:p-20">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-col items-start px-4 py-15 lg:p-20">
         <div className="flex w-full flex-col items-center justify-center gap-[50px] lg:flex-row">
           {/* Image — wipes in from the left edge rightward */}
           <div className="w-full p-2.5 lg:min-w-0 lg:flex-1">

@@ -148,7 +148,7 @@ export function Services() {
       data-node-id="61:52715"
       aria-labelledby="services-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1512px] flex-1 items-center px-4 py-15 lg:p-20">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 items-center px-4 py-15 lg:p-20">
         <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row">
           {/* Left column — pins 100px below the top while the cards scroll past */}
           <div className="flex w-full flex-col items-start justify-center gap-1 lg:sticky lg:top-[100px] lg:w-[617px] lg:shrink-0 lg:self-start">
