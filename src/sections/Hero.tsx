@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
 import { StaggerLines } from '../components/StaggerLines'
@@ -23,6 +23,9 @@ const SCRIM_MOBILE =
   'linear-gradient(180deg, rgba(36, 18, 8, 0.5) 0%, rgba(36, 18, 8, 0.22) 40%, rgba(36, 18, 8, 0) 100%), ' +
   'linear-gradient(90deg, rgba(36, 18, 8, 0.08) 0%, rgba(36, 18, 8, 0.08) 100%)'
 
+/** How far the hero falls behind the page: 0.1 leaves it running at 90%. */
+const LAG = 0.1
+
 const FACTS = [
   {
     icon: clockIcon,
@@ -45,8 +48,10 @@ export function Hero() {
   const reduceMotion = useReducedMotion()
   const { scrollY } = useScroll()
 
-  // The hero keeps moving as the page scrolls, just slower than the sections
-  // that follow — so they gradually ride over it. Laptops and desktops only.
+  // The hero scrolls at 90% of the page's pace, so the sections that follow
+  // gradually ride over it by the 10% it lags. Laptops and desktops only.
+  const sectionRef = useRef<HTMLElement>(null)
+  const [height, setHeight] = useState(994)
   const [drift, setDrift] = useState(false)
   useEffect(() => {
     const query = window.matchMedia(
@@ -58,17 +63,27 @@ export function Hero() {
     return () => query.removeEventListener('change', update)
   }, [])
 
-  // Over one hero's worth of scrolling it travels 180px of its own, which puts
-  // it at roughly four fifths of the page's pace.
-  const driftY = useTransform(scrollY, [0, 994], [0, -180], { clamp: true })
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    const measure = () => setHeight(section.offsetHeight)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
+  // Holding the hero back by a tenth of what the page has travelled leaves it
+  // moving at 90%, and the overlap is exactly that tenth.
+  const driftY = useTransform(scrollY, [0, height], [0, height * LAG], { clamp: true })
 
   return (
     <motion.section
       id="top"
-      // From the xl breakpoint up the hero is held by the viewport bottom and
-      // then drifts upward under the sections sliding over it.
-      data-sticky-hero
-      className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px] xl:sticky xl:top-[min(0px,calc(100dvh-994px))] xl:z-0"
+      // From the xl breakpoint up the hero lags the page by a tenth, so the
+      // sections after it overlap it by that much as they come up.
+      ref={sectionRef}
+      className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px] xl:z-0"
       style={drift ? { y: driftY } : undefined}
       data-node-id="96:9714"
     >

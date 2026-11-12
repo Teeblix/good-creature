@@ -37,11 +37,11 @@ export function NavigationBar() {
   openRef.current = open
 
   useEffect(() => {
-    // The bar is transparent while it sits over the hero photograph and takes
-    // a cream fill once it has travelled past it.
+    // Transparent for the whole of the hero. The fill arrives only once the
+    // section after it has reached the top of the viewport.
     const hero = document.getElementById('top')
     const measure = () => {
-      thresholdRef.current = hero ? Math.max(0, hero.offsetHeight - 86) : 600
+      thresholdRef.current = hero ? hero.offsetHeight : 600
     }
     measure()
 
