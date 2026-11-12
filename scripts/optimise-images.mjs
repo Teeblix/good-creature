@@ -17,6 +17,7 @@ const ARCHIVE = 'assets-source'
 const WIDTHS = {
   'hero-desktop': 2400, // full-bleed background (superseded by hero-v2)
   'hero-v2': 1512, // redesigned hero background, exported at 1512
+  'hero-mobile': 900, // portrait crop used below the lg breakpoint
   'logo-v2': 128, // 44×46 wordmark lockup
   cta: 2400, // full-bleed background
   approach: 2400, // full-width illustration

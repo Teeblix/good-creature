@@ -3,17 +3,24 @@ import { ArrowButton } from '../components/ArrowButton'
 import { StaggerLines } from '../components/StaggerLines'
 import { StaggerText } from '../components/StaggerText'
 import { EASE_OUT } from '../lib/motion'
-import heroImage from '../assets/hero-v2.webp'
+import heroDesktop from '../assets/hero-v2.webp'
+import heroMobile from '../assets/hero-mobile.webp'
 import clockIcon from '../assets/icon-clock.svg'
 import heartIcon from '../assets/icon-heart.svg'
 import tickIcon from '../assets/icon-tick-circle.svg'
 
-/** The four stacked scrims from the design, which sit over the photograph. */
-const SCRIM =
+/** The stacked scrims from the design. Mobile uses its own, lighter set —
+ *  the portrait crop carries more of the scene, so it needs less covering. */
+const SCRIM_DESKTOP =
   'linear-gradient(0deg, rgba(36, 18, 8, 0.78) 0%, rgba(36, 18, 8, 0.5) 30%, rgba(36, 18, 8, 0.1) 65%, rgba(36, 18, 8, 0) 100%), ' +
   'linear-gradient(180deg, rgba(36, 18, 8, 0.45) 0%, rgba(36, 18, 8, 0.15) 40%, rgba(36, 18, 8, 0) 100%), ' +
   'linear-gradient(90deg, rgba(36, 18, 8, 0.5) 0%, rgba(36, 18, 8, 0.3) 50%, rgba(36, 18, 8, 0) 80%), ' +
   'linear-gradient(90deg, rgba(36, 18, 8, 0.05) 0%, rgba(36, 18, 8, 0.05) 100%)'
+
+const SCRIM_MOBILE =
+  'linear-gradient(0deg, rgba(36, 18, 8, 0.6) 0%, rgba(36, 18, 8, 0.3) 30%, rgba(36, 18, 8, 0) 60%, rgba(36, 18, 8, 0) 100%), ' +
+  'linear-gradient(180deg, rgba(36, 18, 8, 0.5) 0%, rgba(36, 18, 8, 0.22) 40%, rgba(36, 18, 8, 0) 100%), ' +
+  'linear-gradient(90deg, rgba(36, 18, 8, 0.08) 0%, rgba(36, 18, 8, 0.08) 100%)'
 
 const FACTS = [
   {
@@ -42,21 +49,33 @@ export function Hero() {
       className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px]"
       data-node-id="96:9714"
     >
-      {/* Photograph, easing out of a slow zoom, under the design's scrims */}
+      {/* Photograph, easing out of a slow zoom, under the design's scrims.
+          The source swaps at the lg breakpoint, so only one file is fetched. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <motion.img
-          src={heroImage}
-          alt=""
-          fetchPriority="high"
+        <motion.div
+          className="absolute inset-0"
           initial={reduceMotion ? { opacity: 1, scale: 1 } : { scale: 1.12, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{
             scale: { duration: reduceMotion ? 0 : 2.4, ease: EASE_OUT },
             opacity: { duration: reduceMotion ? 0.3 : 1.2, ease: EASE_OUT },
           }}
-          className="absolute inset-0 size-full max-w-none object-cover"
+        >
+          <picture>
+            <source media="(min-width: 1024px)" srcSet={heroDesktop} />
+            <img
+              src={heroMobile}
+              alt=""
+              fetchPriority="high"
+              className="absolute inset-0 size-full max-w-none object-cover"
+            />
+          </picture>
+        </motion.div>
+        <div className="absolute inset-0 lg:hidden" style={{ backgroundImage: SCRIM_MOBILE }} />
+        <div
+          className="absolute inset-0 hidden lg:block"
+          style={{ backgroundImage: SCRIM_DESKTOP }}
         />
-        <div className="absolute inset-0" style={{ backgroundImage: SCRIM }} />
       </div>
 
       <div className="relative mx-auto flex w-full max-w-[1920px] flex-1 flex-col justify-between gap-16 px-4 pt-[120px] pb-10 lg:px-20">
@@ -114,8 +133,13 @@ export function Hero() {
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduceMotion ? 0.3 : 0.7, ease: EASE_OUT, delay: 1.15 }}
+                className="w-full lg:w-auto"
               >
-                <ArrowButton variant="light" href="#plan-a-visit">
+                <ArrowButton
+                  variant="light"
+                  href="#plan-a-visit"
+                  className="w-full justify-between lg:w-auto lg:justify-center"
+                >
                   Book a visit
                 </ArrowButton>
               </motion.div>
