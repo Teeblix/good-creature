@@ -13,12 +13,23 @@ const variants = {
   primary: { pill: 'bg-navy text-cream', badge: 'bg-cream', arrow: arrowDark },
 } as const
 
+const SLIDE =
+  'transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'
+
 /**
- * Pill button with a circular arrow badge, as used by the redesigned hero and
- * navigation bar. The label rolls on hover like every other button; the badge
- * lifts with it.
+ * Pill button with a circular arrow badge.
+ *
+ * On hover the label rolls upward and the arrow rolls too — but along the 45°
+ * axis it points down, leaving the badge through its own tip while an
+ * identical arrow enters from the opposite corner. The badge itself never
+ * moves; it just clips the two arrows.
  */
-export function ArrowButton({ variant = 'light', className = '', children, ...props }: ArrowButtonProps) {
+export function ArrowButton({
+  variant = 'light',
+  className = '',
+  children,
+  ...props
+}: ArrowButtonProps) {
   const style = variants[variant]
 
   return (
@@ -27,11 +38,23 @@ export function ArrowButton({ variant = 'light', className = '', children, ...pr
       {...props}
     >
       <RollingText>{children}</RollingText>
+
       <span
-        className={`flex size-10 shrink-0 items-center justify-center rounded-full transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0 ${style.badge}`}
+        className={`relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full ${style.badge}`}
       >
-        {/* The design rotates the vuesax arrow-up glyph to point out of the pill */}
-        <img src={style.arrow} alt="" className="size-5 rotate-[45deg]" />
+        {/* Leaves through the tip */}
+        <span
+          className={`absolute inset-0 flex items-center justify-center ${SLIDE} group-hover:translate-x-[80%] group-hover:-translate-y-[80%] group-focus-visible:translate-x-[80%] group-focus-visible:-translate-y-[80%] motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0`}
+        >
+          <img src={style.arrow} alt="" className="size-5 rotate-45" />
+        </span>
+        {/* Follows in from the tail */}
+        <span
+          aria-hidden
+          className={`absolute inset-0 flex -translate-x-[80%] translate-y-[80%] items-center justify-center ${SLIDE} group-hover:translate-x-0 group-hover:translate-y-0 group-focus-visible:translate-x-0 group-focus-visible:translate-y-0 motion-reduce:group-hover:-translate-x-[80%] motion-reduce:group-hover:translate-y-[80%]`}
+        >
+          <img src={style.arrow} alt="" className="size-5 rotate-45" />
+        </span>
       </span>
     </a>
   )
