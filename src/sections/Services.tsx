@@ -103,7 +103,7 @@ export function Services() {
         <div className="flex w-full flex-col gap-3 lg:h-[90dvh] lg:flex-row">
           {/* The card. Headline, list and detail sit at the top, middle and
               bottom of its height, which is the design's three equal gaps. */}
-          <div className="flex w-full flex-col justify-between gap-12 rounded-lg bg-navy p-5 lg:h-full lg:flex-1">
+          <div className="flex w-full flex-col justify-between gap-12 rounded-lg bg-navy p-10 lg:h-full lg:flex-1">
             <StaggerLines
               as="h2"
               lines={['Care for Every', 'Stage of Life']}
