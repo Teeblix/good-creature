@@ -100,7 +100,7 @@ export function Services() {
   return (
     <section id="services" className="w-full bg-cream" data-node-id="61:52715">
       <div className="mx-auto w-full max-w-[1920px] px-4 py-15 lg:p-20">
-        <div className="flex w-full flex-col gap-3 lg:h-[1052px] lg:flex-row">
+        <div className="flex w-full flex-col gap-3 lg:h-[90dvh] lg:flex-row">
           {/* The card. Headline, list and detail sit at the top, middle and
               bottom of its height, which is the design's three equal gaps. */}
           <div className="flex w-full flex-col justify-between gap-12 rounded-lg bg-navy p-5 lg:h-full lg:flex-1">
@@ -121,15 +121,28 @@ export function Services() {
               ))}
             </ul>
 
-            {/* Remounted on change, so the new detail resolves line by line. */}
-            <div className="w-full max-w-[350px] text-[16px] leading-normal text-[#f7f7f7]">
-              <StaggerText
-                key={current.title}
-                text={current.body}
-                playOnMount
-                variant="blur"
-                stagger={0.07}
-              />
+            {/* The detail is remounted on change, so it resolves line by line.
+                All four sit stacked and unpainted underneath to reserve the
+                height of the longest one: without that, a taller detail would
+                squeeze the gaps above it and walk the list of names up the
+                card every time the hover changed. */}
+            <div className="relative w-full max-w-[350px] text-[16px] leading-normal text-[#f7f7f7]">
+              <div aria-hidden className="invisible grid">
+                {SERVICES.map((service) => (
+                  <p key={service.title} className="col-start-1 row-start-1">
+                    {service.body}
+                  </p>
+                ))}
+              </div>
+              <div className="absolute inset-0">
+                <StaggerText
+                  key={current.title}
+                  text={current.body}
+                  playOnMount
+                  variant="blur"
+                  stagger={0.07}
+                />
+              </div>
             </div>
           </div>
 
