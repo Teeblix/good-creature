@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
 import { EASE_OUT } from '../lib/motion'
+import { MenuIcon } from '../components/MenuIcon'
+import { MobileMenu } from '../components/MobileMenu'
 import logo from '../assets/logo-v2.webp'
-import menuIcon from '../assets/icon-menu.svg'
-import closeIcon from '../assets/icon-close.svg'
 
 /**
  * Menu item underline: a hairline that wipes in from the left on hover or
@@ -16,9 +16,6 @@ const NAV_LINK =
   'after:scale-x-0 after:bg-current after:transition-transform after:duration-300 ' +
   'after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 ' +
   'focus-visible:after:scale-x-100 motion-reduce:after:transition-none'
-
-const ICON =
-  'absolute inset-0 size-6 transition-all duration-300 ease-out motion-reduce:transition-none'
 
 export const NAV_LINKS = [
   { label: 'Services', href: '#services' },
@@ -70,6 +67,16 @@ export function NavigationBar() {
     }
   }, [])
 
+  // The full-screen menu owns the viewport while it is open.
+  useEffect(() => {
+    if (!open) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [open])
+
   // Escape closes the overlay, as expected of anything covering the page.
   useEffect(() => {
     if (!open) return
@@ -80,10 +87,11 @@ export function NavigationBar() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [open])
 
-  // Over the photograph everything is white; on the cream fill everything is ink.
+  // Over the photograph — and over the open navy menu — everything is white;
+  // on the cream fill everything is ink.
   const onFill = filled && !open
   const textTone = onFill ? 'text-ink' : 'text-cream'
-  const iconTone = onFill ? '' : 'brightness-0 invert'
+  const barTone = onFill ? 'bg-ink' : 'bg-cream'
 
   const item = {
     hidden: reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 },
@@ -95,6 +103,7 @@ export function NavigationBar() {
   }
 
   return (
+    <>
     <motion.header
       className={`fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300 ease-out ${
         onFill ? 'bg-cream' : 'bg-transparent'
@@ -170,61 +179,13 @@ export function NavigationBar() {
             >
               {open ? 'Close' : 'Menu'}
             </span>
-            <span className="relative block size-6">
-              <img
-                src={menuIcon}
-                alt=""
-                className={`${ICON} ${iconTone} ${open ? 'rotate-90 opacity-0' : 'rotate-0 opacity-100'}`}
-              />
-              <img
-                src={closeIcon}
-                alt=""
-                className={`${ICON} ${iconTone} ${open ? 'rotate-45 opacity-100' : 'rotate-0 opacity-0'}`}
-              />
-            </span>
+            <MenuIcon open={open} tone={barTone} />
           </motion.button>
         </div>
       </motion.div>
 
-      {/* Mobile navigation panel. Absolutely placed, so it lies over the page
-          instead of pushing it down; grid-rows 0fr/1fr collapses it without
-          needing a measured pixel height. */}
-      <div
-        id="mobile-nav"
-        className={`absolute inset-x-0 top-full grid bg-cream transition-[grid-template-rows,opacity] duration-400 ease-out lg:hidden ${
-          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-        }`}
-      >
-        <nav className="overflow-hidden" aria-hidden={!open}>
-          <div className="mx-auto w-full max-w-[1920px] px-4 pt-1 pb-5">
-            <div className="flex w-full flex-col items-start justify-center gap-10">
-              <ul className="flex w-full flex-col items-start justify-center gap-6 text-[18px] font-medium text-ink">
-                {NAV_LINKS.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      tabIndex={open ? 0 : -1}
-                      onClick={() => setOpen(false)}
-                      className={NAV_LINK}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <ArrowButton
-                variant="primary"
-                href="#contact"
-                tabIndex={open ? 0 : -1}
-                className="w-full justify-between"
-                onClick={() => setOpen(false)}
-              >
-                Contact Us
-              </ArrowButton>
-            </div>
-          </div>
-        </nav>
-      </div>
     </motion.header>
+    <MobileMenu open={open} onNavigate={() => setOpen(false)} />
+    </>
   )
 }

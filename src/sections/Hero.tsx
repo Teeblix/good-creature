@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
 import { StaggerLines } from '../components/StaggerLines'
+import { StaggerText } from '../components/StaggerText'
 import { EASE_OUT } from '../lib/motion'
 import heroImage from '../assets/hero-v2.webp'
 import clockIcon from '../assets/icon-clock.svg'
@@ -38,7 +39,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[760px] w-full flex-col overflow-hidden lg:min-h-[994px]"
+      className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px]"
       data-node-id="96:9714"
     >
       {/* Photograph, easing out of a slow zoom, under the design's scrims */}
@@ -60,17 +61,24 @@ export function Hero() {
 
       <div className="relative mx-auto flex w-full max-w-[1920px] flex-1 flex-col justify-between gap-16 px-4 pt-[120px] pb-10 lg:px-20">
         {/* Headline */}
-        <StaggerLines
-          as="h1"
-          playOnMount
-          delay={0.35}
-          lines={['Braver Visits', 'Start with Kinder Care']}
-          className="w-full max-w-[850px] font-grotesk text-[40px] leading-[1.15] text-cream sm:text-[56px] lg:text-[80px]"
-        />
+        <h1 className="w-full max-w-[850px] font-grotesk leading-[1.15] text-cream">
+          <StaggerText
+            text="Braver Visits Start with Kinder Care"
+            playOnMount
+            delay={0.35}
+            className="block text-[46px] lg:hidden"
+          />
+          <StaggerLines
+            playOnMount
+            delay={0.35}
+            lines={['Braver Visits', 'Start with Kinder Care']}
+            className="hidden text-[80px] lg:block"
+          />
+        </h1>
 
         {/* Reassurances left, promise and call to action right */}
         <div className="flex w-full flex-col items-start justify-between gap-10 lg:flex-row lg:items-end">
-          <ul className="flex w-full flex-col items-start justify-center gap-5 lg:w-[380px] lg:max-w-[380px] lg:shrink-0">
+          <ul className="hidden w-full flex-col items-start justify-center gap-5 lg:flex lg:w-[380px] lg:max-w-[380px] lg:shrink-0">
             {FACTS.map((fact, index) => (
               <motion.li
                 key={fact.title}
@@ -96,15 +104,11 @@ export function Hero() {
             {/* 632px in the design; Switzer sets wider than Neue Montreal, so the
                 box is widened just enough to keep the design's two-line break. */}
             <div className="flex w-full flex-col items-start justify-center gap-6 lg:w-[680px]">
-              <StaggerLines
-                as="p"
+              <StaggerText
+                text="We take every step with you and your pet, and nothing happens until you say yes"
                 playOnMount
                 delay={0.6}
-                lines={[
-                  'We take every step with you and your pet,',
-                  'and nothing happens until you say yes',
-                ]}
-                className="w-full font-grotesk text-[24px] leading-[1.25] text-cream lg:text-[36px]"
+                className="w-full font-grotesk text-[26px] leading-[1.25] text-cream lg:text-[36px]"
               />
               <motion.div
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
