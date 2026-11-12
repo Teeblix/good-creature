@@ -90,7 +90,7 @@ function CardFace({ card }: { card: Card }) {
       </span>
       <div className="flex w-full flex-col gap-1.5">
         <h3 className="font-grotesk text-[22px] leading-none text-ink">{card.title}</h3>
-        <p className="text-[14px] leading-normal text-ink-soft">{card.body}</p>
+        <p className="text-[16px] leading-normal text-ink-soft">{card.body}</p>
       </div>
     </article>
   )
