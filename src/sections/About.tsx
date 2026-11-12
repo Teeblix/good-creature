@@ -8,9 +8,6 @@ import {
   useScroll,
   useTransform,
 } from 'motion/react'
-import { Button } from '../components/Button'
-import { WipeImage } from '../components/WipeImage'
-import aboutImage from '../assets/about.webp'
 
 /** The statement, authored line by line — the stagger is per line, never per word. */
 const HEADLINE = ['A small practice built', 'around calm care']
@@ -164,18 +161,6 @@ export function About() {
   return (
     <section id="about-us" className="w-full bg-cream" data-node-id="107:9994">
       {reduceMotion ? <StillStatement /> : <Statement />}
-
-      <div className="mx-auto w-full max-w-[1920px] px-4 pb-15 lg:px-20 lg:pb-20">
-        <WipeImage
-          src={aboutImage}
-          alt="Two vets in navy scrubs greeting a golden retriever in the clinic"
-          direction="right"
-          className="h-[420px] w-full lg:h-[720px]"
-        />
-        <div className="mt-10 flex justify-center">
-          <Button href="#about-us">More about us</Button>
-        </div>
-      </div>
     </section>
   )
 }

@@ -24,7 +24,7 @@ const WIDTHS = {
   about: 1400, // half-width column, 845px tall
   'journey-1': 800, // 400×300 on desktop, hidden on mobile
   'journey-2': 800,
-  'trust-1': 800, // 220×250 desktop, full-width on mobile
+  'trust-1': 800, // 379×586 doorway on desktop, unused on mobile
   'trust-2': 800,
   'trust-3': 800,
   'trust-4': 800,

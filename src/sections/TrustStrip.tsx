@@ -48,7 +48,7 @@ const CARDS: Card[] = [
     body: 'You approve every plan and cost before treatment starts, with no surprises',
     icon: iconReceipt,
     image: trust3,
-    alt: 'Illustrated cat holding up an approved treatment plan',
+    alt: 'Illustrated cat in glasses holding up an approved treatment plan',
     side: 'right',
     inset: true,
   },
@@ -57,7 +57,7 @@ const CARDS: Card[] = [
     body: 'Call, message or walk in, and a real person from our team answers',
     icon: iconCall,
     image: trust4,
-    alt: 'Illustrated dog holding a telephone receiver',
+    alt: 'Illustrated dog waving from the reception desk beside a telephone',
     side: 'right',
     inset: false,
   },
@@ -160,7 +160,7 @@ function PinnedStage() {
   return (
     <div ref={trackRef} className="relative h-[360vh]">
       <div className="sticky top-0 grid h-dvh place-items-center">
-        <div className="flex w-full max-w-[1920px] flex-col items-center gap-[50px] px-20">
+        <div className="flex w-full max-w-[1920px] flex-col items-center gap-[60px] px-20">
           <div className="flex w-full flex-col items-center gap-1 text-center">
             <motion.h2
               style={{ opacity: headingOpacity, y: headingY, filter: headingBlur }}
@@ -189,7 +189,7 @@ function PinnedStage() {
             </div>
 
             {/* The doorway. Images stack inside it, newest on top. */}
-            <div className="absolute left-1/2 top-1/2 isolate aspect-[379/586] h-[min(586px,58dvh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-t-[250px] bg-ink/5">
+            <div className="absolute left-1/2 top-1/2 isolate aspect-[379/586] h-[min(586px,62dvh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-t-[250px] bg-ink/5">
               {CARDS.map((card, index) => (
                 <ArchImage
                   key={card.title}
