@@ -1,7 +1,7 @@
 import { SmoothScroll } from './components/SmoothScroll'
 import { NavigationBar } from './sections/NavigationBar'
 import { Hero } from './sections/Hero'
-import { TrustStrip } from './sections/TrustStrip'
+import { About } from './sections/About'
 import { Services } from './sections/Services'
 import { Journey } from './sections/Journey'
 import { Approach } from './sections/Approach'
@@ -20,10 +20,10 @@ function App() {
         {/* Everything after the hero shares one opaque layer, so it slides up
             over the pinned hero instead of scrolling alongside it. */}
         <div className="relative z-10">
-          <TrustStrip />
-          {/* The About section is out of the page while it is being redesigned.
-              src/sections/About.tsx still holds the scroll-driven statement —
-              drop <About /> back in here once the new frames land. */}
+          {/* The "Why families stay" strip is out of the page while it is being
+              redesigned. src/sections/TrustStrip.tsx is untouched — drop
+              <TrustStrip /> back in here once the new frames land. */}
+          <About />
           <Services />
           <Journey />
           <Approach />
