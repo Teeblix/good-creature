@@ -158,9 +158,9 @@ export function Hero() {
           </ul>
 
           <div className="flex w-full flex-col justify-center lg:min-w-0 lg:flex-1 lg:items-end">
-            {/* 632px in the design; Switzer sets wider than Neue Montreal, so the
-                box is widened just enough to keep the design's two-line break. */}
-            <div className="flex w-full flex-col items-start justify-center gap-6 lg:w-[680px]">
+            {/* 632px, as the design sets it — the real Neue Montreal is now
+                loaded, so the box no longer needs widening for the break. */}
+            <div className="flex w-full flex-col items-start justify-center gap-6 lg:w-[632px]">
               <StaggerText
                 text="We take every step with you and your pet, and nothing happens until you say yes"
                 playOnMount

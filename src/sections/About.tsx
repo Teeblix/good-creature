@@ -26,15 +26,15 @@ const HEADLINE_TEXT = 'A small practice built around calm care'
 
 /**
  * The paragraph that takes its place in the same spot, also authored by line.
- * The breaks are where the browser would wrap this text in the 1000px measure
- * at 44px, so each line fills it; they are worth recomputing if the typeface
- * or the measure changes.
+ * The breaks are where the text wraps on its own in the 1000px measure at
+ * 40px Satoshi, which is how the design sets it; they are worth recomputing
+ * if the typeface or the measure changes.
  */
 const BODY = [
-  'We are an independent practice of vets and nurses.',
-  'We keep our team small, so your pet sees familiar',
-  'faces every visit. Our rooms are quiet and our',
-  'appointments are long enough to do the job properly.',
+  'We are an independent practice of vets and nurses. We',
+  'keep our team small, so your pet sees familiar faces',
+  'every visit. Our rooms are quiet and our appointments',
+  'are long enough to do the job properly.',
 ]
 
 /**
@@ -192,7 +192,7 @@ function Statement() {
         <Motifs progress={scrollYProgress} />
 
         <p
-          className="col-start-1 row-start-1 w-full max-w-[1000px] text-center font-grotesk text-[19px] leading-[1.5] text-ink-soft [--statement-blur:5px] sm:text-[30px] lg:text-[44px] lg:leading-[1.3] lg:[--statement-blur:9px]"
+          className="col-start-1 row-start-1 w-full max-w-[1000px] text-center font-sans text-[18px] leading-[1.5] text-ink-soft [--statement-blur:5px] sm:text-[27px] lg:text-[40px] lg:leading-[1.35] lg:[--statement-blur:9px]"
           aria-label={BODY.join(' ')}
         >
           {BODY.map((line, index) => (
@@ -229,7 +229,7 @@ function StillStatement() {
       <h2 className="relative w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink sm:text-[52px] lg:text-[76px]">
         A small practice built around <span className="text-ember">calm</span> care
       </h2>
-      <p className="relative w-full max-w-[1000px] text-center font-grotesk text-[19px] leading-[1.5] text-ink-soft sm:text-[30px] lg:text-[44px] lg:leading-[1.3]">
+      <p className="relative w-full max-w-[1000px] text-center font-sans text-[18px] leading-[1.5] text-ink-soft sm:text-[27px] lg:text-[40px] lg:leading-[1.35]">
         {BODY.join(' ')}
       </p>
     </div>

@@ -1,5 +1,23 @@
 @import 'tailwindcss';
 
+/* Neue Montreal, self-hosted from the licensed desktop files. Only the two
+   weights the design uses are shipped. */
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/neuemontreal-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/neuemontreal-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Brand palette, taken from the Figma styles */
   --color-ink: #171717; /* text black-500 */
@@ -14,9 +32,8 @@
 
   --font-display: 'Viaoda Libre', serif;
   --font-sans: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
-  /* Stand-in for Neue Montreal, which the redesign uses but is a commercial
-     licence with no CDN. Switzer is the closest free neo-grotesque. */
-  --font-grotesk: 'Switzer', ui-sans-serif, system-ui, sans-serif;
+  /* Headings. Switzer stands in only until the self-hosted files load. */
+  --font-grotesk: 'Neue Montreal', 'Switzer', ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Scrolling is eased by Lenis (see components/SmoothScroll). The native
