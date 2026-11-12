@@ -22,7 +22,9 @@ const WIDTHS = {
   'logo-mark': 128, // 44×49 doorway-and-cat mark in the navigation bar
   cta: 2400, // full-bleed background
   approach: 2400, // full-width illustration
-  about: 1400, // half-width column, 845px tall
+  about: 1400, // half-width column, 845px tall (no longer placed)
+  'about-cat': 400, // corner motif in the About statement, ~170px wide
+  'about-dog': 400,
   'journey-1': 800, // 400×300 on desktop, hidden on mobile
   'journey-2': 800,
   'trust-1': 800, // 379×586 doorway on desktop, unused on mobile

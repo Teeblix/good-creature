@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import type { ReactNode } from 'react'
 import type { MotionValue } from 'motion/react'
 import {
   motion,
@@ -9,15 +10,28 @@ import {
   useTransform,
 } from 'motion/react'
 
+import catMotif from '../assets/about-cat.webp'
+import dogMotif from '../assets/about-dog.webp'
+
 /** The statement, authored line by line — the stagger is per line, never per word. */
-const HEADLINE = ['A small practice built', 'around calm care']
+const HEADLINE: ReactNode[] = [
+  'A small practice built',
+  <>
+    around <span className="text-ember">calm</span> care
+  </>,
+]
+
+/** The same sentence as plain text, for screen readers and the still version. */
+const HEADLINE_TEXT = 'A small practice built around calm care'
 
 /** The paragraph that takes its place in the same spot, also authored by line. */
 const BODY = [
-  'Good Creature began with one simple idea: a vet visit',
-  'should feel like a kind step forward, not a stressful one.',
-  'We’re a team of vets, nurses and animal lovers who listen,',
-  'explain things plainly and treat every pet like family.',
+  'Good Creature began with one simple idea:',
+  'a vet visit should feel like a kind step',
+  'forward, not a stressful one. We’re a team',
+  'of vets, nurses and animal lovers who',
+  'listen, explain things plainly and treat',
+  'every pet like family.',
 ]
 
 /**
@@ -45,7 +59,7 @@ type LineProps = {
   progress: MotionValue<number>
   index: number
   count: number
-  children: string
+  children: ReactNode
 }
 
 /**
@@ -88,6 +102,38 @@ function BodyLine({ progress, index, count, children }: LineProps) {
 }
 
 /**
+ * The two drawings that keep the corners company. They arrive with the
+ * headline and keep drifting gently upwards for the rest of the section, so
+ * the page never reads as bare type on an empty field.
+ */
+function Motifs({ progress }: { progress: MotionValue<number> }) {
+  const opacity = useTransform(progress, [0.12, 0.3], [0, 1])
+  const y = useTransform(progress, [0.12, 0.3, 1], [56, 0, -38])
+
+  return (
+    <>
+      <motion.img
+        src={catMotif}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        style={{ opacity, y }}
+        className="pointer-events-none absolute bottom-[9vh] left-[5vw] w-[clamp(74px,9vw,164px)] lg:bottom-[12vh]"
+      />
+      <motion.img
+        src={dogMotif}
+        alt=""
+        aria-hidden
+        loading="lazy"
+        style={{ opacity, y }}
+        /* Flipped so the dog looks back in towards the words. */
+        className="pointer-events-none absolute bottom-[9vh] right-[5vw] w-[clamp(84px,10vw,184px)] -scale-x-100 lg:bottom-[12vh]"
+      />
+    </>
+  )
+}
+
+/**
  * The statement itself: one viewport held still while two blocks of type hand
  * over to each other. The track above it is what supplies the scroll distance —
  * the sticky child stays pinned for as long as the track is passing through.
@@ -107,16 +153,30 @@ function Statement() {
     trackRef.current?.setAttribute('data-progress', value.toFixed(3))
   })
 
+  // The doorway outline opens out behind the words for the whole of the
+  // section, so the type is always sitting inside something that is still
+  // growing rather than against a blank page.
+  const archScale = useTransform(scrollYProgress, [0.08, 1], [0.72, 1.38])
+  const archOpacity = useTransform(scrollYProgress, [0.08, 0.26], [0, 1])
+
   return (
     <div ref={trackRef} className="relative h-[300vh]">
-      <div className="sticky top-0 grid h-dvh place-items-center px-6">
+      <div className="sticky top-0 grid h-dvh place-items-center overflow-hidden px-6">
+        {/* The doorway, drawn as an outline — it sits behind the words and
+            keeps opening out as the section is scrolled. */}
+        <motion.div
+          aria-hidden
+          style={{ scale: archScale, opacity: archOpacity }}
+          className="col-start-1 row-start-1 aspect-[391/547] h-[min(547px,62dvh)] rounded-t-[250px] border border-line"
+        />
+
         <h2
           className="col-start-1 row-start-1 w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink [--statement-blur:8px] sm:text-[52px] lg:text-[76px] lg:[--statement-blur:16px]"
-          aria-label={HEADLINE.join(' ')}
+          aria-label={HEADLINE_TEXT}
         >
           {HEADLINE.map((line, index) => (
             <HeadlineLine
-              key={line}
+              key={index}
               progress={scrollYProgress}
               index={index}
               count={HEADLINE.length}
@@ -126,8 +186,10 @@ function Statement() {
           ))}
         </h2>
 
+        <Motifs progress={scrollYProgress} />
+
         <p
-          className="col-start-1 row-start-1 w-full max-w-[760px] text-center font-grotesk text-[17px] leading-[1.65] text-ink-soft [--statement-blur:5px] sm:text-[21px] lg:text-[26px] lg:[--statement-blur:8px]"
+          className="col-start-1 row-start-1 w-full max-w-[1000px] text-center font-grotesk text-[19px] leading-[1.5] text-ink-soft [--statement-blur:5px] sm:text-[30px] lg:text-[44px] lg:leading-[1.3] lg:[--statement-blur:9px]"
           aria-label={BODY.join(' ')}
         >
           {BODY.map((line, index) => (
@@ -144,11 +206,27 @@ function Statement() {
 /** The same two blocks, stacked and still, for anyone who asks for less motion. */
 function StillStatement() {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-10 px-6 py-20">
-      <h2 className="w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink sm:text-[52px] lg:text-[76px]">
-        {HEADLINE.join(' ')}
+    <div className="relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-6 py-20">
+      <div
+        aria-hidden
+        className="absolute top-1/2 aspect-[391/547] h-[min(547px,62dvh)] -translate-y-1/2 rounded-t-[250px] border border-line"
+      />
+      <img
+        src={catMotif}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute bottom-[9vh] left-[5vw] w-[clamp(74px,9vw,164px)]"
+      />
+      <img
+        src={dogMotif}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute bottom-[9vh] right-[5vw] w-[clamp(84px,10vw,184px)] -scale-x-100"
+      />
+      <h2 className="relative w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink sm:text-[52px] lg:text-[76px]">
+        A small practice built around <span className="text-ember">calm</span> care
       </h2>
-      <p className="w-full max-w-[760px] text-center font-grotesk text-[17px] leading-[1.65] text-ink-soft sm:text-[21px] lg:text-[26px]">
+      <p className="relative w-full max-w-[1000px] text-center font-grotesk text-[19px] leading-[1.5] text-ink-soft sm:text-[30px] lg:text-[44px] lg:leading-[1.3]">
         {BODY.join(' ')}
       </p>
     </div>

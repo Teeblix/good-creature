@@ -83,7 +83,7 @@ export function Hero() {
       // From the xl breakpoint up the hero lags the page by a tenth, so the
       // sections after it overlap it by that much as they come up.
       ref={sectionRef}
-      className="relative flex min-h-[789px] w-full flex-col overflow-hidden lg:min-h-[994px] xl:z-0"
+      className="relative flex min-h-dvh w-full flex-col overflow-hidden xl:z-0"
       style={drift ? { y: driftY } : undefined}
       data-node-id="96:9714"
     >
