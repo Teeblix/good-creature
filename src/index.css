@@ -18,8 +18,10 @@
   --font-grotesk: 'Switzer', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Scrolling is eased by Lenis (see components/SmoothScroll). The native
+   smooth behaviour is deliberately left off, because the two fight. */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -29,10 +31,4 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
 }
