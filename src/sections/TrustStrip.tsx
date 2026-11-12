@@ -110,22 +110,30 @@ function ScrollCard({ progress, index, card }: { progress: MotionValue<number>; 
 }
 
 /**
- * One photograph inside the doorway. Each new image rises over the one before
- * it and stays there, so the stack reads as a single frame being refilled —
- * and scrolling back up slides the newest image away to uncover the last.
+ * One photograph inside the doorway. The image does not travel: it is held
+ * still and uncovered from the bottom edge upwards, so the new picture is
+ * peeled into view over the one before it rather than sliding across it. The
+ * slight settle of its own scale keeps the reveal from feeling like a shutter.
+ *
+ * Images stack in order, so scrolling back up closes the mask again and the
+ * previous photograph is still sitting underneath, untouched.
  */
 function ArchImage({ progress, index, card }: { progress: MotionValue<number>; index: number; card: Card }) {
   const [from, to] = cardPhase(index)
-  const y = useTransform(progress, [from, to], ['101%', '0%'])
+  const covered = useTransform(progress, [from, to], [100, 0])
+  const clipPath = useMotionTemplate`inset(${covered}% 0% 0% 0%)`
+  const scale = useTransform(progress, [from, to], [1.06, 1])
 
   return (
-    <motion.img
-      src={card.image}
-      alt={card.alt}
-      loading="lazy"
-      style={{ y, zIndex: index }}
-      className="absolute inset-0 size-full object-cover"
-    />
+    <motion.div style={{ clipPath, zIndex: index }} className="absolute inset-0">
+      <motion.img
+        src={card.image}
+        alt={card.alt}
+        loading="lazy"
+        style={{ scale }}
+        className="size-full object-cover"
+      />
+    </motion.div>
   )
 }
 
