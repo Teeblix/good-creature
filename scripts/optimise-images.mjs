@@ -18,7 +18,8 @@ const WIDTHS = {
   'hero-desktop': 2400, // full-bleed background (superseded by hero-v2)
   'hero-v2': 1512, // redesigned hero background, exported at 1512
   'hero-mobile': 900, // portrait crop used below the lg breakpoint
-  'logo-v2': 128, // 44×46 wordmark lockup
+  'logo-v2': 128, // 44×46 wordmark lockup (superseded by logo-mark)
+  'logo-mark': 128, // 44×49 doorway-and-cat mark in the navigation bar
   cta: 2400, // full-bleed background
   approach: 2400, // full-width illustration
   about: 1400, // half-width column, 845px tall

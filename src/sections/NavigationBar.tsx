@@ -4,7 +4,7 @@ import { ArrowButton } from '../components/ArrowButton'
 import { EASE_OUT } from '../lib/motion'
 import { MenuIcon } from '../components/MenuIcon'
 import { MobileMenu } from '../components/MobileMenu'
-import logo from '../assets/logo-v2.webp'
+import logo from '../assets/logo-mark.webp'
 
 /**
  * Menu item underline: a hairline that wipes in from the left on hover or
@@ -125,8 +125,8 @@ export function NavigationBar() {
         }}
       >
         <div className="flex w-full items-center justify-between">
-          {/* Logo lockup — the design flips the mark with a difference blend
-              once it is sitting on the cream fill. */}
+          {/* Logo lockup. The mark carries its own colour now, so it stays as
+              drawn in both bar states; only the wordmark changes tone. */}
           <motion.a
             href="#top"
             variants={item}
@@ -136,7 +136,7 @@ export function NavigationBar() {
             <img
               src={logo}
               alt=""
-              className={`h-[46px] w-[44px] object-contain ${onFill ? 'mix-blend-difference' : ''}`}
+              className="h-[49px] w-[44px] object-contain"
             />
             <span
               className={`font-grotesk text-[18px] font-medium whitespace-nowrap transition-colors duration-300 ${textTone}`}
