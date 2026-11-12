@@ -31,10 +31,13 @@ export function ArrowButton({
   ...props
 }: ArrowButtonProps) {
   const style = variants[variant]
+  // Full-width versions push the label and badge to opposite ends, so only
+  // centre the pair when the caller has not asked for a different alignment.
+  const justify = className.includes('justify-') ? '' : 'justify-center'
 
   return (
     <a
-      className={`group inline-flex items-center justify-center gap-5 rounded-full py-0.5 pr-0.5 pl-6 text-[18px] font-medium transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 ${style.pill} ${className}`}
+      className={`group inline-flex items-center ${justify} gap-5 rounded-full py-0.5 pr-0.5 pl-6 text-[18px] font-medium transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 ${style.pill} ${className}`}
       {...props}
     >
       <RollingText>{children}</RollingText>
