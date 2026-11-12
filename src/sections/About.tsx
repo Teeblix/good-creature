@@ -24,14 +24,17 @@ const HEADLINE: ReactNode[] = [
 /** The same sentence as plain text, for screen readers and the still version. */
 const HEADLINE_TEXT = 'A small practice built around calm care'
 
-/** The paragraph that takes its place in the same spot, also authored by line. */
+/**
+ * The paragraph that takes its place in the same spot, also authored by line.
+ * The breaks are where the browser would wrap this text in the 1000px measure
+ * at 44px, so each line fills it; they are worth recomputing if the typeface
+ * or the measure changes.
+ */
 const BODY = [
-  'Good Creature began with one simple idea:',
-  'a vet visit should feel like a kind step',
-  'forward, not a stressful one. We’re a team',
-  'of vets, nurses and animal lovers who',
-  'listen, explain things plainly and treat',
-  'every pet like family.',
+  'We are an independent practice of vets and nurses.',
+  'We keep our team small, so your pet sees familiar',
+  'faces every visit. Our rooms are quiet and our',
+  'appointments are long enough to do the job properly.',
 ]
 
 /**
