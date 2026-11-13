@@ -1,40 +1,211 @@
 import { useState } from 'react'
-import { Eyebrow } from '../components/Eyebrow'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { ArrowButton } from '../components/ArrowButton'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
-import addIcon from '../assets/icon-add-circle.svg'
-import closeIcon from '../assets/icon-close-circle.svg'
+import { EASE_OUT } from '../lib/motion'
 
-const QUESTIONS = [
+type Item = { question: string; answer: string }
+type Category = { title: string; items: Item[] }
+
+const CATEGORIES: Category[] = [
   {
-    question: 'Do you accept new clients?',
-    answer: 'Yes. Book online or call us.',
+    title: 'Booking and first visits',
+    items: [
+      {
+        question: 'How do I book a first visit?',
+        answer:
+          'Book online or call us. We’ll ask a few questions about your pet so we can plan the visit around them.',
+      },
+      {
+        question: 'Can I get a same day appointment if my pet is unwell?',
+        answer:
+          'Yes. We keep space for same day sick visits, so call early and we’ll see your pet as soon as we can.',
+      },
+      {
+        question: 'Do you accept walk ins?',
+        answer:
+          'Yes, but booking ahead is quicker. Call, message or walk in and we’ll find the soonest time for you.',
+      },
+      {
+        question: 'What should I bring to our first visit?',
+        answer:
+          'Bring any previous records, a list of current medication and your pet in a carrier or on a lead.',
+      },
+    ],
   },
   {
-    question: 'Can I get a same day appointment?',
-    answer: 'Usually, for unwell pets. Call early and we’ll find you a slot.',
+    title: 'Costs and payment',
+    items: [
+      {
+        question: 'Will I know the cost before treatment starts?',
+        answer:
+          'Yes. We explain the plan and the cost in plain words, and nothing begins until you approve it.',
+      },
+      {
+        question: 'Can I get a written estimate?',
+        answer:
+          'Yes. Ask at any visit and we’ll write down what we recommend and what it costs.',
+      },
+      {
+        question: 'Do you work with pet insurance?',
+        answer:
+          'Yes, we can provide the paperwork your insurer needs. Check your policy for what it covers.',
+      },
+      {
+        question: 'When do I pay?',
+        answer: 'You pay after your visit. We’ll confirm the total with you before you go.',
+      },
+    ],
   },
   {
-    question: 'What if my pet is very nervous?',
-    answer:
-      'Tell us when you book. We’ll plan a quiet arrival, skip the waiting room and let them set the pace.',
+    title: 'Nervous pets',
+    items: [
+      {
+        question: 'Can you help if my pet is scared of the vet?',
+        answer:
+          'Yes. Tell us when you book. We use quiet rooms, slow handling and extra time so nervous pets can settle.',
+      },
+      {
+        question: 'Can I stay with my pet during the exam?',
+        answer:
+          'Yes, in most cases. We want you there, and we’ll explain each step as it happens.',
+      },
+      {
+        question: 'Do you have separate areas for cats and dogs?',
+        answer:
+          'Yes. We use separate quiet rooms so cats and dogs aren’t stressed by each other.',
+      },
+    ],
   },
   {
-    question: 'Will I know the cost first?',
-    answer:
-      'Always. We write the plan and the cost down, and nothing starts until you’ve approved it.',
-  },
-  {
-    question: 'What about emergencies after hours?',
-    // Operational detail — confirm the real out-of-hours arrangement before launch.
-    answer:
-      'Call the practice and our out of hours message will point you straight to the nearest emergency hospital.',
+    title: 'After your visit',
+    items: [
+      {
+        question: 'What happens after treatment?',
+        answer:
+          'You leave with any medication, written aftercare and a date for the next visit.',
+      },
+      {
+        question: 'Will you check on my pet at home?',
+        answer: 'Yes. We call the next day to see how your pet is doing.',
+      },
+      {
+        question: 'What if I have a question after we get home?',
+        answer: 'Call or message us and a member of our team will help.',
+      },
+    ],
   },
 ]
 
-export function Faq() {
-  const [open, setOpen] = useState(0)
+/**
+ * One question.
+ *
+ * A row on a ruled list rather than a card: no fill, no box, just the hairline
+ * under it. The only marks of state are the answer and the icon, which is a
+ * plus that turns forty-five degrees into a cross.
+ */
+function Question({
+  item,
+  isOpen,
+  onToggle,
+}: {
+  item: Item
+  isOpen: boolean
+  onToggle: () => void
+}) {
+  const reduceMotion = useReducedMotion()
+  const id = `faq-${item.question.replace(/\W+/g, '-').toLowerCase()}`
+  const transition = { duration: reduceMotion ? 0 : 0.4, ease: EASE_OUT }
 
+  return (
+    <div className="w-full border-b border-line first:border-t">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={id}
+        className="flex w-full cursor-pointer items-center gap-5 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+      >
+        <span className="min-w-0 flex-1 font-grotesk text-[18px] leading-normal text-black lg:text-[22px]">
+          {item.question}
+        </span>
+
+        {/* One mark for both states: upright it reads as a plus, turned it
+            reads as a cross, and the turn is the transition between them. */}
+        <motion.svg
+          viewBox="0 0 24 24"
+          aria-hidden
+          className="size-6 shrink-0 text-ink"
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          transition={transition}
+        >
+          <path
+            d="M12 5.75v12.5M5.75 12h12.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </motion.svg>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={id}
+            key="answer"
+            initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={transition}
+            className="overflow-hidden"
+          >
+            <p className="pb-4 text-[16px] leading-normal text-black">{item.answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/**
+ * A group of questions under its own title.
+ *
+ * Each question opens and closes on its own — opening one leaves the rest as
+ * they are, so two answers can be read side by side.
+ */
+function CategoryBlock({ category }: { category: Category }) {
+  // The design shows the first question of every group already open.
+  const [open, setOpen] = useState<ReadonlySet<number>>(() => new Set([0]))
+
+  return (
+    <div className="flex w-full flex-col items-start gap-4">
+      <Reveal>
+        <h3 className="font-grotesk text-[24px] leading-normal text-ink lg:text-[30px]">
+          {category.title}
+        </h3>
+      </Reveal>
+      <div className="flex w-full flex-col items-start">
+        {category.items.map((item, index) => (
+          <Question
+            key={item.question}
+            item={item}
+            isOpen={open.has(index)}
+            onToggle={() =>
+              setOpen((current) => {
+                const next = new Set(current)
+                if (!next.delete(index)) next.add(index)
+                return next
+              })
+            }
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function Faq() {
   return (
     <section
       id="faq"
@@ -42,71 +213,43 @@ export function Faq() {
       data-node-id="61:53520"
       aria-labelledby="faq-heading"
     >
-      <div className="mx-auto flex w-full max-w-[1920px] flex-1 items-center px-4 py-15 lg:p-20">
-        <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row">
-          {/* Heading */}
-          <div className="flex w-full flex-col items-start justify-center gap-1 lg:min-w-0 lg:flex-1">
-            <Eyebrow tone="dark">Before you book</Eyebrow>
-            <div className="flex w-full flex-col items-start justify-center gap-1">
-              <StaggerLines
-                as="h2"
-                id="faq-heading"
-                lines={['Good Questions,', 'Straight Answers.']}
-                className="w-full max-w-[650px] font-display text-[36px] text-ink lg:text-[60px] lg:leading-[72.7px]"
-              />
-              <Reveal delay={0.15}>
-                <p className="w-full max-w-[400px] text-[16px] text-ink-soft">
-                  The things new clients ask us most, answered in a line or two. Feel free to reach
-                  out.
-                </p>
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 items-start px-4 py-15 lg:p-20">
+        <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row lg:gap-10">
+          {/* Heading, and the way out for anything not answered here. It
+              stays with you down the questions, parked clear of the navigation
+              bar — which is 89px tall and comes back the moment you scroll up,
+              so the heading would sit under it with any less. */}
+          <div className="flex w-full flex-col items-start gap-10 lg:sticky lg:top-[99px] lg:min-w-0 lg:flex-1 lg:gap-[60px]">
+            <StaggerLines
+              as="h2"
+              id="faq-heading"
+              label="Questions We Hear Most"
+              lines={[
+                'Questions We',
+                <>
+                  <span className="text-ember">Hear</span> Most
+                </>,
+              ]}
+              className="w-full max-w-[650px] font-grotesk text-[36px] leading-[1.17] text-ink lg:text-[60px] lg:leading-[70px]"
+            />
+
+            <div className="flex flex-col items-start gap-3">
+              <Reveal delay={0.1}>
+                <p className="text-[16px] leading-normal text-ink-soft">Still have questions?</p>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <ArrowButton variant="primary" href="#contact">
+                  Contact us
+                </ArrowButton>
               </Reveal>
             </div>
           </div>
 
-          {/* Accordion */}
-          <div className="flex w-full flex-col items-start px-[7px] py-[15px] lg:min-w-0 lg:flex-1">
-            <div className="flex w-full flex-col items-start">
-              {QUESTIONS.map((item, index) => {
-                const isOpen = open === index
-                return (
-                  <div
-                    key={item.question}
-                    className={`flex w-full flex-col items-start border-b border-line ${
-                      index === 0 ? 'pb-3' : 'py-3'
-                    }`}
-                  >
-                    <h3 className="w-full">
-                      <button
-                        type="button"
-                        onClick={() => setOpen(isOpen ? -1 : index)}
-                        aria-expanded={isOpen}
-                        aria-controls={`faq-answer-${index}`}
-                        className="flex w-full cursor-pointer items-center gap-5 text-left"
-                      >
-                        <span className="min-w-0 flex-1 font-display text-[22px] text-black">
-                          {item.question}
-                        </span>
-                        <img
-                          src={isOpen ? closeIcon : addIcon}
-                          alt=""
-                          className="size-6 shrink-0"
-                        />
-                      </button>
-                    </h3>
-                    <div
-                      id={`faq-answer-${index}`}
-                      className={`grid w-full transition-[grid-template-rows,opacity] duration-400 ease-out ${
-                        isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                      }`}
-                    >
-                      <div className="overflow-hidden">
-                        <p className="w-full pt-4 text-[16px] text-black">{item.answer}</p>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+          {/* The questions themselves, grouped */}
+          <div className="flex w-full flex-col items-start gap-[30px] lg:min-w-0 lg:flex-1 lg:px-[7px] lg:py-[15px]">
+            {CATEGORIES.map((category) => (
+              <CategoryBlock key={category.title} category={category} />
+            ))}
           </div>
         </div>
       </div>
