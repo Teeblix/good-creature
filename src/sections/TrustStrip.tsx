@@ -84,7 +84,7 @@ function cardPhase(index: number): Phase {
 /** The card itself — identical in both layouts, so only its wrapper changes. */
 function CardFace({ card }: { card: Card }) {
   return (
-    <article className="flex w-full flex-col gap-20 rounded-[4px] border border-line bg-cream p-3 lg:w-[350px]">
+    <article className="flex w-full flex-col gap-20 rounded-xl border border-line bg-white p-3 lg:w-[350px]">
       <span className="flex size-[46px] shrink-0 items-center justify-center rounded-full bg-ember">
         <img src={card.icon} alt="" className="size-6" />
       </span>
@@ -174,7 +174,7 @@ function PinnedStage() {
               style={{ opacity: headingOpacity, y: headingY, filter: headingBlur }}
               className="max-w-[650px] font-grotesk text-[60px] leading-[70px] text-ink"
             >
-              Why Families Stay
+              Why <span className="text-ember">Families</span> Stay
             </motion.h2>
             <motion.p
               style={{ opacity: subOpacity, y: subY }}
@@ -234,7 +234,7 @@ function StackedCards() {
     <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-10 px-4 py-15 md:px-10">
       <div className="flex w-full flex-col items-center gap-1 text-center">
         <h2 className="max-w-[650px] font-grotesk text-[36px] leading-[1.14] text-ink md:text-[48px]">
-          Why Families Stay
+          Why <span className="text-ember">Families</span> Stay
         </h2>
         <p className="max-w-[400px] text-[16px] text-ink-soft">
           Fast answers, gentle handling and prices agreed before treatment.
