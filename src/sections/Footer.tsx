@@ -7,12 +7,15 @@ import whatsappIcon from '../assets/icon-whatsapp.svg'
 
 type Link = { label: string; href?: string }
 
-/** Same four destinations as the navigation bar, with Home ahead of them. */
+/**
+ * Same four destinations as the navigation bar, in the navigation bar's
+ * order — which is the order of the page itself — with Home ahead of them.
+ */
 const NAVIGATE: Link[] = [
   { label: 'Home', href: '#top' },
+  { label: 'About us', href: '#about-us' },
   { label: 'Our services', href: '#services' },
   { label: 'Plan a visit', href: '#plan-a-visit' },
-  { label: 'About us', href: '#about-us' },
   { label: 'Quick answers', href: '#faq' },
 ]
 
