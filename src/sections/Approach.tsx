@@ -40,39 +40,27 @@ const PILLARS: Pillar[] = [
   },
 ]
 
-/**
- * The veil over the figure.
- *
- * It belongs to the card's width, not to the page's layout. Once the card can
- * hold its full 623 the body stops at 440 and never reaches the figure, so
- * the drawing is left alone. Below that the card shrinks, the text runs under
- * it, and this is what keeps the words readable: the card's own fill, solid
- * where the text is and clear at the outer edge, so the figure still reads as
- * a figure rather than as something stamped on the paragraph.
- */
-const VEIL = 'linear-gradient(270deg, rgba(248,241,222,0) 0%, rgb(248,241,222) 86%)'
-
 function PillarCard({ pillar }: { pillar: Pillar }) {
   return (
-    <article className="relative flex w-full flex-col gap-[70px] overflow-hidden rounded-lg border border-line p-4">
-      <h3 className="relative z-10 font-grotesk text-[22px] leading-none text-ink">
-        {pillar.title}
-      </h3>
+    <article className="flex w-full items-start gap-5 overflow-hidden rounded-lg border border-line">
+      <div className="flex min-w-0 flex-1 flex-col gap-[70px] p-4">
+        <h3 className="font-grotesk text-[22px] leading-none text-ink">{pillar.title}</h3>
+        <p className="text-[18px] leading-normal text-pretty text-ink-soft">{pillar.body}</p>
+      </div>
 
-      {/* Taller than the card and clipped by it, which is what keeps the
-          figure bleeding off the top and bottom edges rather than sitting in
-          the middle of a box of its own. */}
-      <span
+      {/* In the layout rather than over it, and stretched to whatever height
+          the words opposite it come to. That is the whole point of the change:
+          a figure given a height of its own was being cut off by the card,
+          and this one is never taller than the box it sits in.
+
+          Gone on a phone. At 358 the card cannot give 143 to a picture and
+          still leave a readable column beside it. */}
+      <div
         aria-hidden
-        className="pointer-events-none absolute top-1/2 right-0 h-[calc(100%+22px)] w-[143px] -translate-y-1/2"
+        className="hidden w-[143px] shrink-0 self-stretch overflow-hidden rounded-r-[7px] sm:block"
       >
         <img src={pillar.figure} alt="" loading="lazy" className="size-full object-cover" />
-        <span className="absolute inset-0 sm:hidden" style={{ background: VEIL }} />
-      </span>
-
-      <p className="relative z-10 max-w-[440px] text-[18px] leading-normal text-pretty text-ink-soft">
-        {pillar.body}
-      </p>
+      </div>
     </article>
   )
 }
@@ -84,11 +72,9 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
  * sticky, so the claim is still on screen while the proof for it scrolls
  * past.
  *
- * The row waits for xl rather than lg. The cards are a fixed 623 — the design
- * draws them that way and the figure inside is a fixed 143 — so at 1024 the
- * headline would be left with 201px, and 60px type in 201px is five lines
- * where the design has two. Below xl the two columns stack instead, and the
- * cards keep their width rather than stretching across the page.
+ * Both columns fill the row and share it equally. The row still waits for
+ * xl: at 1024 an even split leaves the headline 412px, and 60px type wants
+ * more than that to hold the design's two lines.
  *
  * The 99px offset is the FAQ's — the navigation bar's height with 10px of air
  * above the column, the gap the two sticky sections share.
@@ -118,7 +104,7 @@ export function Approach() {
             </Reveal>
           </div>
 
-          <ul className="flex w-full max-w-[623px] flex-col gap-4 xl:w-[623px] xl:max-w-none xl:shrink-0 xl:gap-5">
+          <ul className="flex w-full flex-col gap-4 xl:min-w-0 xl:flex-1 xl:gap-5">
             {PILLARS.map((pillar, index) => (
               <li key={pillar.title} className="w-full">
                 <FadeIn delay={index * 0.06} className="w-full">
