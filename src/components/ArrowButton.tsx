@@ -43,8 +43,19 @@ export function ArrowButton({
   const justify = className.includes('justify-') ? '' : 'justify-center'
 
   const Tag = onPress ? 'button' : 'a'
+  // As a button it keeps everything but the href — tabIndex and aria still
+  // matter — and any onClick of its own runs before the press handler, so a
+  // caller can close its menu and open a panel from the same click.
+  const { href: _href, onClick, ...rest } = props
   const tagProps = onPress
-    ? ({ type: 'button', onClick: onPress } as const)
+    ? ({
+        ...rest,
+        type: 'button',
+        onClick: (event: React.MouseEvent<HTMLElement>) => {
+          onClick?.(event as React.MouseEvent<HTMLAnchorElement>)
+          onPress()
+        },
+      } as Record<string, unknown>)
     : (props as Record<string, unknown>)
 
   return (

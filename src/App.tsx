@@ -1,4 +1,4 @@
-import { BookVisitProvider } from './components/BookVisit'
+import { FormPanelProvider } from './components/FormPanel'
 import { SmoothScroll } from './components/SmoothScroll'
 import { NavigationBar } from './sections/NavigationBar'
 import { Hero } from './sections/Hero'
@@ -14,7 +14,7 @@ import { Footer } from './sections/Footer'
 
 function App() {
   return (
-    <BookVisitProvider>
+    <FormPanelProvider>
       <SmoothScroll />
       <NavigationBar />
       <main>
@@ -33,7 +33,7 @@ function App() {
         </div>
       </main>
       <Footer />
-    </BookVisitProvider>
+    </FormPanelProvider>
   )
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
-import { useBookVisit } from '../components/BookVisit'
+import { useBookVisit } from '../components/FormPanel'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import iconCalendar from '../assets/icon-journey-calendar.svg'

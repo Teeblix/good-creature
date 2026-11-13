@@ -6,7 +6,7 @@ import { pauseSmoothScroll, resumeSmoothScroll } from './SmoothScroll'
 import calendarIcon from '../assets/icon-journey-calendar.svg'
 import tickIcon from '../assets/icon-tick-circle.svg'
 
-/* ------------------------------------------------------------------ fields */
+/* ------------------------------------------------------------------ shapes */
 
 type Field = {
   name: string
@@ -15,80 +15,156 @@ type Field = {
   placeholder: string
   required?: boolean
   options?: string[]
+  rows?: number
 }
 
-/** The asterisk in the label is the design's; `required` is what enforces it. */
-const FIELDS: Field[] = [
-  { name: 'name', label: 'Your Name*', kind: 'text', placeholder: 'Full name', required: true },
-  {
-    name: 'email',
-    label: 'Email Address*',
-    kind: 'email',
-    placeholder: 'name@email.com',
-    required: true,
-  },
-  { name: 'phone', label: 'Phone', kind: 'tel', placeholder: 'Your mobile number' },
-  {
-    name: 'petName',
-    label: 'Pet’s Name*',
-    kind: 'text',
-    placeholder: 'e.g. Biscuit',
-    required: true,
-  },
-  {
-    name: 'petType',
-    label: 'Type of Pet*',
-    kind: 'select',
-    placeholder: 'Select',
-    required: true,
-    options: ['Dog', 'Cat', 'Rabbit', 'Other'],
-  },
-  {
-    name: 'reason',
-    label: 'Reason for Visit*',
-    kind: 'select',
-    placeholder: 'Select',
-    required: true,
-    options: [
-      'Check up or vaccination',
-      'Unwell pet',
-      'Surgery or dental',
-      'Senior pet care',
-      'Something else',
-    ],
-  },
-  {
-    name: 'date',
-    label: 'Preferred Date*',
-    kind: 'date',
-    placeholder: 'Choose a date',
-    required: true,
-  },
-  {
-    name: 'time',
-    label: 'Preferred Time*',
-    kind: 'select',
-    placeholder: 'Select',
-    required: true,
-    options: ['Morning', 'Afternoon', 'No preference'],
-  },
-  {
-    name: 'notes',
-    label: 'Anything We Should Know',
-    kind: 'textarea',
-    placeholder: 'Tell us if your pet is nervous, has health needs or needs extra time',
-  },
-]
+type Values = Record<string, string>
 
-const EMPTY = Object.fromEntries(FIELDS.map((field) => [field.name, ''])) as Record<string, string>
+type Form = {
+  /** Prefixes every field id, so two forms never collide in the document. */
+  id: string
+  title: string
+  intro: string
+  fields: Field[]
+  submitLabel: string
+  success: (values: Values) => { heading: string; body: string }
+}
+
+/* ------------------------------------------------------------------- forms */
+
+/** The asterisk in a label is the design's; `required` is what enforces it. */
+const BOOK: Form = {
+  id: 'book',
+  title: 'Book a Visit',
+  intro:
+    'Tell us about your pet and when suits you. We’ll confirm your appointment within one working day.',
+  submitLabel: 'Submit',
+  fields: [
+    { name: 'name', label: 'Your Name*', kind: 'text', placeholder: 'Full name', required: true },
+    {
+      name: 'email',
+      label: 'Email Address*',
+      kind: 'email',
+      placeholder: 'name@email.com',
+      required: true,
+    },
+    { name: 'phone', label: 'Phone', kind: 'tel', placeholder: 'Your mobile number' },
+    {
+      name: 'petName',
+      label: 'Pet’s Name*',
+      kind: 'text',
+      placeholder: 'e.g. Biscuit',
+      required: true,
+    },
+    {
+      name: 'petType',
+      label: 'Type of Pet*',
+      kind: 'select',
+      placeholder: 'Select',
+      required: true,
+      options: ['Dog', 'Cat', 'Rabbit', 'Other'],
+    },
+    {
+      name: 'reason',
+      label: 'Reason for Visit*',
+      kind: 'select',
+      placeholder: 'Select',
+      required: true,
+      options: [
+        'Check up or vaccination',
+        'Unwell pet',
+        'Surgery or dental',
+        'Senior pet care',
+        'Something else',
+      ],
+    },
+    {
+      name: 'date',
+      label: 'Preferred Date*',
+      kind: 'date',
+      placeholder: 'Choose a date',
+      required: true,
+    },
+    {
+      name: 'time',
+      label: 'Preferred Time*',
+      kind: 'select',
+      placeholder: 'Select',
+      required: true,
+      options: ['Morning', 'Afternoon', 'No preference'],
+    },
+    {
+      name: 'notes',
+      label: 'Anything We Should Know',
+      kind: 'textarea',
+      placeholder: 'Tell us if your pet is nervous, has health needs or needs extra time',
+    },
+  ],
+  success: (values) => ({
+    heading: `Thank you, ${values.name.split(' ')[0] || 'and see you soon'}`,
+    body: `Your request is with us. We’ll confirm ${values.petName || 'your pet'}’s appointment within one working day.`,
+  }),
+}
+
+const CONTACT: Form = {
+  id: 'contact',
+  title: 'Contact Us',
+  intro:
+    'Questions about services, prices or your first visit? Send us a message and a member of our team will reply within one working day.',
+  submitLabel: 'Send message',
+  fields: [
+    { name: 'name', label: 'Your name*', kind: 'text', placeholder: 'Full name', required: true },
+    { name: 'email', label: 'Email*', kind: 'email', placeholder: 'name@email.com', required: true },
+    { name: 'phone', label: 'Phone (optional)', kind: 'tel', placeholder: 'Your mobile number' },
+    {
+      name: 'topic',
+      label: 'Topic*',
+      kind: 'select',
+      placeholder: 'Select',
+      required: true,
+      options: [
+        'General question',
+        'Prices and payment',
+        'Prescriptions',
+        'Insurance paperwork',
+        'Feedback',
+      ],
+    },
+    {
+      name: 'message',
+      label: 'Message*',
+      kind: 'textarea',
+      placeholder: 'How can we help',
+      required: true,
+      rows: 4,
+    },
+  ],
+  success: (values) => ({
+    heading: `Thank you, ${values.name.split(' ')[0] || 'we’ve got your message'}`,
+    body: 'Your message is with us. A member of our team will reply within one working day.',
+  }),
+}
+
+const FORMS = { book: BOOK, contact: CONTACT } as const
+type FormKey = keyof typeof FORMS
+
+const emptyValues = (form: Form) =>
+  Object.fromEntries(form.fields.map((field) => [field.name, ''])) as Values
 
 /* ----------------------------------------------------------------- opening */
 
-const BookVisitContext = createContext<() => void>(() => {})
+const PanelContext = createContext<(form: FormKey) => void>(() => {})
 
 /** Call this from anywhere to open the booking panel. */
 export function useBookVisit() {
-  return useContext(BookVisitContext)
+  const open = useContext(PanelContext)
+  return useCallback(() => open('book'), [open])
+}
+
+/** Call this from anywhere to open the contact panel. */
+export function useContactUs() {
+  const open = useContext(PanelContext)
+  return useCallback(() => open('contact'), [open])
 }
 
 /* ------------------------------------------------------------------- parts */
@@ -115,17 +191,18 @@ function Chevron() {
 }
 
 function Control({
+  id,
   field,
   value,
   invalid,
   onChange,
 }: {
+  id: string
   field: Field
   value: string
   invalid: boolean
   onChange: (value: string) => void
 }) {
-  const id = `book-${field.name}`
   const described = invalid ? `${id}-error` : undefined
 
   if (field.kind === 'textarea') {
@@ -133,7 +210,7 @@ function Control({
       <textarea
         id={id}
         name={field.name}
-        rows={3}
+        rows={field.rows ?? 3}
         value={value}
         placeholder={field.placeholder}
         aria-invalid={invalid}
@@ -215,12 +292,14 @@ function Control({
 
 /* ------------------------------------------------------------------- panel */
 
-function Panel({ onClose }: { onClose: () => void }) {
+function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
   const reduceMotion = useReducedMotion()
-  const [values, setValues] = useState(EMPTY)
+  const [values, setValues] = useState(() => emptyValues(form))
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [sent, setSent] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
+
+  const fieldId = (name: string) => `${form.id}-${name}`
 
   // The panel takes the keyboard when it opens, so the first thing tabbed to
   // is inside it rather than back on the page behind.
@@ -244,7 +323,7 @@ function Panel({ onClose }: { onClose: () => void }) {
     event.preventDefault()
     const found: Record<string, string> = {}
 
-    for (const field of FIELDS) {
+    for (const field of form.fields) {
       const value = values[field.name].trim()
       if (field.required && !value) found[field.name] = 'Please fill in this field'
       else if (field.kind === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
@@ -253,9 +332,9 @@ function Panel({ onClose }: { onClose: () => void }) {
 
     setErrors(found)
 
-    const first = FIELDS.find((field) => found[field.name])
+    const first = form.fields.find((field) => found[field.name])
     if (first) {
-      document.getElementById(`book-${first.name}`)?.focus()
+      document.getElementById(fieldId(first.name))?.focus()
       return
     }
 
@@ -275,13 +354,15 @@ function Panel({ onClose }: { onClose: () => void }) {
     },
   }
 
+  const done = form.success(values)
+
   return (
     <motion.div
       ref={panelRef}
       tabIndex={-1}
       role="dialog"
       aria-modal="true"
-      aria-label="Book a visit"
+      aria-label={form.title}
       initial={reduceMotion ? { opacity: 0 } : { x: 'calc(100% + 20px)' }}
       animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
       exit={reduceMotion ? { opacity: 0 } : { x: 'calc(100% + 20px)' }}
@@ -295,11 +376,8 @@ function Panel({ onClose }: { onClose: () => void }) {
       <div className="flex w-full shrink-0 flex-col gap-[18px] p-6 pb-0">
         <div className="flex w-full items-start justify-between gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <h2 className="font-grotesk text-[36px] leading-[1.19] text-ink">Book a Visit</h2>
-            <p className="text-[16px] leading-normal text-ink-soft">
-              Tell us about your pet and when suits you. We’ll confirm your appointment within one
-              working day.
-            </p>
+            <h2 className="font-grotesk text-[36px] leading-[1.19] text-ink">{form.title}</h2>
+            <p className="text-[16px] leading-normal text-ink-soft">{form.intro}</p>
           </div>
           <button
             type="button"
@@ -330,13 +408,8 @@ function Panel({ onClose }: { onClose: () => void }) {
           role="status"
         >
           <img src={tickIcon} alt="" className="size-10" />
-          <h3 className="font-grotesk text-[28px] leading-tight text-ink">
-            Thank you, {values.name.split(' ')[0] || 'and see you soon'}
-          </h3>
-          <p className="max-w-[380px] text-[16px] leading-normal text-ink-soft">
-            Your request is with us. We’ll confirm {values.petName || 'your pet'}’s appointment
-            within one working day.
-          </p>
+          <h3 className="font-grotesk text-[28px] leading-tight text-ink">{done.heading}</h3>
+          <p className="max-w-[380px] text-[16px] leading-normal text-ink-soft">{done.body}</p>
           <button
             type="button"
             onClick={onClose}
@@ -354,18 +427,16 @@ function Panel({ onClose }: { onClose: () => void }) {
             data-lenis-prevent
             className="flex min-h-0 w-full flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-6 py-[31px]"
           >
-            {FIELDS.map((field) => {
+            {form.fields.map((field) => {
               const error = errors[field.name]
+              const id = fieldId(field.name)
               return (
-                <motion.div
-                  key={field.name}
-                  variants={rise}
-                  className="flex w-full flex-col gap-4"
-                >
-                  <label htmlFor={`book-${field.name}`} className={LABEL}>
+                <motion.div key={field.name} variants={rise} className="flex w-full flex-col gap-4">
+                  <label htmlFor={id} className={LABEL}>
                     {field.label}
                   </label>
                   <Control
+                    id={id}
                     field={field}
                     value={values[field.name]}
                     invalid={Boolean(error)}
@@ -374,7 +445,7 @@ function Panel({ onClose }: { onClose: () => void }) {
                   <AnimatePresence initial={false}>
                     {error && (
                       <motion.p
-                        id={`book-${field.name}-error`}
+                        id={`${id}-error`}
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
@@ -390,8 +461,8 @@ function Panel({ onClose }: { onClose: () => void }) {
             })}
           </motion.div>
 
-          {/* Always in view: the form is taller than any screen, and a submit
-              you have to go looking for is a submit people do not find. */}
+          {/* Always in view: the form can be taller than the screen, and a
+              submit you have to go looking for is a submit people do not find. */}
           <motion.div
             variants={rise}
             initial="hidden"
@@ -402,7 +473,7 @@ function Panel({ onClose }: { onClose: () => void }) {
               type="submit"
               className="flex w-full cursor-pointer items-center justify-between gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
             >
-              Submit
+              {form.submitLabel}
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cream">
                 <svg viewBox="0 0 20 20" aria-hidden className="size-5 text-ink">
                   <path
@@ -425,15 +496,15 @@ function Panel({ onClose }: { onClose: () => void }) {
 
 /* ---------------------------------------------------------------- provider */
 
-export function BookVisitProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false)
+export function FormPanelProvider({ children }: { children: ReactNode }) {
+  const [active, setActive] = useState<FormKey | null>(null)
   const reduceMotion = useReducedMotion()
-  const close = useCallback(() => setOpen(false), [])
-  const openPanel = useCallback(() => setOpen(true), [])
+  const close = useCallback(() => setActive(null), [])
+  const open = useCallback((form: FormKey) => setActive(form), [])
 
   // The page behind does not scroll while the panel is over it.
   useEffect(() => {
-    if (!open) return
+    if (!active) return
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     pauseSmoothScroll()
@@ -441,22 +512,22 @@ export function BookVisitProvider({ children }: { children: ReactNode }) {
       document.body.style.overflow = previous
       resumeSmoothScroll()
     }
-  }, [open])
+  }, [active])
 
   useEffect(() => {
-    if (!open) return
+    if (!active) return
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close()
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [open, close])
+  }, [active, close])
 
   return (
-    <BookVisitContext.Provider value={openPanel}>
+    <PanelContext.Provider value={open}>
       {children}
       <AnimatePresence>
-        {open && (
+        {active && (
           <>
             <motion.div
               key="scrim"
@@ -468,10 +539,12 @@ export function BookVisitProvider({ children }: { children: ReactNode }) {
               transition={{ duration: reduceMotion ? 0.2 : 0.45, ease: EASE_OUT }}
               className="fixed inset-0 z-[60] bg-ink/25 backdrop-blur-[6px]"
             />
-            <Panel key="panel" onClose={close} />
+            {/* Keyed by form, so switching from one to the other rebuilds the
+                panel's state instead of carrying the old answers across. */}
+            <Panel key={active} form={FORMS[active]} onClose={close} />
           </>
         )}
       </AnimatePresence>
-    </BookVisitContext.Provider>
+    </PanelContext.Provider>
   )
 }

@@ -4,6 +4,7 @@ import { ArrowButton } from '../components/ArrowButton'
 import { EASE_OUT } from '../lib/motion'
 import { MenuIcon } from '../components/MenuIcon'
 import { MobileMenu } from '../components/MobileMenu'
+import { useContactUs } from '../components/FormPanel'
 import logo from '../assets/logo-mark.webp'
 
 /**
@@ -26,6 +27,7 @@ export const NAV_LINKS = [
 ]
 
 export function NavigationBar() {
+  const openContact = useContactUs()
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
   // The colour of whatever section is currently behind the bar, and whether
@@ -208,7 +210,7 @@ export function NavigationBar() {
               ))}
             </ul>
             <motion.div variants={item}>
-              <ArrowButton variant="primary" href="#contact">
+              <ArrowButton variant="primary" onPress={openContact}>
                 Contact us
               </ArrowButton>
             </motion.div>

@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
-import { useBookVisit } from '../components/BookVisit'
+import { useBookVisit } from '../components/FormPanel'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import { EASE_OUT, VIEWPORT } from '../lib/motion'

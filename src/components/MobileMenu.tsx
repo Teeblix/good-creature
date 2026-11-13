@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from './ArrowButton'
+import { useContactUs } from './FormPanel'
 import { EASE_OUT } from '../lib/motion'
 
 export const MOBILE_LINKS = [
@@ -14,6 +15,7 @@ export const MOBILE_LINKS = [
  * own logo and Close control, so this holds everything below that row.
  */
 export function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: () => void }) {
+  const openContact = useContactUs()
   const reduceMotion = useReducedMotion()
 
   const item = {
@@ -61,7 +63,7 @@ export function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: ()
           <motion.div variants={item} className="w-full">
             <ArrowButton
               variant="light"
-              href="#contact"
+              onPress={openContact}
               tabIndex={open ? 0 : -1}
               className="w-full justify-between"
               onClick={onNavigate}

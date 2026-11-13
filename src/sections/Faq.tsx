@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
+import { useContactUs } from '../components/FormPanel'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import { EASE_OUT } from '../lib/motion'
@@ -208,6 +209,8 @@ function CategoryBlock({ category }: { category: Category }) {
 }
 
 export function Faq() {
+  const openContact = useContactUs()
+
   return (
     <section
       id="faq"
@@ -240,7 +243,7 @@ export function Faq() {
                 <p className="text-[16px] leading-normal text-ink-soft">Still have questions?</p>
               </Reveal>
               <Reveal delay={0.2}>
-                <ArrowButton variant="primary" href="#contact">
+                <ArrowButton variant="primary" onPress={openContact}>
                   Contact us
                 </ArrowButton>
               </Reveal>
