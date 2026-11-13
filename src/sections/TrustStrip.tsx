@@ -173,7 +173,7 @@ function PinnedStage() {
               className="max-w-[650px] font-grotesk text-[60px] leading-[70px] text-ink"
             />
             <Reveal delay={0.15}>
-              <p className="text-[18px] text-ink-soft">
+              <p className="max-w-[620px] text-[24px] leading-normal text-balance text-ink-soft">
                 Fast answers, gentle handling and prices agreed before treatment.
               </p>
             </Reveal>
@@ -298,7 +298,7 @@ function MobileStrip() {
           className="w-full font-grotesk text-[36px] leading-[1.19] text-ink"
         />
         <Reveal delay={0.15}>
-          <p className="w-full text-[18px] leading-normal text-ink-soft">
+          <p className="w-full text-[20px] leading-normal text-balance text-ink-soft">
             Fast answers, gentle handling and prices agreed before treatment.
           </p>
         </Reveal>
