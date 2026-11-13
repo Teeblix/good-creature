@@ -101,7 +101,7 @@ export function Services() {
   return (
     <section id="services" className="w-full bg-cream" data-node-id="61:52715">
       <div className="mx-auto w-full max-w-[1920px] px-4 py-15 lg:p-20">
-        <div className="flex w-full flex-col gap-3 lg:h-[90dvh] lg:flex-row">
+        <div className="flex w-full flex-col gap-4 lg:h-[90dvh] lg:flex-row lg:gap-3">
           {/* The card. Headline, list and detail sit at the top, middle and
               bottom of its height, which is the design's three equal gaps. */}
           <motion.div
