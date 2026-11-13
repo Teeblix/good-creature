@@ -174,9 +174,8 @@ function PinnedStage() {
             />
             <Reveal delay={0.15}>
               <p className="max-w-[620px] text-[18px] leading-normal text-pretty text-ink-soft">
-                Fast answers, gentle handling and prices agreed before treatment. Families stay
-                because the everyday things hold steady: you can reach us, you are seen quickly,
-                and you know the cost before anything begins.
+                Fast answers, gentle handling and prices agreed before treatment. The small
+                things, done the same way every visit.
               </p>
             </Reveal>
           </div>
@@ -301,9 +300,8 @@ function MobileStrip() {
         />
         <Reveal delay={0.15}>
           <p className="w-full text-[18px] leading-normal text-pretty text-ink-soft">
-            Fast answers, gentle handling and prices agreed before treatment. Families stay because
-            the everyday things hold steady: you can reach us, you are seen quickly, and you know
-            the cost before anything begins.
+            Fast answers, gentle handling and prices agreed before treatment. The small things,
+            done the same way every visit.
           </p>
         </Reveal>
       </div>
