@@ -254,7 +254,7 @@ function MobileStrip() {
 
   return (
     <div className="mx-auto flex w-full max-w-[560px] flex-col items-start px-4 py-15">
-      <div className="flex w-full flex-col items-start gap-1">
+      <div className="flex w-full flex-col items-center gap-1 text-center">
         <StaggerLines
           as="h2"
           label="Why Families Stay"
@@ -272,8 +272,10 @@ function MobileStrip() {
         </Reveal>
       </div>
 
-      {/* The doorway keeps to the page's 16 of side padding. */}
-      <Reveal className="mt-[50px] w-full">
+      {/* Smaller than the column it sits in: at full width the doorway stood
+          553 tall, so its own top had left the screen by the time the cards
+          below it were in view. */}
+      <Reveal className="mx-auto mt-[50px] w-[min(100%,280px)]">
         <div className="relative isolate aspect-[379/586] w-full overflow-hidden rounded-t-[250px] bg-ink/5">
           {CARDS.map((card, index) => (
             <motion.img
