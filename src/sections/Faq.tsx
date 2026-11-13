@@ -181,7 +181,9 @@ function CategoryBlock({ category }: { category: Category }) {
   return (
     <div className="flex w-full flex-col items-start gap-4">
       <Reveal>
-        <h3 className="font-grotesk text-[24px] leading-normal text-ink lg:text-[30px]">
+        {/* text black-100 in the file, the palest of the greys — the group
+            titles sit back and let the questions lead. */}
+        <h3 className="font-grotesk text-[24px] leading-normal text-[#b7b7b7] lg:text-[30px]">
           {category.title}
         </h3>
       </Reveal>
