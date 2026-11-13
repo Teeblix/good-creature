@@ -22,7 +22,11 @@ const WIDTHS = {
   'logo-mark': 128, // 44×49 doorway-and-cat mark in the navigation bar
   cta: 2400, // full-bleed background
   'cta-mobile': 900, // portrait crop used below the lg breakpoint
-  approach: 2400, // full-width illustration
+  approach: 2400, // full-width illustration (superseded by the four figures)
+  'approach-listen': 400, // 143×185 figure at the right edge of an approach card
+  'approach-plain': 400,
+  'approach-your-call': 400,
+  'approach-follow': 400,
   about: 1400, // half-width column, 845px tall (no longer placed)
   'about-cat': 400, // corner motif in the About statement, ~170px wide
   'about-dog': 400,
