@@ -17,11 +17,12 @@ const NAV_LINK =
   'after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 ' +
   'focus-visible:after:scale-x-100 motion-reduce:after:transition-none'
 
+/** Sentence case, unlike the section headlines — only the first word is capitalised. */
 export const NAV_LINKS = [
-  { label: 'Services', href: '#services' },
+  { label: 'Our services', href: '#services' },
   { label: 'Plan a visit', href: '#plan-a-visit' },
-  { label: 'About', href: '#about-us' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'About us', href: '#about-us' },
+  { label: 'Quick answers', href: '#faq' },
 ]
 
 export function NavigationBar() {
@@ -190,7 +191,7 @@ export function NavigationBar() {
             </ul>
             <motion.div variants={item}>
               <ArrowButton variant="primary" href="#contact">
-                Contact Us
+                Contact us
               </ArrowButton>
             </motion.div>
           </nav>

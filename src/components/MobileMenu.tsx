@@ -66,7 +66,7 @@ export function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: ()
               className="w-full justify-between"
               onClick={onNavigate}
             >
-              Contact Us
+              Contact us
             </ArrowButton>
           </motion.div>
         </div>
