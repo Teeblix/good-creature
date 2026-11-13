@@ -24,6 +24,8 @@ export function Cta() {
       id="plan-your-visit"
       ref={sectionRef}
       className="relative flex min-h-dvh w-full items-center overflow-hidden"
+      // A photograph, not a fill: the bar goes clear and its type goes white.
+      data-bar="over-image"
       data-node-id="61:53897"
       aria-labelledby="cta-heading"
     >

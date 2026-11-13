@@ -28,45 +28,58 @@ export const NAV_LINKS = [
 export function NavigationBar() {
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
-  const [filled, setFilled] = useState(false)
-  // The colour of whatever section is currently behind the bar.
+  // The colour of whatever section is currently behind the bar, and whether
+  // that section is a photograph rather than a flat fill.
   const [tint, setTint] = useState<string | null>(null)
+  const [overImage, setOverImage] = useState(true)
   const reduceMotion = useReducedMotion()
 
   const headerRef = useRef<HTMLElement>(null)
 
   // Read inside the scroll listener without re-subscribing it.
   const lastY = useRef(0)
-  const thresholdRef = useRef(600)
   const openRef = useRef(false)
   openRef.current = open
 
   useEffect(() => {
-    // Transparent for the whole of the hero. The fill arrives only once the
-    // section after it has reached the top of the viewport.
-    const hero = document.getElementById('top')
-    const measure = () => {
-      thresholdRef.current = hero ? hero.offsetHeight : 600
+    // The colour you would actually see behind an element: its own fill, or
+    // the first one an ancestor paints. A section that sets no background of
+    // its own still sits on the page's, and that is the colour the bar wants —
+    // not a hard-coded guess, which silently goes wrong the day the page
+    // changes colour.
+    const surfaceOf = (start: HTMLElement) => {
+      let node: HTMLElement | null = start
+      while (node) {
+        const colour = getComputedStyle(node).backgroundColor
+        if (colour !== 'rgba(0, 0, 0, 0)' && colour !== 'transparent') return colour
+        node = node.parentElement
+      }
+      return null
     }
-    measure()
 
-    // Every panel that paints a colour, with the colour it paints. Read once:
-    // a section's fill is a class, and classes do not change under us.
-    const panels = Array.from(document.querySelectorAll<HTMLElement>('main section, footer'))
-      .map((el) => ({ el, colour: getComputedStyle(el).backgroundColor }))
-      .filter(({ colour }) => colour !== 'rgba(0, 0, 0, 0)' && colour !== 'transparent')
+    // Read once: a section's fill is a class, and classes do not change under
+    // us. The two that carry a photograph are marked, because what you see
+    // there is the picture, not any colour underneath it.
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('main section, footer')).map(
+      (el) => ({
+        el,
+        colour: surfaceOf(el),
+        overImage: el.dataset.bar === 'over-image',
+      }),
+    )
 
-    // Which of them is behind the bar. Measured at the bar's own waist, so the
+    // Which section is behind the bar. Measured at the bar's own waist, so the
     // colour changes when a new section is half way across it rather than at
     // the moment it first appears underneath.
     const pickTint = () => {
       const waist = (headerRef.current?.offsetHeight ?? 89) / 2
-      let found: string | null = null
-      for (const { el, colour } of panels) {
-        const box = el.getBoundingClientRect()
-        if (box.top <= waist && box.bottom > waist) found = colour
+      let panel: (typeof panels)[number] | undefined
+      for (const candidate of panels) {
+        const box = candidate.el.getBoundingClientRect()
+        if (box.top <= waist && box.bottom > waist) panel = candidate
       }
-      setTint(found)
+      setTint(panel?.colour ?? null)
+      setOverImage(panel?.overImage ?? false)
     }
 
     // Scrolling down takes the bar away; scrolling back up brings it in. A few
@@ -75,7 +88,6 @@ export function NavigationBar() {
       const y = window.scrollY
       const delta = y - lastY.current
       lastY.current = y
-      setFilled(y > thresholdRef.current)
       pickTint()
       if (openRef.current) return setHidden(false)
       if (delta > 4 && y > 120) setHidden(true)
@@ -84,11 +96,10 @@ export function NavigationBar() {
 
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    const observer = hero ? new ResizeObserver(measure) : null
-    if (hero && observer) observer.observe(hero)
+    window.addEventListener('resize', pickTint)
     return () => {
       window.removeEventListener('scroll', onScroll)
-      observer?.disconnect()
+      window.removeEventListener('resize', pickTint)
     }
   }, [])
 
@@ -112,16 +123,17 @@ export function NavigationBar() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [open])
 
-  // Over the photograph — and over the open navy menu — everything is white;
-  // on a filled bar everything is ink.
-  const onFill = filled && !open
+  // The bar takes the colour you would see behind the section it is over, so
+  // it reads as part of that section rather than as a strip laid across it.
+  // Clear only over the two photographs, and over the open navy menu.
+  const barFill = open || overImage ? 'transparent' : (tint ?? 'transparent')
 
-  // The bar borrows the section's own colour, so it reads as part of it rather
-  // than as a cream strip laid over the top. Cream is the fallback for a
-  // section that paints no colour of its own, such as the closing photograph.
-  const barFill = onFill ? (tint ?? 'var(--color-cream)') : 'transparent'
-  const textTone = onFill ? 'text-ink' : 'text-cream'
-  const barTone = onFill ? 'bg-ink' : 'bg-cream'
+  // White type over the two photographs and over the open navy menu; ink
+  // everywhere else, including the sections that paint nothing, since what
+  // shows through them is the page's own light background.
+  const onDark = open || overImage
+  const textTone = onDark ? 'text-cream' : 'text-ink'
+  const barTone = onDark ? 'bg-cream' : 'bg-ink'
 
   const item = {
     hidden: reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 },
@@ -140,7 +152,7 @@ export function NavigationBar() {
       style={{ backgroundColor: barFill }}
       data-node-id="99:9780"
       data-hidden={hidden}
-      data-filled={onFill}
+      data-over-image={overImage}
       data-tint={tint ?? 'none'}
       initial={false}
       animate={{ y: hidden && !reduceMotion ? '-100%' : '0%' }}

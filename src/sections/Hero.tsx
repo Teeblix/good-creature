@@ -85,6 +85,8 @@ export function Hero() {
       ref={sectionRef}
       className="relative flex min-h-dvh w-full flex-col overflow-hidden xl:z-0"
       style={drift ? { y: driftY } : undefined}
+      // A photograph, not a fill: the bar goes clear and its type goes white.
+      data-bar="over-image"
       data-node-id="96:9714"
     >
       {/* Photograph, easing out of a slow zoom, under the design's scrims.
