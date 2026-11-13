@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "images": "node scripts/optimise-images.mjs"
+    "images": "node scripts/optimise-images.mjs",
+    "submission": "node scripts/build-submission.mjs"
   },
   "dependencies": {
     "lenis": "^1.3.27",
