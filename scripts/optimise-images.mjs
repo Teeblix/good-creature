@@ -25,8 +25,12 @@ const WIDTHS = {
   about: 1400, // half-width column, 845px tall (no longer placed)
   'about-cat': 400, // corner motif in the About statement, ~170px wide
   'about-dog': 400,
-  'journey-1': 800, // 400×300 on desktop, hidden on mobile
+  'journey-1': 800, // staircase art from the first Journey layout (no longer placed)
   'journey-2': 800,
+  'journey-step-1': 800, // 374×300 inside an open step card
+  'journey-step-2': 800,
+  'journey-step-3': 800,
+  'journey-step-4': 800,
   'trust-1': 800, // 379×586 doorway on desktop, unused on mobile
   'trust-2': 800,
   'trust-3': 800,

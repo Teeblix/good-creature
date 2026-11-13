@@ -26,6 +26,11 @@ type StaggerLinesProps = {
   delay?: number
   /** Play on mount instead of waiting to scroll into view (used by the hero). */
   playOnMount?: boolean
+  /**
+   * The plain sentence for screen readers. Needed when any line is markup
+   * rather than a string, since only string lines can be joined into one.
+   */
+  label?: string
 }
 
 /**
@@ -40,6 +45,7 @@ export function StaggerLines({
   stagger = 0.12,
   delay = 0,
   playOnMount = false,
+  label,
 }: StaggerLinesProps) {
   const reduceMotion = useReducedMotion()
   const MotionTag = TAGS[as]
@@ -49,7 +55,7 @@ export function StaggerLines({
     : { whileInView: 'visible' as const, viewport: VIEWPORT }
 
   // Screen readers get the plain sentence; the split rows are decorative.
-  const label = lines.filter((line): line is string => typeof line === 'string').join(' ')
+  const sentence = label ?? lines.filter((line): line is string => typeof line === 'string').join(' ')
 
   return (
     <MotionTag
@@ -63,7 +69,7 @@ export function StaggerLines({
           transition: { staggerChildren: reduceMotion ? 0 : stagger, delayChildren: delay },
         },
       }}
-      aria-label={label || undefined}
+      aria-label={sentence || undefined}
     >
       {lines.map((line, index) => (
         <span key={index} className="block overflow-hidden" aria-hidden>
