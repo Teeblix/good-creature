@@ -24,12 +24,18 @@ export function Cta() {
     <section
       id="plan-your-visit"
       ref={sectionRef}
-      className="relative flex min-h-dvh w-full items-start overflow-hidden lg:items-center"
+      className="relative flex min-h-lvh w-full items-start overflow-hidden lg:items-center"
       // A photograph, not a fill: the bar goes clear and its type goes white.
       data-bar="over-image"
       data-node-id="61:53897"
       aria-labelledby="cta-heading"
     >
+      {/* Sized in lvh, not dvh. A phone's address bar collapses the moment
+          you start scrolling, and with dvh the section would shrink with it —
+          taking the picture's frame down by about 67px and its offset by 4,
+          in one frame, every time. lvh is the viewport with the bar already
+          out of the way: a fixed number, so the frame the picture travels in
+          never changes size under it. */}
       <motion.div
         aria-hidden
         style={reduceMotion ? undefined : { y: parallaxY }}

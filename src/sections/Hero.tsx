@@ -77,13 +77,23 @@ export function Hero() {
   // moving at 90%, and the overlap is exactly that tenth.
   const driftY = useTransform(scrollY, [0, height], [0, height * LAG], { clamp: true })
 
+  // Below the drift breakpoint the section does not move, so the photograph
+  // travels inside it instead: it is cut taller than the hero and overlaps
+  // both edges, so the travel never uncovers one.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  })
+  const photographY = useTransform(scrollYProgress, [0, 1], ['0%', '6%'])
+  const travels = !drift && !reduceMotion
+
   return (
     <motion.section
       id="top"
       // From the xl breakpoint up the hero lags the page by a tenth, so the
       // sections after it overlap it by that much as they come up.
       ref={sectionRef}
-      className="relative flex min-h-dvh w-full flex-col overflow-hidden xl:z-0"
+      className="relative flex min-h-lvh w-full flex-col overflow-hidden xl:z-0"
       style={drift ? { y: driftY } : undefined}
       // A photograph, not a fill: the bar goes clear and its type goes white.
       data-bar="over-image"
@@ -91,25 +101,30 @@ export function Hero() {
     >
       {/* Photograph, easing out of a slow zoom, under the design's scrims.
           The source swaps at the lg breakpoint, so only one file is fetched. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute inset-0"
-          initial={reduceMotion ? { opacity: 1, scale: 1 } : { scale: 1.12, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{
-            scale: { duration: reduceMotion ? 0 : 2.4, ease: EASE_OUT },
-            opacity: { duration: reduceMotion ? 0.3 : 1.2, ease: EASE_OUT },
-          }}
+          className="absolute inset-x-0 -inset-y-[12%]"
+          style={travels ? { y: photographY } : undefined}
         >
-          <picture>
-            <source media="(min-width: 1024px)" srcSet={heroDesktop} />
-            <img
-              src={heroMobile}
-              alt=""
-              fetchPriority="high"
-              className="absolute inset-0 size-full max-w-none object-cover"
-            />
-          </picture>
+          <motion.div
+            className="size-full"
+            initial={reduceMotion ? { opacity: 1, scale: 1 } : { scale: 1.12, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              scale: { duration: reduceMotion ? 0 : 2.4, ease: EASE_OUT },
+              opacity: { duration: reduceMotion ? 0.3 : 1.2, ease: EASE_OUT },
+            }}
+          >
+            <picture>
+              <source media="(min-width: 1024px)" srcSet={heroDesktop} />
+              <img
+                src={heroMobile}
+                alt=""
+                fetchPriority="high"
+                className="size-full max-w-none object-cover"
+              />
+            </picture>
+          </motion.div>
         </motion.div>
         <div className="absolute inset-0 lg:hidden" style={{ backgroundImage: SCRIM_MOBILE }} />
         <div
@@ -118,7 +133,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-[1920px] flex-1 flex-col justify-between gap-16 px-4 pt-[120px] pb-10 lg:px-20">
+      <div className="relative mx-auto flex min-h-svh w-full max-w-[1920px] grow-0 flex-col justify-between gap-16 px-4 pt-[120px] pb-10 lg:min-h-0 lg:grow lg:px-20">
         {/* Headline */}
         <h1 className="w-full max-w-[850px] font-grotesk leading-[1.15] text-cream">
           <StaggerText
