@@ -43,11 +43,12 @@ const PILLARS: Pillar[] = [
 /**
  * The veil over the figure.
  *
- * On a wide card the body stops at 470 and never reaches the figure, so the
- * drawing is left alone. As the card narrows the text runs under it, and this
- * is what keeps the words readable: the card's own fill, solid where the text
- * is and clear at the outer edge, so the figure still reads as a figure
- * rather than as something stamped on top of the paragraph.
+ * It belongs to the card's width, not to the page's layout. Once the card can
+ * hold its full 623 the body stops at 440 and never reaches the figure, so
+ * the drawing is left alone. Below that the card shrinks, the text runs under
+ * it, and this is what keeps the words readable: the card's own fill, solid
+ * where the text is and clear at the outer edge, so the figure still reads as
+ * a figure rather than as something stamped on the paragraph.
  */
 const VEIL = 'linear-gradient(270deg, rgba(248,241,222,0) 0%, rgb(248,241,222) 86%)'
 
@@ -66,7 +67,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
         className="pointer-events-none absolute top-1/2 right-0 h-[calc(100%+22px)] w-[143px] -translate-y-1/2"
       >
         <img src={pillar.figure} alt="" loading="lazy" className="size-full object-cover" />
-        <span className="absolute inset-0 lg:hidden" style={{ background: VEIL }} />
+        <span className="absolute inset-0 sm:hidden" style={{ background: VEIL }} />
       </span>
 
       <p className="relative z-10 max-w-[440px] text-[18px] leading-normal text-pretty text-ink-soft">
@@ -79,10 +80,15 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
 /**
  * Our approach to every visit.
  *
- * The headline stays put while the four cards go by: on a tall enough screen
- * the left column is sticky, so the claim is still on screen while the proof
- * for it scrolls past. Below lg there is not enough height for that to mean
- * anything, so the two columns simply stack.
+ * The headline stays put while the four cards go by: the left column is
+ * sticky, so the claim is still on screen while the proof for it scrolls
+ * past.
+ *
+ * The row waits for xl rather than lg. The cards are a fixed 623 — the design
+ * draws them that way and the figure inside is a fixed 143 — so at 1024 the
+ * headline would be left with 201px, and 60px type in 201px is five lines
+ * where the design has two. Below xl the two columns stack instead, and the
+ * cards keep their width rather than stretching across the page.
  *
  * The 99px offset is the FAQ's — the navigation bar's height with 10px of air
  * above the column, the gap the two sticky sections share.
@@ -96,8 +102,8 @@ export function Approach() {
       aria-labelledby="approach-heading"
     >
       <div className="mx-auto w-full max-w-[1920px] px-4 py-15 lg:p-20">
-        <div className="flex w-full flex-col items-start gap-10 lg:flex-row lg:gap-10">
-          <div className="flex w-full flex-col items-start gap-3 lg:sticky lg:top-[99px] lg:min-w-0 lg:flex-1">
+        <div className="flex w-full flex-col items-start gap-10 xl:flex-row xl:gap-10">
+          <div className="flex w-full flex-col items-start gap-3 xl:sticky xl:top-[99px] xl:min-w-0 xl:flex-1">
             <StaggerLines
               as="h2"
               id="approach-heading"
@@ -112,7 +118,7 @@ export function Approach() {
             </Reveal>
           </div>
 
-          <ul className="flex w-full flex-col gap-4 lg:w-[623px] lg:shrink-0 lg:gap-5">
+          <ul className="flex w-full max-w-[623px] flex-col gap-4 xl:w-[623px] xl:max-w-none xl:shrink-0 xl:gap-5">
             {PILLARS.map((pillar, index) => (
               <li key={pillar.title} className="w-full">
                 <FadeIn delay={index * 0.06} className="w-full">
