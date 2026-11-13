@@ -287,7 +287,7 @@ export function Journey() {
       <div className="mx-auto flex w-full max-w-[1920px] flex-col items-start px-4 py-15 lg:p-10 xl:p-20">
         <div className="relative flex w-full flex-col items-center gap-[50px]">
           {/* Headline on the left, the standing invitation on the right */}
-          <div className="flex w-full flex-col items-start justify-between gap-8 lg:flex-row lg:gap-12">
+          <div className="flex w-full flex-col items-start justify-between gap-[60px] lg:flex-row lg:gap-12">
             <StaggerLines
               as="h2"
               id="journey-heading"
