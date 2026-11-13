@@ -173,8 +173,10 @@ function PinnedStage() {
               className="max-w-[650px] font-grotesk text-[60px] leading-[70px] text-ink"
             />
             <Reveal delay={0.15}>
-              <p className="max-w-[620px] text-[24px] leading-normal text-balance text-ink-soft">
-                Fast answers, gentle handling and prices agreed before treatment.
+              <p className="max-w-[620px] text-[18px] leading-normal text-pretty text-ink-soft">
+                Fast answers, gentle handling and prices agreed before treatment. Families stay
+                because the everyday things hold steady: you can reach us, you are seen quickly,
+                and you know the cost before anything begins.
               </p>
             </Reveal>
           </div>
@@ -298,8 +300,10 @@ function MobileStrip() {
           className="w-full font-grotesk text-[36px] leading-[1.19] text-ink"
         />
         <Reveal delay={0.15}>
-          <p className="w-full text-[20px] leading-normal text-balance text-ink-soft">
-            Fast answers, gentle handling and prices agreed before treatment.
+          <p className="w-full text-[18px] leading-normal text-pretty text-ink-soft">
+            Fast answers, gentle handling and prices agreed before treatment. Families stay because
+            the everyday things hold steady: you can reach us, you are seen quickly, and you know
+            the cost before anything begins.
           </p>
         </Reveal>
       </div>
