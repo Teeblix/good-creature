@@ -57,12 +57,14 @@ export function Footer() {
   return (
     <footer id="contact" className="relative z-10 w-full" data-node-id="61:53961">
       <div className="mx-auto w-full max-w-[1920px] px-4 py-15 lg:p-20">
-        {/* The design leaves a long drop between the two rows — it is what
+        {/* Navigate sits with Contact rather than with the headline: the two
+            columns butt together as one pair, held off the headline by a gap
+            of their own. The design leaves a long drop between the two rows — it is what
             gives the footer its air, so it is kept on desktop and traded for
             something walkable once the columns stack. */}
         <div className="flex w-full flex-col items-start gap-20 lg:gap-[300px]">
           <div className="flex w-full flex-col items-start gap-10 lg:flex-row lg:items-start lg:gap-[220px]">
-            <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row lg:gap-0">
+            <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row lg:gap-[70px]">
               <StaggerLines
                 as="h2"
                 label="Small steps for a kinder visit"
