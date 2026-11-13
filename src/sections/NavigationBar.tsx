@@ -28,7 +28,11 @@ export function NavigationBar() {
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [filled, setFilled] = useState(false)
+  // The colour of whatever section is currently behind the bar.
+  const [tint, setTint] = useState<string | null>(null)
   const reduceMotion = useReducedMotion()
+
+  const headerRef = useRef<HTMLElement>(null)
 
   // Read inside the scroll listener without re-subscribing it.
   const lastY = useRef(0)
@@ -45,6 +49,25 @@ export function NavigationBar() {
     }
     measure()
 
+    // Every panel that paints a colour, with the colour it paints. Read once:
+    // a section's fill is a class, and classes do not change under us.
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('main section, footer'))
+      .map((el) => ({ el, colour: getComputedStyle(el).backgroundColor }))
+      .filter(({ colour }) => colour !== 'rgba(0, 0, 0, 0)' && colour !== 'transparent')
+
+    // Which of them is behind the bar. Measured at the bar's own waist, so the
+    // colour changes when a new section is half way across it rather than at
+    // the moment it first appears underneath.
+    const pickTint = () => {
+      const waist = (headerRef.current?.offsetHeight ?? 89) / 2
+      let found: string | null = null
+      for (const { el, colour } of panels) {
+        const box = el.getBoundingClientRect()
+        if (box.top <= waist && box.bottom > waist) found = colour
+      }
+      setTint(found)
+    }
+
     // Scrolling down takes the bar away; scrolling back up brings it in. A few
     // pixels of slack keeps trackpad jitter from flickering it.
     const onScroll = () => {
@@ -52,6 +75,7 @@ export function NavigationBar() {
       const delta = y - lastY.current
       lastY.current = y
       setFilled(y > thresholdRef.current)
+      pickTint()
       if (openRef.current) return setHidden(false)
       if (delta > 4 && y > 120) setHidden(true)
       else if (delta < -4 || y <= 120) setHidden(false)
@@ -88,8 +112,13 @@ export function NavigationBar() {
   }, [open])
 
   // Over the photograph — and over the open navy menu — everything is white;
-  // on the cream fill everything is ink.
+  // on a filled bar everything is ink.
   const onFill = filled && !open
+
+  // The bar borrows the section's own colour, so it reads as part of it rather
+  // than as a cream strip laid over the top. Cream is the fallback for a
+  // section that paints no colour of its own, such as the closing photograph.
+  const barFill = onFill ? (tint ?? 'var(--color-cream)') : 'transparent'
   const textTone = onFill ? 'text-ink' : 'text-cream'
   const barTone = onFill ? 'bg-ink' : 'bg-cream'
 
@@ -105,12 +134,13 @@ export function NavigationBar() {
   return (
     <>
     <motion.header
-      className={`fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300 ease-out ${
-        onFill ? 'bg-cream' : 'bg-transparent'
-      }`}
+      ref={headerRef}
+      className="fixed inset-x-0 top-0 z-50 w-full transition-colors duration-300 ease-out"
+      style={{ backgroundColor: barFill }}
       data-node-id="99:9780"
       data-hidden={hidden}
       data-filled={onFill}
+      data-tint={tint ?? 'none'}
       initial={false}
       animate={{ y: hidden && !reduceMotion ? '-100%' : '0%' }}
       transition={{ duration: reduceMotion ? 0 : 0.45, ease: EASE_OUT }}
