@@ -86,7 +86,7 @@ function cardPhase(index: number): Phase {
 /** The card itself — identical in both layouts, so only its wrapper changes. */
 function CardFace({ card }: { card: Card }) {
   return (
-    <article className="flex w-full flex-col gap-20 rounded-xl border border-line bg-white p-3 lg:w-[350px]">
+    <article className="flex h-full w-full flex-col justify-between gap-20 rounded-xl border border-line bg-white p-3 lg:w-[350px]">
       <span className="flex size-[46px] shrink-0 items-center justify-center rounded-full bg-ember">
         <img src={card.icon} alt="" className="size-6" />
       </span>
@@ -272,8 +272,8 @@ function MobileStrip() {
         </Reveal>
       </div>
 
-      {/* The doorway runs a little wider than the text column, as drawn. */}
-      <Reveal className="mt-[50px] -mx-[10px] w-[calc(100%+20px)]">
+      {/* The doorway keeps to the page's 16 of side padding. */}
+      <Reveal className="mt-[50px] w-full">
         <div className="relative isolate aspect-[379/586] w-full overflow-hidden rounded-t-[250px] bg-ink/5">
           {CARDS.map((card, index) => (
             <motion.img
