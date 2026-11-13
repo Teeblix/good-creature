@@ -63,7 +63,7 @@ const TESTIMONIALS: Testimonial[] = [
  * previously set in the display serif.
  */
 const QUOTE_CLASS =
-  'w-full text-center font-grotesk text-[24px] leading-normal text-ink sm:text-[28px] lg:text-[36px]'
+  'w-full text-center font-grotesk text-[24px] leading-normal text-pretty text-ink sm:text-[28px] lg:text-[36px]'
 
 const SMALL = 60
 const LARGE = 128

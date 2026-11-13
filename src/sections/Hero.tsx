@@ -170,7 +170,7 @@ export function Hero() {
                 <img src={fact.icon} alt="" className="size-10 shrink-0" />
                 <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 text-cream">
                   <p className="w-full font-grotesk text-[18px] font-medium">{fact.title}</p>
-                  <p className="w-full text-[16px]">{fact.body}</p>
+                  <p className="w-full text-[16px] text-pretty">{fact.body}</p>
                 </div>
               </motion.li>
             ))}

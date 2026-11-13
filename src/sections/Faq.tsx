@@ -139,7 +139,7 @@ function Question({
             transition={transition}
             className="overflow-hidden"
           >
-            <p className="pb-4 text-[18px] leading-normal text-black">{item.answer}</p>
+            <p className="pb-4 text-[18px] leading-normal text-pretty text-black">{item.answer}</p>
           </motion.div>
         )}
       </AnimatePresence>

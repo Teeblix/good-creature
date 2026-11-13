@@ -59,11 +59,14 @@ announced**, and how it is announced says what kind of thing it is.
   The scroll trigger sits on an unclipped wrapper, because Chromium folds an
   element's own `clip-path` into its IntersectionObserver ratio — a fully
   clipped element reports itself off-screen and would never reveal itself.
-- **Two sections are drawn by the scroll rather than entered.** About
-  resolves its statement line by line out of a blur while a doorway opens
-  behind it; Approach pins a ring and hands over one pillar at a time.
-- **Buttons roll their label on hover**, the arrow leaving through the tip
-  of its badge while an identical one follows in from the tail.
+- **About is drawn by the scroll rather than entered**, resolving its
+  statement line by line out of a blur.
+- **Approach holds its headline still** in a sticky column while the four
+  cards that prove it scroll past.
+- **Buttons answer a hover with a fill and nothing else.** The label used
+  to roll and the arrow to leave through the tip of its badge; both were
+  doing a lot of work to say "this is a button", which the button already
+  said.
 
 Everything respects `prefers-reduced-motion`; the pinned sequences have
 still versions rather than reduced ones.
@@ -114,4 +117,6 @@ originals land in `assets-source/` (git-ignored) — Figma is the source of trut
   before this goes to a public domain.
 - `src/assets/icon-close.svg` contains an "add" (plus) glyph, not a close
   one; the close cross in the panel is drawn inline instead.
+- Prose carries `text-pretty` wherever it can wrap, so no block on the page
+  ends on a single word. Checked at twelve widths from 360 to 1920.
 - Grace M.'s testimonial portrait is generated; the other three come from Figma.
