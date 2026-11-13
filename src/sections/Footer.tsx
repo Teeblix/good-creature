@@ -56,7 +56,7 @@ function Column({ title, links }: { title: string; links: Link[] }) {
 export function Footer() {
   return (
     <footer id="contact" className="relative z-10 w-full" data-node-id="61:53961">
-      <div className="mx-auto w-full max-w-[1920px] px-4 py-15 lg:p-20">
+      <div className="mx-auto w-full max-w-[1920px] px-4 pt-15 pb-5 lg:px-20 lg:pt-20">
         {/* Navigate sits with Contact rather than with the headline: the two
             columns butt together as one pair, held well off the headline by a
             gap of their own. That gap is paid for out of the long run before
