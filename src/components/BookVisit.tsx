@@ -400,7 +400,7 @@ function Panel({ onClose }: { onClose: () => void }) {
           >
             <button
               type="submit"
-              className="flex w-full cursor-pointer items-center justify-center gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+              className="flex w-full cursor-pointer items-center justify-between gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
             >
               Submit
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cream">
