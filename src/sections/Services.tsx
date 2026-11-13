@@ -80,7 +80,7 @@ function ServiceName({
           transition={transition}
         />
         <motion.span
-          className="block font-grotesk text-[26px] leading-none whitespace-nowrap lg:text-[36px]"
+          className="block font-grotesk text-[36px] leading-none whitespace-nowrap"
           initial={false}
           animate={{ x: isActive ? 30 : 0, color: isActive ? '#f5f5f5' : '#878787' }}
           transition={transition}
@@ -103,7 +103,7 @@ export function Services() {
         <div className="flex w-full flex-col gap-3 lg:h-[90dvh] lg:flex-row">
           {/* The card. Headline, list and detail sit at the top, middle and
               bottom of its height, which is the design's three equal gaps. */}
-          <div className="flex w-full flex-col justify-between gap-12 rounded-lg bg-navy p-10 lg:h-full lg:flex-1">
+          <div className="flex h-[578px] w-full flex-col justify-between gap-12 rounded-lg bg-navy p-4 lg:h-full lg:p-10 lg:flex-1">
             <StaggerLines
               as="h2"
               lines={['Care for Every', 'Stage of Life']}
@@ -147,7 +147,10 @@ export function Services() {
           </div>
 
           {/* The photographs, stacked. Only the active one is sharp. */}
-          <div className="relative aspect-[650/720] w-full overflow-hidden rounded-lg bg-navy/5 lg:aspect-auto lg:h-full lg:flex-1">
+          {/* First on a phone, where the frame leads with the photograph, and
+              cut to the same height as the card under it. From lg it goes back
+              beside the card and takes its height from the row. */}
+          <div className="relative order-first h-[578px] w-full overflow-hidden rounded-lg bg-navy/5 lg:order-none lg:aspect-auto lg:h-full lg:flex-1">
             {SERVICES.map((service, index) => (
               <motion.img
                 key={service.title}
