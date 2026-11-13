@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { MotionValue } from 'motion/react'
 import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from 'motion/react'
 import { Reveal } from '../components/Reveal'
+import { EASE_OUT } from '../lib/motion'
 import { StaggerLines } from '../components/StaggerLines'
 import iconClock from '../assets/icon-why-clock.svg'
 import iconHeart from '../assets/icon-why-heart.svg'
@@ -63,6 +64,9 @@ const CARDS: Card[] = [
     inset: false,
   },
 ]
+
+/** The gap between cards on the mobile rail — 12 in the design. */
+const CARD_GAP = 12
 
 /* ---------------------------------------------------------------- timings */
 
@@ -219,11 +223,38 @@ function PinnedStage() {
   )
 }
 
-/** Tablet and mobile: the same cards, simply stacked and read in order. */
-function StackedCards() {
+/**
+ * Tablet and mobile: the header, then the doorway, then the cards on a rail
+ * you push sideways.
+ *
+ * The doorway still belongs to a card — scrolling the rail hands it the
+ * photograph of whichever card you have reached, which is the same idea as
+ * the desktop peel without needing the height a pinned sequence would eat.
+ */
+function MobileStrip() {
+  const [active, setActive] = useState(0)
+  const railRef = useRef<HTMLDivElement>(null)
+
+  // Which card the rail has settled on, read from how far it has travelled.
+  useEffect(() => {
+    const rail = railRef.current
+    if (!rail) return
+
+    const update = () => {
+      const card = rail.firstElementChild as HTMLElement | null
+      if (!card) return
+      const step = card.offsetWidth + CARD_GAP
+      const index = Math.round(rail.scrollLeft / step)
+      setActive(Math.max(0, Math.min(CARDS.length - 1, index)))
+    }
+
+    rail.addEventListener('scroll', update, { passive: true })
+    return () => rail.removeEventListener('scroll', update)
+  }, [])
+
   return (
-    <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-10 px-4 py-15 md:px-10">
-      <div className="flex w-full flex-col items-center gap-1 text-center">
+    <div className="mx-auto flex w-full max-w-[560px] flex-col items-start px-4 py-15">
+      <div className="flex w-full flex-col items-start gap-1">
         <StaggerLines
           as="h2"
           label="Why Families Stay"
@@ -232,19 +263,44 @@ function StackedCards() {
               Why <span className="text-ember">Families</span> Stay
             </>,
           ]}
-          className="max-w-[650px] font-grotesk text-[36px] leading-[1.14] text-ink md:text-[48px]"
+          className="w-full font-grotesk text-[36px] leading-[1.19] text-ink"
         />
         <Reveal delay={0.15}>
-          <p className="max-w-[400px] text-[16px] text-ink-soft">
+          <p className="w-full text-[16px] leading-normal text-ink-soft">
             Fast answers, gentle handling and prices agreed before treatment.
           </p>
         </Reveal>
       </div>
-      <div className="flex w-full max-w-[560px] flex-col gap-4 md:max-w-[720px]">
-        {CARDS.map((card, index) => (
-          <Reveal key={card.title} delay={index * 0.08}>
+
+      {/* The doorway runs a little wider than the text column, as drawn. */}
+      <Reveal className="mt-[50px] -mx-[10px] w-[calc(100%+20px)]">
+        <div className="relative isolate aspect-[379/586] w-full overflow-hidden rounded-t-[250px] bg-ink/5">
+          {CARDS.map((card, index) => (
+            <motion.img
+              key={card.title}
+              src={card.image}
+              alt={card.alt}
+              loading="lazy"
+              initial={false}
+              animate={{ opacity: active === index ? 1 : 0 }}
+              transition={{ duration: 0.45, ease: EASE_OUT }}
+              className="absolute inset-0 size-full object-cover"
+            />
+          ))}
+        </div>
+      </Reveal>
+
+      {/* Full-bleed rail: the cards reach the edge of the screen rather than
+          stopping at the text column, so it reads as something to push. */}
+      <div
+        ref={railRef}
+        className="mt-[40px] -mx-4 flex w-screen max-w-[100vw] snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        aria-label="Reasons families stay"
+      >
+        {CARDS.map((card) => (
+          <div key={card.title} className="w-[300px] shrink-0 snap-start">
             <CardFace card={card} />
-          </Reveal>
+          </div>
         ))}
       </div>
     </div>
@@ -270,7 +326,7 @@ export function TrustStrip() {
 
   return (
     <section id="why-families-stay" className="w-full bg-cream" data-node-id="107:9964">
-      {pinned ? <PinnedStage /> : <StackedCards />}
+      {pinned ? <PinnedStage /> : <MobileStrip />}
     </section>
   )
 }
