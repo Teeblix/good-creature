@@ -45,7 +45,7 @@ function PillarCard({ pillar }: { pillar: Pillar }) {
     <article className="flex w-full items-start gap-5 overflow-hidden rounded-lg border border-line">
       <div className="flex min-w-0 flex-1 flex-col gap-[70px] p-4">
         <h3 className="font-grotesk text-[22px] leading-none text-ink">{pillar.title}</h3>
-        <p className="max-w-[400px] text-[18px] leading-normal text-pretty text-ink-soft">{pillar.body}</p>
+        <p className="max-w-[550px] text-[18px] leading-normal text-pretty text-ink-soft">{pillar.body}</p>
       </div>
 
       {/* In the layout rather than over it, and stretched to whatever height
