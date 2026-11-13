@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { MotionValue } from 'motion/react'
 import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from 'motion/react'
 import { Reveal } from '../components/Reveal'
+import { StaggerLines } from '../components/StaggerLines'
 import iconClock from '../assets/icon-why-clock.svg'
 import iconHeart from '../assets/icon-why-heart.svg'
 import iconReceipt from '../assets/icon-why-receipt.svg'
@@ -66,9 +67,6 @@ const CARDS: Card[] = [
 /* ---------------------------------------------------------------- timings */
 
 type Phase = readonly [number, number]
-/** The heading settles while the section is still arriving. */
-const HEADING: Phase = [0.12, 0.26]
-const SUBHEADING: Phase = [0.16, 0.3]
 /** Progress at which the first card lands, and how the rest follow. */
 const FIRST_CARD = 0.26
 const CARD_STEP = 0.17
@@ -149,16 +147,6 @@ function PinnedStage() {
   const trackRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start end', 'end end'] })
 
-  const heading = [...HEADING]
-  const headingOpacity = useTransform(scrollYProgress, heading, [0, 1])
-  const headingY = useTransform(scrollYProgress, heading, ['0.3em', '0em'])
-  const headingSoftness = useTransform(scrollYProgress, heading, [1, 0])
-  const headingBlur = useMotionTemplate`blur(calc(12px * ${headingSoftness}))`
-
-  const sub = [...SUBHEADING]
-  const subOpacity = useTransform(scrollYProgress, sub, [0, 1])
-  const subY = useTransform(scrollYProgress, sub, ['0.5em', '0em'])
-
   // Mirrors the live progress onto the DOM so the sequence can be inspected
   // while scrolling, as the navigation bar and the About statement both do.
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
@@ -170,18 +158,21 @@ function PinnedStage() {
       <div className="sticky top-0 grid h-dvh place-items-center">
         <div className="flex w-full max-w-[1920px] flex-col items-center gap-[60px] px-20">
           <div className="flex w-full flex-col items-center gap-1 text-center">
-            <motion.h2
-              style={{ opacity: headingOpacity, y: headingY, filter: headingBlur }}
+            <StaggerLines
+              as="h2"
+              label="Why Families Stay"
+              lines={[
+                <>
+                  Why <span className="text-ember">Families</span> Stay
+                </>,
+              ]}
               className="max-w-[650px] font-grotesk text-[60px] leading-[70px] text-ink"
-            >
-              Why <span className="text-ember">Families</span> Stay
-            </motion.h2>
-            <motion.p
-              style={{ opacity: subOpacity, y: subY }}
-              className="max-w-[400px] text-[16px] text-ink-soft"
-            >
-              Fast answers, gentle handling and prices agreed before treatment.
-            </motion.p>
+            />
+            <Reveal delay={0.15}>
+              <p className="max-w-[400px] text-[16px] text-ink-soft">
+                Fast answers, gentle handling and prices agreed before treatment.
+              </p>
+            </Reveal>
           </div>
 
           {/* The row has to be at least as tall as the doorway, or the arch —
@@ -233,12 +224,21 @@ function StackedCards() {
   return (
     <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-10 px-4 py-15 md:px-10">
       <div className="flex w-full flex-col items-center gap-1 text-center">
-        <h2 className="max-w-[650px] font-grotesk text-[36px] leading-[1.14] text-ink md:text-[48px]">
-          Why <span className="text-ember">Families</span> Stay
-        </h2>
-        <p className="max-w-[400px] text-[16px] text-ink-soft">
-          Fast answers, gentle handling and prices agreed before treatment.
-        </p>
+        <StaggerLines
+          as="h2"
+          label="Why Families Stay"
+          lines={[
+            <>
+              Why <span className="text-ember">Families</span> Stay
+            </>,
+          ]}
+          className="max-w-[650px] font-grotesk text-[36px] leading-[1.14] text-ink md:text-[48px]"
+        />
+        <Reveal delay={0.15}>
+          <p className="max-w-[400px] text-[16px] text-ink-soft">
+            Fast answers, gentle handling and prices agreed before treatment.
+          </p>
+        </Reveal>
       </div>
       <div className="flex w-full max-w-[560px] flex-col gap-4 md:max-w-[720px]">
         {CARDS.map((card, index) => (
