@@ -176,10 +176,16 @@ export function NavigationBar() {
             className="flex items-center gap-1"
             aria-label="Good Creature — home"
           >
+            {/* The mark keeps its own colours everywhere except over the open
+                menu, where the design has it flat white. brightness-0 takes
+                every pixel to black and invert takes it to white, so one file
+                serves both states and the transparency is kept. */}
             <img
               src={logo}
               alt=""
-              className="h-[49px] w-[44px] object-contain"
+              className={`h-[49px] w-[44px] object-contain transition-[filter] duration-300 ease-out ${
+                open ? 'brightness-0 invert' : ''
+              }`}
             />
             <span
               className={`font-grotesk text-[18px] font-medium whitespace-nowrap transition-colors duration-300 ${textTone}`}
