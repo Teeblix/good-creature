@@ -55,6 +55,15 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ]
 
+/**
+ * The quote's type, in one place: the visible quote and the invisible copy
+ * that reserves its height have to be set identically or the reservation is
+ * wrong. Neue Montreal at 36px is what the redesign uses — the section was
+ * previously set in the display serif.
+ */
+const QUOTE_CLASS =
+  'w-full text-center font-grotesk text-[24px] leading-normal text-ink sm:text-[28px] lg:text-[36px]'
+
 const SMALL = 60
 const LARGE = 128
 /** Centre-to-centre distance between the active portrait and a neighbour. */
@@ -102,7 +111,7 @@ export function Testimonials() {
                 return (
                   <motion.div
                     key={item.name}
-                    className="absolute top-1/2 left-1/2 overflow-hidden"
+                    className="absolute top-1/2 left-1/2 overflow-hidden rounded-lg"
                     initial={false}
                     animate={{ x, y, width: size, height: size, opacity }}
                     transition={transition}
@@ -115,12 +124,28 @@ export function Testimonials() {
 
             {/* Quote — remounts on change so the lines stagger back in */}
             <div className="flex w-full flex-col items-center gap-[50px]" aria-live="polite">
-              <StaggerText
-                key={`quote-${index}`}
-                text={active.quote}
-                playOnMount
-                className="w-full max-w-[700px] text-center font-display text-[36px] text-ink"
-              />
+              {/* The quotes are not the same length, and without a fixed box
+                  the longest ones push the name and the arrows down the page
+                  as you move through them. An invisible copy of all four holds
+                  the tallest one's height, so the controls never move. */}
+              <div className="relative w-full max-w-[850px]">
+                <div aria-hidden className="invisible grid">
+                  {TESTIMONIALS.map((item) => (
+                    <p key={item.name} className={`col-start-1 row-start-1 ${QUOTE_CLASS}`}>
+                      {item.quote}
+                    </p>
+                  ))}
+                </div>
+
+                <div className="absolute inset-0 flex items-center">
+                  <StaggerText
+                    key={`quote-${index}`}
+                    text={active.quote}
+                    playOnMount
+                    className={QUOTE_CLASS}
+                  />
+                </div>
+              </div>
 
               <Reveal key={`who-${index}`} playOnMount delay={0.25}>
                 <div className="flex flex-col items-center text-center">
