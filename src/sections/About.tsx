@@ -164,13 +164,18 @@ function Statement() {
 
   return (
     <div ref={trackRef} className="relative h-[300vh]">
-      <div className="sticky top-0 grid h-dvh place-items-center overflow-hidden px-6">
+      {/* Sized in svh, not dvh. A phone collapses its address bar as you
+          scroll, and on dvh this stage and the doorway would both resize with
+          it mid-scroll — the doorway is drawn from its own height, so
+          narrowing it also walks it sideways. svh is the viewport with the bar
+          still showing: a fixed number, so nothing here is re-measured. */}
+      <div className="sticky top-0 grid h-svh place-items-center overflow-hidden px-6">
         {/* The doorway, drawn as an outline — it sits behind the words and
             keeps opening out as the section is scrolled. */}
         <motion.div
           aria-hidden
           style={{ scale: archScale, opacity: archOpacity }}
-          className="col-start-1 row-start-1 aspect-[391/547] h-[min(547px,62dvh)] rounded-t-[250px] border border-line"
+          className="col-start-1 row-start-1 aspect-[391/547] h-[min(547px,62svh)] rounded-t-[250px] border border-line"
         />
 
         <h2
@@ -209,10 +214,10 @@ function Statement() {
 /** The same two blocks, stacked and still, for anyone who asks for less motion. */
 function StillStatement() {
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center gap-10 overflow-hidden px-6 py-20">
+    <div className="relative flex min-h-svh flex-col items-center justify-center gap-10 overflow-hidden px-6 py-20">
       <div
         aria-hidden
-        className="absolute top-1/2 aspect-[391/547] h-[min(547px,62dvh)] -translate-y-1/2 rounded-t-[250px] border border-line"
+        className="absolute top-1/2 aspect-[391/547] h-[min(547px,62svh)] -translate-y-1/2 rounded-t-[250px] border border-line"
       />
       <img
         src={catMotif}

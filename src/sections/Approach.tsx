@@ -292,7 +292,7 @@ function PinnedStage({ narrow }: { narrow: boolean }) {
           overhang — it lifts the ring by half of it and centres what you
           actually see. Narrow: the words sit under the ring and are part of
           the column, so the column centres itself and no inset is wanted. */}
-      <div className="sticky top-0 flex h-dvh flex-col items-center justify-center overflow-hidden px-4 xl:px-20 xl:pb-[113px]">
+      <div className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-4 xl:px-20 xl:pb-[113px]">
         {/* The ring. Everything else is pinned to its edge or its centre, so
             it is the only thing that has to know how big it is.
 
@@ -301,7 +301,7 @@ function PinnedStage({ narrow }: { narrow: boolean }) {
             Narrow, it is the width that binds, with the words left room below. */}
         <motion.div
           style={{ opacity: circleOpacity }}
-          className="@container relative size-[min(84vw,calc(100dvh-280px))] shrink-0 rounded-full border border-[#b7b7b7] xl:size-[min(676px,calc(100dvh-270px),46vw)]"
+          className="@container relative size-[min(84vw,calc(100svh-280px))] shrink-0 rounded-full border border-[#b7b7b7] xl:size-[min(676px,calc(100svh-270px),46vw)]"
         >
           <motion.h2
             id="approach-heading"
