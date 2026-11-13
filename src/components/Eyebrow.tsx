@@ -50,7 +50,7 @@ export function Eyebrow({
       initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
       {...playback}
       transition={{ duration: reduceMotion ? 0.3 : 0.6, ease: EASE_OUT, delay }}
-      className={`relative inline-flex items-center justify-center rounded-full px-3 py-1.5 text-center text-[12px] whitespace-nowrap ${TEXT[tone]} ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full px-3 py-1.5 text-center text-[14px] whitespace-nowrap ${TEXT[tone]} ${className}`}
     >
       <span
         aria-hidden

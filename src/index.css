@@ -29,6 +29,8 @@
   --color-powder: #d3e1fc; /* journey step badge */
   --color-line: #d8d8d8; /* journey card border, mobile menu dividers */
   --color-ember: #dc6832; /* icon badge on the "Why families stay" cards */
+  --shadow-card: 0 1px 2px rgba(23, 23, 23, 0.04), 0 6px 16px rgba(23, 23, 23, 0.05);
+
   --color-mute: #878787; /* text white-800: a service name that is not active */
 
   --font-display: 'Viaoda Libre', serif;

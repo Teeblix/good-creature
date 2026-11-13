@@ -130,7 +130,7 @@ export function Services() {
                 height of the longest one: without that, a taller detail would
                 squeeze the gaps above it and walk the list of names up the
                 card every time the hover changed. */}
-            <div className="relative w-full max-w-[350px] text-[16px] leading-normal text-[#f7f7f7]">
+            <div className="relative w-full max-w-[350px] text-[18px] leading-normal text-[#f7f7f7]">
               <div aria-hidden className="invisible grid">
                 {SERVICES.map((service) => (
                   <p key={service.title} className="col-start-1 row-start-1">

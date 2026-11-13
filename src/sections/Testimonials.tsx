@@ -104,13 +104,7 @@ export function Testimonials() {
           <StaggerLines
             as="h2"
             id="stories-heading"
-            label="What Families Say About Us"
-            lines={[
-              <>
-                What Families <span className="text-ember">Say</span>
-              </>,
-              'About Us',
-            ]}
+            lines={['What Families Say', 'About Us']}
             className="max-w-[650px] text-center font-grotesk text-[36px] leading-[1.17] text-ink lg:text-[60px] lg:leading-[70px]"
           />
 
@@ -162,7 +156,7 @@ export function Testimonials() {
               <Reveal key={`who-${index}`} playOnMount delay={0.25}>
                 <div className="flex flex-col items-center text-center">
                   <p className="text-[18px] text-ink">{active.name}</p>
-                  <p className="text-[14px] text-ink-soft">{active.role}</p>
+                  <p className="text-[16px] text-ink-soft">{active.role}</p>
                 </div>
               </Reveal>
             </div>

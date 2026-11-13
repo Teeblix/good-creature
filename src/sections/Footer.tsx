@@ -20,7 +20,9 @@ const CONTACT: Link[] = [
   { label: '020 7946 0123', href: 'tel:02079460123' },
   { label: 'hello@goodcreature.vet', href: 'mailto:hello@goodcreature.vet' },
   // The address is not a link; there is nowhere agreed for it to go yet.
-  { label: '24 Larkfield Lane, Ashbourne, DE6 1QT' },
+  // It breaks where an address is read — street, then town and postcode —
+  // rather than wherever the column happens to run out.
+  { label: '24 Larkfield Lane,\nAshbourne, DE6 1QT' },
 ]
 
 /** Placeholder destinations — the real profiles are not in the design. */
@@ -40,12 +42,14 @@ function Column({ title, links }: { title: string; links: Link[] }) {
             {link.href ? (
               <a
                 href={link.href}
-                className="text-[16px] leading-normal text-ink-soft transition-opacity duration-200 hover:opacity-60"
+                className="text-[18px] leading-normal text-ink-soft transition-opacity duration-200 hover:opacity-60"
               >
                 {link.label}
               </a>
             ) : (
-              <span className="text-[16px] leading-normal text-ink-soft">{link.label}</span>
+              <span className="text-[18px] leading-normal whitespace-pre-line text-ink-soft">
+                {link.label}
+              </span>
             )}
           </li>
         ))}
@@ -57,22 +61,20 @@ function Column({ title, links }: { title: string; links: Link[] }) {
 export function Footer() {
   return (
     <footer id="contact" className="relative z-10 w-full" data-node-id="61:53961">
-      <div className="mx-auto w-full max-w-[1920px] px-4 pt-15 pb-5 lg:px-20 lg:pt-20">
+      <div className="mx-auto w-full max-w-[1920px] px-4 pt-12 pb-5 lg:px-20 lg:pt-16">
         {/* Navigate sits with Contact rather than with the headline: the two
             columns butt together as one pair, held well off the headline by a
             gap of their own. That gap is paid for out of the long run before
             the social buttons, so the columns keep their width and the buttons
-            do not move. The design leaves a long drop between the two rows — it is what
-            gives the footer its air, so it is kept on desktop and traded for
-            something walkable once the columns stack. */}
-        <div className="flex w-full flex-col items-start gap-20 lg:gap-[300px]">
-          <div className="flex w-full flex-col items-start gap-10 lg:flex-row lg:items-start lg:gap-[150px]">
-            <div className="flex w-full flex-1 flex-col items-start gap-10 lg:flex-row lg:gap-[140px]">
+            do not move. */}
+        <div className="flex w-full flex-col items-start gap-14 xl:gap-[150px]">
+          <div className="flex w-full flex-col items-start gap-10 xl:flex-row xl:items-start xl:gap-[150px]">
+            <div className="flex w-full flex-1 flex-col items-start gap-10 xl:flex-row xl:gap-[140px]">
               <StaggerLines
                 as="h2"
                 label="Small steps for a kinder visit"
                 lines={['Small steps for a', 'kinder visit']}
-                className="w-full shrink-0 lg:w-[403px] font-grotesk text-[28px] leading-[1.2] text-ink lg:text-[36px]"
+                className="w-full shrink-0 font-grotesk text-[28px] leading-[1.2] text-ink lg:text-[36px] xl:w-[403px]"
               />
 
               <div className="flex w-full flex-1 flex-col items-start gap-10 sm:flex-row sm:gap-0">
@@ -102,7 +104,7 @@ export function Footer() {
             </Reveal>
           </div>
 
-          <FadeIn className="flex w-full items-start justify-between gap-6 text-[16px] leading-normal text-ink">
+          <FadeIn className="flex w-full items-start justify-between gap-6 text-[18px] leading-normal text-ink">
             <p>© 2026 Good Creature</p>
             <a
               href="#top"

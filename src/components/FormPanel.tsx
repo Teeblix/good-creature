@@ -171,13 +171,19 @@ export function useContactUs() {
 
 const LABEL = 'w-full text-[18px] leading-normal text-ink'
 const CONTROL =
-  'w-full border-b border-line bg-transparent py-[10px] text-[14px] leading-normal text-ink ' +
+  'w-full border-b border-line bg-transparent py-[10px] text-[16px] leading-normal text-ink ' +
   'placeholder:text-[#949494] focus:border-navy focus:outline-none'
 
-/** A chevron, drawn rather than fetched — it only ever points one way. */
-function Chevron() {
+/** A chevron, drawn rather than fetched. It turns over when the list opens. */
+function Chevron({ open = false }: { open?: boolean }) {
   return (
-    <svg viewBox="0 0 20 20" aria-hidden className="pointer-events-none size-5 text-ink">
+    <svg
+      viewBox="0 0 20 20"
+      aria-hidden
+      className={`pointer-events-none size-5 text-ink transition-transform duration-300 ease-out ${
+        open ? '-rotate-180' : ''
+      }`}
+    >
       <path
         d="M5 8l5 5 5-5"
         fill="none"
@@ -187,6 +193,188 @@ function Chevron() {
         strokeLinejoin="round"
       />
     </svg>
+  )
+}
+
+/**
+ * The site's own dropdown.
+ *
+ * A native select paints its list with the operating system's widget — right
+ * typeface, wrong everything else, and nothing about it belongs to this page.
+ * This keeps what the native control is good at (click the field, click the
+ * option, and the keyboard behaves) and draws the list in the page's own
+ * language: the field's rule, the panel's radius, the card shadow.
+ *
+ * The list flips above the field when there is not room below it, because the
+ * panel it lives in scrolls and would otherwise clip it.
+ */
+function Select({
+  id,
+  field,
+  value,
+  invalid,
+  onChange,
+}: {
+  id: string
+  field: Field
+  value: string
+  invalid: boolean
+  onChange: (value: string) => void
+}) {
+  const options = field.options ?? []
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState(0)
+  const [place, setPlace] = useState({ above: false, maxHeight: 260 })
+  const rootRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+
+  const close = useCallback(() => setOpen(false), [])
+
+  /**
+   * Opening decides where the list goes. Below the field is the right answer
+   * almost always — a list that jumps above covers the questions already
+   * answered — so it only flips when there is really nothing underneath, and
+   * otherwise just takes the height that fits.
+   */
+  const show = () => {
+    const box = rootRef.current?.getBoundingClientRect()
+    if (box) {
+      const below = window.innerHeight - box.bottom - 28
+      const above = box.top - 28
+      setPlace(
+        below < 140 && above > below
+          ? { above: true, maxHeight: Math.min(260, above) }
+          : { above: false, maxHeight: Math.min(260, below) },
+      )
+    }
+    setActive(Math.max(0, options.indexOf(value)))
+    setOpen(true)
+  }
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) close()
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [open, close])
+
+  // The active option is kept in view, so a long list can be walked with the
+  // arrow keys without losing sight of where you are.
+  useEffect(() => {
+    if (!open) return
+    const node = listRef.current?.children[active] as HTMLElement | undefined
+    node?.scrollIntoView({ block: 'nearest' })
+  }, [open, active])
+
+  const pick = (option: string) => {
+    onChange(option)
+    setOpen(false)
+  }
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') return close()
+    if (event.key === 'Tab') return close()
+
+    if (!open) {
+      if (['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
+        event.preventDefault()
+        show()
+      }
+      return
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      pick(options[active])
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      setActive((current) => Math.min(options.length - 1, current + 1))
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      setActive((current) => Math.max(0, current - 1))
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      setActive(0)
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      setActive(options.length - 1)
+    }
+  }
+
+  return (
+    <div ref={rootRef} className="relative w-full">
+      <button
+        id={id}
+        type="button"
+        role="combobox"
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        aria-controls={`${id}-list`}
+        aria-invalid={invalid}
+        aria-describedby={invalid ? `${id}-error` : undefined}
+        onClick={() => (open ? close() : show())}
+        onKeyDown={onKeyDown}
+        className={`${CONTROL} flex cursor-pointer items-center justify-between gap-4 text-left ${
+          value ? '' : 'text-[#949494]'
+        }`}
+      >
+        <span className="truncate">{value || field.placeholder}</span>
+        <Chevron open={open} />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            ref={listRef}
+            id={`${id}-list`}
+            role="listbox"
+            aria-label={field.label}
+            initial={{ opacity: 0, y: place.above ? 4 : -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: place.above ? 4 : -4 }}
+            transition={{ duration: 0.18, ease: EASE_OUT }}
+            style={{ maxHeight: place.maxHeight }}
+            className={`absolute right-0 left-0 z-10 overflow-y-auto overscroll-contain rounded-xl bg-white p-1.5 shadow-card ${
+              place.above ? 'bottom-full mb-2' : 'top-full mt-2'
+            }`}
+          >
+            {options.map((option, index) => {
+              const selected = option === value
+              return (
+                <li key={option}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={selected}
+                    onMouseEnter={() => setActive(index)}
+                    onClick={() => pick(option)}
+                    className={`flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-[16px] leading-normal transition-colors duration-150 ${
+                      index === active ? 'bg-cream text-ink' : 'text-ink-soft'
+                    }`}
+                  >
+                    {option}
+                    {selected && (
+                      <svg viewBox="0 0 20 20" aria-hidden className="size-4 shrink-0 text-ink">
+                        <path
+                          d="M4 10.5l4 4 8-9"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </li>
+              )
+            })}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }
 
@@ -222,31 +410,7 @@ function Control({
   }
 
   if (field.kind === 'select') {
-    return (
-      <div className="relative flex w-full items-center">
-        {/* A real select: it opens the platform's own picker, which on a phone
-            is the wheel people already know how to use. */}
-        <select
-          id={id}
-          name={field.name}
-          value={value}
-          aria-invalid={invalid}
-          aria-describedby={described}
-          onChange={(event) => onChange(event.target.value)}
-          className={`${CONTROL} appearance-none pr-8 ${value ? '' : 'text-[#949494]'}`}
-        >
-          <option value="">{field.placeholder}</option>
-          {field.options?.map((option) => (
-            <option key={option} value={option} className="text-ink">
-              {option}
-            </option>
-          ))}
-        </select>
-        <span className="pointer-events-none absolute right-0">
-          <Chevron />
-        </span>
-      </div>
-    )
+    return <Select id={id} field={field} value={value} invalid={invalid} onChange={onChange} />
   }
 
   if (field.kind === 'date') {
@@ -377,7 +541,7 @@ function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
         <div className="flex w-full items-start justify-between gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-3">
             <h2 className="font-grotesk text-[36px] leading-[1.19] text-ink">{form.title}</h2>
-            <p className="text-[16px] leading-normal text-ink-soft">{form.intro}</p>
+            <p className="text-[18px] leading-normal text-pretty text-ink-soft">{form.intro}</p>
           </div>
           <button
             type="button"
@@ -409,11 +573,11 @@ function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
         >
           <img src={tickIcon} alt="" className="size-10" />
           <h3 className="font-grotesk text-[28px] leading-tight text-ink">{done.heading}</h3>
-          <p className="max-w-[380px] text-[16px] leading-normal text-ink-soft">{done.body}</p>
+          <p className="max-w-[380px] text-[18px] leading-normal text-pretty text-ink-soft">{done.body}</p>
           <button
             type="button"
             onClick={onClose}
-            className="mt-2 cursor-pointer rounded-full bg-navy px-6 py-3 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98]"
+            className="mt-2 cursor-pointer rounded-full bg-navy px-6 py-3 text-[18px] font-medium text-cream transition-colors duration-300 ease-out hover:bg-[#2d5474]"
           >
             Close
           </button>
@@ -450,7 +614,7 @@ function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.25, ease: EASE_OUT }}
-                        className="-mt-2 overflow-hidden text-[14px] leading-normal text-[#b3261e]"
+                        className="-mt-2 overflow-hidden text-[16px] leading-normal text-[#b3261e]"
                       >
                         {error}
                       </motion.p>
@@ -471,7 +635,7 @@ function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
           >
             <button
               type="submit"
-              className="flex w-full cursor-pointer items-center justify-between gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+              className="inline-flex cursor-pointer items-center gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-colors duration-300 ease-out hover:bg-[#2d5474] focus-visible:bg-[#2d5474] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
             >
               {form.submitLabel}
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cream">

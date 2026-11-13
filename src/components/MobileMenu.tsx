@@ -4,9 +4,9 @@ import { useContactUs } from './FormPanel'
 import { EASE_OUT } from '../lib/motion'
 
 export const MOBILE_LINKS = [
+  { label: 'About Us', href: '#about-us' },
   { label: 'Our Services', href: '#services' },
   { label: 'Plan a Visit', href: '#plan-a-visit' },
-  { label: 'About Us', href: '#about-us' },
   { label: 'Quick Answers', href: '#faq' },
 ]
 
@@ -65,7 +65,6 @@ export function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: ()
               variant="light"
               onPress={openContact}
               tabIndex={open ? 0 : -1}
-              className="w-full justify-between"
               onClick={onNavigate}
             >
               Contact us
@@ -75,18 +74,18 @@ export function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: ()
 
         <motion.div variants={item} className="flex w-[166px] flex-col items-start gap-10">
           <div className="flex w-full flex-col items-start gap-1.5">
-            <p className="w-full text-[14px] text-[#949494]">Email Us</p>
+            <p className="w-full text-[16px] text-[#949494]">Email Us</p>
             <a
               href="mailto:hello@goodcreature.vet"
               tabIndex={open ? 0 : -1}
-              className="w-full text-[16px] text-cream"
+              className="w-full text-[18px] text-cream"
             >
               hello@goodcreature.vet
             </a>
           </div>
           <div className="flex w-full flex-col items-start gap-1.5">
-            <p className="w-full text-[14px] text-[#949494]">Social Media</p>
-            <div className="flex w-full flex-col items-start gap-px text-[16px] text-cream">
+            <p className="w-full text-[16px] text-[#949494]">Social Media</p>
+            <div className="flex w-full flex-col items-start gap-px text-[18px] text-cream">
               <a href="#" tabIndex={open ? 0 : -1} className="w-full">
                 Instagram
               </a>

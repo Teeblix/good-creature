@@ -65,7 +65,7 @@ export function Cta() {
               className="w-full font-grotesk text-[38px] leading-[1.14] text-cream sm:text-[52px] lg:text-[80px] lg:leading-[1.08]"
             />
             <Reveal delay={0.15}>
-              <p className="w-full max-w-[450px] text-[16px] leading-normal text-[#f7f7f7]">
+              <p className="w-full max-w-[450px] text-[18px] leading-normal text-[#f7f7f7]">
                 Book online or call us and we’ll find a time that suits you and your pet. We accept
                 new clients every week.
               </p>

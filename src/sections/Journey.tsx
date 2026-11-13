@@ -25,7 +25,7 @@ type Step = {
 
 const STEPS: Step[] = [
   {
-    number: '01.',
+    number: '01',
     title: 'Before you arrive',
     body: 'We send a reminder with what to bring and carrier tips. Tell us how your pet copes and we plan around it.',
     icon: iconCalendar,
@@ -33,7 +33,7 @@ const STEPS: Step[] = [
     alt: 'Illustrated cat stepping into an open carrier beside a packing checklist',
   },
   {
-    number: '02.',
+    number: '02',
     title: 'A quiet welcome',
     body: 'No crowded waiting room. We greet you at the door and take you straight to a calm room made for nervous pets.',
     icon: iconHeart,
@@ -41,7 +41,7 @@ const STEPS: Step[] = [
     alt: 'Illustrated nurse kneeling to greet a small dog at the practice door',
   },
   {
-    number: '03.',
+    number: '03',
     title: 'A gentle exam',
     body: 'Your pet sets the pace while we explain each step as it happens. You get a plain plan with costs before we begin.',
     icon: iconHealth,
@@ -49,7 +49,7 @@ const STEPS: Step[] = [
     alt: 'Illustrated cat on an examination table with a stethoscope held to its chest',
   },
   {
-    number: '04.',
+    number: '04',
     title: 'The ride home',
     body: 'You leave with medication, written aftercare and a date for the next visit. We call the next day to check in.',
     icon: iconHome,
@@ -75,9 +75,9 @@ const RESTING_HEIGHT = '74%'
 /** How much wider the open card grows: 400 against 303 in the design. */
 const OPEN_GROW = 1.32
 
-/** The row's gap, and the padding plus border each card carries outside its share. */
+/** The row's gap, and the padding each card carries outside its share. */
 const GAP = 8
-const EDGES = 26
+const EDGES = 24
 
 /**
  * The curve the card opens on.
@@ -123,12 +123,15 @@ function StepCard({
   step,
   isOpen,
   bodyHeight,
+  bodyWidth,
   onOpen,
 }: {
   step: Step
   isOpen: boolean
   /** The body's height once this card is open — measured before the move starts. */
   bodyHeight: number
+  /** And its width, for the same reason. */
+  bodyWidth: number
   onOpen: () => void
 }) {
   const reduceMotion = useReducedMotion()
@@ -145,7 +148,7 @@ function StepCard({
       style={{ flexBasis: 0 }}
       animate={{ flexGrow: isOpen ? OPEN_GROW : 1, height: isOpen ? '100%' : RESTING_HEIGHT }}
       transition={transition}
-      className="relative flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-xl border border-line bg-white p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+      className="relative flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-xl bg-white p-3 text-left shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
     >
       {/* The number and the photograph share this space and trade places in it. */}
       <div className="relative min-h-0 w-full flex-1">
@@ -190,15 +193,24 @@ function StepCard({
 
       <motion.div
         initial={false}
-        animate={{ height: isOpen ? bodyHeight : 0, marginTop: isOpen ? 80 : 0 }}
+        animate={{ height: isOpen ? bodyHeight : 0, marginTop: isOpen ? 32 : 0 }}
         transition={transition}
         className="w-full overflow-hidden"
       >
         <motion.p
-          /* Same reasoning as the picture: no filter on a box that is resizing. */
+          /* Held at the width it will have once the card is open, rather than
+             the width the card has right now. The card grows for 550ms, and a
+             paragraph that takes its width from the card re-wraps on every one
+             of those frames — you watch the lines rebuild themselves. Fixed,
+             it is typeset once and only fades in. The card clips the overflow
+             while it is still narrow.
+
+             Same reasoning as the picture: no filter on a box that is
+             resizing. */
+          style={{ width: bodyWidth || undefined }}
           animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 8 }}
           transition={{ ...transition, delay: isOpen && !reduceMotion ? 0.12 : 0 }}
-          className="text-[16px] leading-normal text-black"
+          className="text-[18px] leading-normal text-pretty text-black"
         >
           {step.body}
         </motion.p>
@@ -214,7 +226,7 @@ function StackedSteps() {
       {STEPS.map((step) => (
         <Reveal
           key={step.number}
-          className="flex w-full flex-col rounded-xl border border-line bg-white p-3"
+          className="flex w-full flex-col rounded-xl bg-white p-3 shadow-card"
         >
           <span className="relative block h-[220px] w-full overflow-hidden rounded-t-[4px]">
             <img src={step.image} alt={step.alt} loading="lazy" className="size-full object-cover" />
@@ -224,7 +236,7 @@ function StackedSteps() {
             <img src={step.icon} alt="" className="size-[19.2px]" />
           </span>
           <h3 className="mt-2 font-grotesk text-[22px] leading-tight text-ink">{step.title}</h3>
-          <p className="mt-6 text-[16px] leading-normal text-black">{step.body}</p>
+          <p className="mt-6 text-[18px] leading-normal text-black">{step.body}</p>
         </Reveal>
       ))}
     </div>
@@ -245,6 +257,7 @@ function useOpenBodyHeights() {
   const rowRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
   const [heights, setHeights] = useState<number[]>(() => STEPS.map(() => 0))
+  const [bodyWidth, setBodyWidth] = useState(0)
 
   useLayoutEffect(() => {
     const row = rowRef.current
@@ -259,6 +272,7 @@ function useOpenBodyHeights() {
       if (width <= 0) return
 
       measure.style.width = `${width}px`
+      setBodyWidth((current) => (current === width ? current : width))
       const next = Array.from(measure.children, (child) => (child as HTMLElement).offsetHeight)
       setHeights((current) =>
         current.length === next.length && current.every((h, i) => h === next[i]) ? current : next,
@@ -271,14 +285,14 @@ function useOpenBodyHeights() {
     return () => observer.disconnect()
   }, [])
 
-  return { rowRef, measureRef, heights }
+  return { rowRef, measureRef, heights, bodyWidth }
 }
 
 export function Journey() {
   // One card is always open; leaving the row hands it back to the first step.
   const [open, setOpen] = useState(0)
   const openBooking = useBookVisit()
-  const { rowRef, measureRef, heights } = useOpenBodyHeights()
+  const { rowRef, measureRef, heights, bodyWidth } = useOpenBodyHeights()
 
   return (
     <section
@@ -290,23 +304,17 @@ export function Journey() {
       <div className="mx-auto flex w-full max-w-[1920px] flex-col items-start px-4 py-15 lg:p-10 xl:p-20">
         <div className="relative flex w-full flex-col items-center gap-[50px]">
           {/* Headline on the left, the standing invitation on the right */}
-          <div className="flex w-full flex-col items-start justify-between gap-[60px] lg:flex-row lg:gap-12">
+          <div className="flex w-full flex-col items-start justify-between gap-6 lg:flex-row lg:gap-12">
             <StaggerLines
               as="h2"
               id="journey-heading"
-              label="How a Visit Works in Four Steps"
-              lines={[
-                <>
-                  How a <span className="text-ember">Visit Works</span>
-                </>,
-                'in Four Steps',
-              ]}
+              lines={['How a Visit Works', 'in Four Steps']}
               className="max-w-[650px] font-grotesk text-[36px] leading-[1.17] text-ink lg:text-[48px] xl:text-[60px] xl:leading-[70px]"
             />
 
             <div className="flex w-full max-w-[450px] flex-col items-start gap-6">
               <Reveal delay={0.1}>
-                <p className="text-[16px] leading-normal text-ink-soft">
+                <p className="text-[18px] leading-normal text-ink-soft">
                   From packing the carrier to the ride home, every step is planned around your pet.
                   You always know what happens next, and you stay in control the whole way.
                 </p>
@@ -329,7 +337,7 @@ export function Journey() {
           <div
             ref={measureRef}
             aria-hidden
-            className="pointer-events-none invisible absolute top-0 left-0 text-[16px] leading-normal"
+            className="pointer-events-none invisible absolute top-0 left-0 text-[18px] leading-normal text-pretty"
           >
             {STEPS.map((step) => (
               <p key={step.number}>{step.body}</p>
@@ -348,6 +356,7 @@ export function Journey() {
                 step={step}
                 isOpen={open === index}
                 bodyHeight={heights[index]}
+                bodyWidth={bodyWidth}
                 onOpen={() => setOpen(index)}
               />
             ))}

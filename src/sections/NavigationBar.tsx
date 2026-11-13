@@ -20,9 +20,9 @@ const NAV_LINK =
 
 /** Sentence case, unlike the section headlines — only the first word is capitalised. */
 export const NAV_LINKS = [
+  { label: 'About us', href: '#about-us' },
   { label: 'Our services', href: '#services' },
   { label: 'Plan a visit', href: '#plan-a-visit' },
-  { label: 'About us', href: '#about-us' },
   { label: 'Quick answers', href: '#faq' },
 ]
 
@@ -216,20 +216,18 @@ export function NavigationBar() {
             </motion.div>
           </nav>
 
-          {/* Mobile toggle — "Menu" label beside the mark, per the design */}
+          {/* Mobile toggle. The icon says it on its own — the word beside it
+              was telling people what they could already see. It keeps an
+              accessible name, which is where that word belongs. */}
           <motion.button
             type="button"
             variants={item}
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-nav"
-            className="flex items-center gap-1 lg:hidden"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            className="flex items-center lg:hidden"
           >
-            <span
-              className={`text-[18px] font-medium whitespace-nowrap transition-colors duration-300 ${textTone}`}
-            >
-              {open ? 'Close' : 'Menu'}
-            </span>
             <MenuIcon open={open} tone={barTone} />
           </motion.button>
         </div>

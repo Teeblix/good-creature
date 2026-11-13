@@ -87,13 +87,13 @@ function cardPhase(index: number): Phase {
 /** The card itself — identical in both layouts, so only its wrapper changes. */
 function CardFace({ card }: { card: Card }) {
   return (
-    <article className="flex h-full w-full flex-col justify-between gap-20 rounded-xl border border-line bg-white p-3 lg:w-[350px]">
+    <article className="flex h-full w-full flex-col justify-between gap-10 rounded-xl bg-white p-3 shadow-card lg:w-[350px]">
       <span className="flex size-[46px] shrink-0 items-center justify-center rounded-full bg-ember">
         <img src={card.icon} alt="" className="size-6" />
       </span>
       <div className="flex w-full flex-col gap-1.5">
         <h3 className="font-grotesk text-[22px] leading-none text-ink">{card.title}</h3>
-        <p className="text-[16px] leading-normal text-ink-soft">{card.body}</p>
+        <p className="text-[18px] leading-normal text-ink-soft">{card.body}</p>
       </div>
     </article>
   )
@@ -165,24 +165,18 @@ function PinnedStage() {
           <div className="flex w-full flex-col items-center gap-1 text-center">
             <StaggerLines
               as="h2"
-              label="Why Families Stay"
-              lines={[
-                <>
-                  Why <span className="text-ember">Families</span> Stay
-                </>,
-              ]}
+              lines={['Why Families Stay']}
               className="max-w-[650px] font-grotesk text-[60px] leading-[70px] text-ink"
             />
             <Reveal delay={0.15}>
-              <p className="max-w-[400px] text-[16px] text-ink-soft">
+              <p className="text-[18px] text-ink-soft">
                 Fast answers, gentle handling and prices agreed before treatment.
               </p>
             </Reveal>
           </div>
 
-          {/* The row has to be at least as tall as the doorway, or the arch —
-              which is centred on it and taller than the cards — overhangs the
-              top edge and swallows the gap below the heading. */}
+          {/* The row has to be at least as tall as the frame, which is
+              centred on it and taller than the cards. */}
           <div className="relative flex min-h-[min(586px,62dvh)] w-full max-w-[1352px] items-center justify-between">
             <div className="flex flex-col gap-[30px]">
               {CARDS.filter((card) => card.side === 'left').map((card) => (
@@ -195,8 +189,10 @@ function PinnedStage() {
               ))}
             </div>
 
-            {/* The doorway. Images stack inside it, newest on top. */}
-            <div className="absolute left-1/2 top-1/2 isolate aspect-[379/586] h-[min(586px,62dvh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-t-[250px] bg-ink/5">
+            {/* The frame. Images stack inside it, newest on top — and it
+                carries the cards' own corner radius, so the three shapes in
+                the row are the same shape. */}
+            <div className="absolute left-1/2 top-1/2 isolate aspect-[379/586] h-[min(586px,62dvh)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl bg-ink/5">
               {CARDS.map((card, index) => (
                 <ArchImage
                   key={card.title}
@@ -258,26 +254,21 @@ function MobileStrip() {
       <div className="flex w-full flex-col items-center gap-1 text-center">
         <StaggerLines
           as="h2"
-          label="Why Families Stay"
-          lines={[
-            <>
-              Why <span className="text-ember">Families</span> Stay
-            </>,
-          ]}
+          lines={['Why Families Stay']}
           className="w-full font-grotesk text-[36px] leading-[1.19] text-ink"
         />
         <Reveal delay={0.15}>
-          <p className="w-full text-[16px] leading-normal text-ink-soft">
+          <p className="w-full text-[18px] leading-normal text-ink-soft">
             Fast answers, gentle handling and prices agreed before treatment.
           </p>
         </Reveal>
       </div>
 
-      {/* Smaller than the column it sits in: at full width the doorway stood
+      {/* Smaller than the column it sits in: at full width the frame stood
           553 tall, so its own top had left the screen by the time the cards
           below it were in view. */}
       <Reveal className="mx-auto mt-[50px] w-[min(100%,280px)]">
-        <div className="relative isolate aspect-[379/586] w-full overflow-hidden rounded-t-[250px] bg-ink/5">
+        <div className="relative isolate aspect-[379/586] w-full overflow-hidden rounded-xl bg-ink/5">
           {CARDS.map((card, index) => (
             <motion.img
               key={card.title}
@@ -293,16 +284,21 @@ function MobileStrip() {
         </div>
       </Reveal>
 
-      {/* Full-bleed rail: the cards reach the edge of the screen rather than
-          stopping at the text column, so it reads as something to push. */}
+      {/* The rail keeps the page's own margin rather than running to the
+          edge of the screen: a card cut off by the bezel reads as a mistake,
+          not as an invitation. What says it can be pushed is the next card
+          showing at the right, which is what the narrower card buys. A
+          full-bleed rail also broke the tablet widths outright — w-screen
+          inside a centred column starts at the column's edge and runs a whole
+          viewport from there. */}
       <motion.div
         ref={railRef}
         {...fadeInProps}
-        className="mt-[40px] -mx-4 flex w-screen max-w-[100vw] snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mt-[40px] flex w-full snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Reasons families stay"
       >
         {CARDS.map((card) => (
-          <div key={card.title} className="w-[300px] shrink-0 snap-start">
+          <div key={card.title} className="w-[min(300px,82%)] shrink-0 snap-start">
             <CardFace card={card} />
           </div>
         ))}

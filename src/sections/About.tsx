@@ -14,12 +14,7 @@ import catMotif from '../assets/about-cat.webp'
 import dogMotif from '../assets/about-dog.webp'
 
 /** The statement, authored line by line — the stagger is per line, never per word. */
-const HEADLINE: ReactNode[] = [
-  'A Small Practice Built',
-  <>
-    Around <span className="text-ember">Calm</span> Care
-  </>,
-]
+const HEADLINE: ReactNode[] = ['A Small Practice Built', 'Around Calm Care']
 
 /** The same sentence as plain text, for screen readers and the still version. */
 const HEADLINE_TEXT = 'A Small Practice Built Around Calm Care'
@@ -156,12 +151,6 @@ function Statement() {
     trackRef.current?.setAttribute('data-progress', value.toFixed(3))
   })
 
-  // The doorway outline opens out behind the words for the whole of the
-  // section, so the type is always sitting inside something that is still
-  // growing rather than against a blank page.
-  const archScale = useTransform(scrollYProgress, [0.08, 1], [0.72, 1.38])
-  const archOpacity = useTransform(scrollYProgress, [0.08, 0.26], [0, 1])
-
   return (
     <div ref={trackRef} className="relative h-[300vh]">
       {/* Sized in svh, not dvh. A phone collapses its address bar as you
@@ -170,14 +159,6 @@ function Statement() {
           narrowing it also walks it sideways. svh is the viewport with the bar
           still showing: a fixed number, so nothing here is re-measured. */}
       <div className="sticky top-0 grid h-svh place-items-center overflow-hidden px-6">
-        {/* The doorway, drawn as an outline — it sits behind the words and
-            keeps opening out as the section is scrolled. */}
-        <motion.div
-          aria-hidden
-          style={{ scale: archScale, opacity: archOpacity }}
-          className="col-start-1 row-start-1 aspect-[391/547] h-[min(547px,62svh)] rounded-t-[250px] border border-line"
-        />
-
         <h2
           className="col-start-1 row-start-1 w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink [--statement-blur:8px] sm:text-[52px] lg:text-[76px] lg:[--statement-blur:16px]"
           aria-label={HEADLINE_TEXT}
@@ -228,10 +209,6 @@ function Statement() {
 function StillStatement() {
   return (
     <div className="relative flex min-h-svh flex-col items-center justify-center gap-10 overflow-hidden px-6 py-20">
-      <div
-        aria-hidden
-        className="absolute top-1/2 aspect-[391/547] h-[min(547px,62svh)] -translate-y-1/2 rounded-t-[250px] border border-line"
-      />
       <img
         src={catMotif}
         alt=""
@@ -245,7 +222,7 @@ function StillStatement() {
         className="pointer-events-none absolute bottom-[9vh] right-[5vw] w-[clamp(84px,10vw,184px)] -scale-x-100"
       />
       <h2 className="relative w-full max-w-[900px] text-center font-grotesk text-[32px] leading-[1.14] text-ink sm:text-[52px] lg:text-[76px]">
-        A Small Practice Built Around <span className="text-ember">Calm</span> Care
+        A Small Practice Built Around Calm Care
       </h2>
       <p className="relative w-full max-w-[1000px] text-center font-sans text-[18px] leading-[1.5] text-ink-soft sm:text-[27px] lg:text-[40px] lg:leading-[1.35]">
         {BODY.join(' ')}

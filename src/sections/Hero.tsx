@@ -170,7 +170,7 @@ export function Hero() {
                 <img src={fact.icon} alt="" className="size-10 shrink-0" />
                 <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 text-cream">
                   <p className="w-full font-grotesk text-[18px] font-medium">{fact.title}</p>
-                  <p className="w-full text-[14px]">{fact.body}</p>
+                  <p className="w-full text-[16px]">{fact.body}</p>
                 </div>
               </motion.li>
             ))}
@@ -181,7 +181,7 @@ export function Hero() {
                 loaded, so the box no longer needs widening for the break. */}
             <div className="flex w-full flex-col items-start justify-center gap-6 lg:w-[632px]">
               <StaggerText
-                text="We take every step with you and your pet, and nothing happens until you say yes"
+                text="We take every step with you and your pet, and nothing happens until you say yes."
                 playOnMount
                 delay={0.6}
                 className="w-full font-grotesk text-[26px] leading-[1.25] text-cream lg:text-[36px]"
@@ -195,7 +195,7 @@ export function Hero() {
                 <ArrowButton
                   variant="light"
                   onPress={openBooking}
-                  className="w-full justify-between lg:w-auto lg:justify-center"
+                  className="w-auto"
                 >
                   Book a visit
                 </ArrowButton>

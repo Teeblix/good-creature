@@ -113,7 +113,7 @@ function Words({ pillar, className = '' }: { pillar: Pillar; className?: string 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <h3 className="font-grotesk text-[36px] leading-normal text-ink">{pillar.title}</h3>
-      <p className="text-[16px] leading-normal text-ink-soft">{pillar.body}</p>
+      <p className="text-[18px] leading-normal text-ink-soft">{pillar.body}</p>
     </div>
   )
 }
@@ -194,7 +194,7 @@ function RingPillar({
         </motion.h3>
         <motion.p
           style={{ opacity: bodyOpacity, y: bodyY }}
-          className="mt-2 text-[16px] leading-normal text-ink-soft"
+          className="mt-2 text-[18px] leading-normal text-ink-soft"
         >
           {pillar.body}
         </motion.p>
@@ -225,7 +225,7 @@ function UnderWords({
   return (
     <motion.div style={{ opacity, y, filter }} className="absolute inset-0" data-under={pillar.number}>
       <h3 className="font-grotesk text-[26px] leading-normal text-ink">{pillar.title}</h3>
-      <p className="mt-2 text-[15px] leading-normal text-ink-soft">{pillar.body}</p>
+      <p className="mt-2 text-[18px] leading-normal text-ink-soft">{pillar.body}</p>
     </motion.div>
   )
 }
@@ -245,7 +245,7 @@ function WordsUnderRing({ progress }: { progress: MotionValue<number> }) {
         {PILLARS.map((pillar) => (
           <div key={pillar.number} className="col-start-1 row-start-1">
             <h3 className="font-grotesk text-[26px] leading-normal">{pillar.title}</h3>
-            <p className="mt-2 text-[15px] leading-normal">{pillar.body}</p>
+            <p className="mt-2 text-[18px] leading-normal">{pillar.body}</p>
           </div>
         ))}
       </div>

@@ -17,17 +17,12 @@ const CATEGORIES: Category[] = [
       {
         question: 'How do I book a first visit?',
         answer:
-          'Book online or call us. We’ll ask a few questions about your pet so we can plan the visit around them.',
+          'Book online or call us, and walk in if you would rather — booking ahead is just quicker. We’ll ask a few questions about your pet so we can plan the visit around them.',
       },
       {
         question: 'Can I get a same day appointment if my pet is unwell?',
         answer:
           'Yes. We keep space for same day sick visits, so call early and we’ll see your pet as soon as we can.',
-      },
-      {
-        question: 'Do you accept walk ins?',
-        answer:
-          'Yes, but booking ahead is quicker. Call, message or walk in and we’ll find the soonest time for you.',
       },
       {
         question: 'What should I bring to our first visit?',
@@ -42,21 +37,12 @@ const CATEGORIES: Category[] = [
       {
         question: 'Will I know the cost before treatment starts?',
         answer:
-          'Yes. We explain the plan and the cost in plain words, and nothing begins until you approve it.',
-      },
-      {
-        question: 'Can I get a written estimate?',
-        answer:
-          'Yes. Ask at any visit and we’ll write down what we recommend and what it costs.',
+          'Yes. We explain the plan and the cost in plain words, and nothing begins until you approve it. Ask and we’ll write the estimate down. You pay after the visit, once we’ve confirmed the total with you.',
       },
       {
         question: 'Do you work with pet insurance?',
         answer:
           'Yes, we can provide the paperwork your insurer needs. Check your policy for what it covers.',
-      },
-      {
-        question: 'When do I pay?',
-        answer: 'You pay after your visit. We’ll confirm the total with you before you go.',
       },
     ],
   },
@@ -66,17 +52,12 @@ const CATEGORIES: Category[] = [
       {
         question: 'Can you help if my pet is scared of the vet?',
         answer:
-          'Yes. Tell us when you book. We use quiet rooms, slow handling and extra time so nervous pets can settle.',
+          'Yes. Tell us when you book. We use quiet rooms, slow handling and extra time so nervous pets can settle, and we keep cats and dogs apart.',
       },
       {
         question: 'Can I stay with my pet during the exam?',
         answer:
           'Yes, in most cases. We want you there, and we’ll explain each step as it happens.',
-      },
-      {
-        question: 'Do you have separate areas for cats and dogs?',
-        answer:
-          'Yes. We use separate quiet rooms so cats and dogs aren’t stressed by each other.',
       },
     ],
   },
@@ -86,11 +67,7 @@ const CATEGORIES: Category[] = [
       {
         question: 'What happens after treatment?',
         answer:
-          'You leave with any medication, written aftercare and a date for the next visit.',
-      },
-      {
-        question: 'Will you check on my pet at home?',
-        answer: 'Yes. We call the next day to see how your pet is doing.',
+          'You leave with any medication, written aftercare and a date for the next visit. We call the next day to see how your pet is doing.',
       },
       {
         question: 'What if I have a question after we get home?',
@@ -162,7 +139,7 @@ function Question({
             transition={transition}
             className="overflow-hidden"
           >
-            <p className="pb-4 text-[16px] leading-normal text-black">{item.answer}</p>
+            <p className="pb-4 text-[18px] leading-normal text-black">{item.answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -229,19 +206,13 @@ export function Faq() {
             <StaggerLines
               as="h2"
               id="faq-heading"
-              label="Questions We Hear Most"
-              lines={[
-                'Questions We',
-                <>
-                  <span className="text-ember">Hear</span> Most
-                </>,
-              ]}
+              lines={['Questions We', 'Hear Most']}
               className="w-full max-w-[650px] font-grotesk text-[36px] leading-[1.17] text-ink lg:text-[60px] lg:leading-[70px]"
             />
 
             <div className="flex flex-col items-start gap-3">
               <Reveal delay={0.1}>
-                <p className="text-[16px] leading-normal text-ink-soft">Still have questions?</p>
+                <p className="text-[18px] leading-normal text-ink-soft">Still have questions?</p>
               </Reveal>
               <Reveal delay={0.2}>
                 <ArrowButton variant="primary" onPress={openContact}>
