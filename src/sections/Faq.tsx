@@ -209,7 +209,7 @@ export function Faq() {
   return (
     <section
       id="faq"
-      className="flex w-full items-center bg-sand"
+      className="flex w-full items-center"
       data-node-id="61:53520"
       aria-labelledby="faq-heading"
     >
