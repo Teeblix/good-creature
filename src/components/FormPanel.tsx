@@ -115,7 +115,7 @@ const CONTACT: Form = {
   fields: [
     { name: 'name', label: 'Your name*', kind: 'text', placeholder: 'Full name', required: true },
     { name: 'email', label: 'Email*', kind: 'email', placeholder: 'name@email.com', required: true },
-    { name: 'phone', label: 'Phone (optional)', kind: 'tel', placeholder: 'Your mobile number' },
+    { name: 'phone', label: 'Phone', kind: 'tel', placeholder: 'Your mobile number' },
     {
       name: 'topic',
       label: 'Topic*',
