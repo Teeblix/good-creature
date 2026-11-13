@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MotionValue } from 'motion/react'
-import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from 'motion/react'
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'motion/react'
 import { fadeInProps } from '../components/FadeIn'
 import { Reveal } from '../components/Reveal'
 import { EASE_OUT } from '../lib/motion'
@@ -65,9 +72,6 @@ const CARDS: Card[] = [
     inset: false,
   },
 ]
-
-/** The gap between cards on the mobile rail — 12 in the design. */
-const CARD_GAP = 12
 
 /* ---------------------------------------------------------------- timings */
 
@@ -228,27 +232,63 @@ function PinnedStage() {
  * photograph of whichever card you have reached, which is the same idea as
  * the desktop peel without needing the height a pinned sequence would eat.
  */
-function MobileStrip() {
+/**
+ * The frame, between the second and third card.
+ *
+ * It used to be a readout: the rail's scroll position chose the photograph,
+ * so the picture only moved when the cards did. Stacked, there is nothing to
+ * read, so it simply shows the four in turn — long enough on each to be
+ * looked at, blurring out and back in rather than cutting.
+ */
+function CyclingFrame() {
+  const reduceMotion = useReducedMotion()
   const [active, setActive] = useState(0)
-  const railRef = useRef<HTMLDivElement>(null)
 
-  // Which card the rail has settled on, read from how far it has travelled.
   useEffect(() => {
-    const rail = railRef.current
-    if (!rail) return
+    if (reduceMotion) return
+    const id = window.setInterval(() => setActive((i) => (i + 1) % CARDS.length), 3600)
+    return () => window.clearInterval(id)
+  }, [reduceMotion])
 
-    const update = () => {
-      const card = rail.firstElementChild as HTMLElement | null
-      if (!card) return
-      const step = card.offsetWidth + CARD_GAP
-      const index = Math.round(rail.scrollLeft / step)
-      setActive(Math.max(0, Math.min(CARDS.length - 1, index)))
-    }
+  return (
+    // Atmosphere, not information: the four cards beside it already say
+    // everything this is here to feel like, and a picture that swaps itself
+    // every few seconds is nothing but interruption read aloud.
+    <div
+      aria-hidden
+      className="relative isolate aspect-[379/480] w-full overflow-hidden rounded-xl bg-ink/5"
+    >
+      {CARDS.map((card, index) => (
+        <motion.img
+          key={card.title}
+          src={card.image}
+          alt=""
+          loading="lazy"
+          initial={false}
+          animate={{
+            opacity: active === index ? 1 : 0,
+            filter: active === index ? 'blur(0px)' : 'blur(10px)',
+            scale: active === index ? 1 : 1.04,
+          }}
+          transition={{ duration: reduceMotion ? 0 : 0.9, ease: EASE_OUT }}
+          className="absolute inset-0 size-full object-cover"
+        />
+      ))}
+    </div>
+  )
+}
 
-    rail.addEventListener('scroll', update, { passive: true })
-    return () => rail.removeEventListener('scroll', update)
-  }, [])
-
+/**
+ * The phone layout: the four cards stacked, with the frame sitting between
+ * the second and the third.
+ *
+ * They were a horizontal rail, which asked people to push sideways through a
+ * page that otherwise only goes down, and left the cards reading as unequal —
+ * one and a half of them visible at a time, each a different amount of itself.
+ * Stacked, they are four of the same thing, and the frame breaks the run so
+ * the column is not eight hundred pixels of card.
+ */
+function MobileStrip() {
   return (
     <div className="mx-auto flex w-full max-w-[560px] flex-col items-start px-4 py-15">
       <div className="flex w-full flex-col items-center gap-1 text-center">
@@ -264,45 +304,23 @@ function MobileStrip() {
         </Reveal>
       </div>
 
-      {/* Smaller than the column it sits in: at full width the frame stood
-          553 tall, so its own top had left the screen by the time the cards
-          below it were in view. */}
-      <Reveal className="mx-auto mt-[50px] w-[min(100%,280px)]">
-        <div className="relative isolate aspect-[379/586] w-full overflow-hidden rounded-xl bg-ink/5">
-          {CARDS.map((card, index) => (
-            <motion.img
-              key={card.title}
-              src={card.image}
-              alt={card.alt}
-              loading="lazy"
-              initial={false}
-              animate={{ opacity: active === index ? 1 : 0 }}
-              transition={{ duration: 0.45, ease: EASE_OUT }}
-              className="absolute inset-0 size-full object-cover"
-            />
-          ))}
-        </div>
-      </Reveal>
-
-      {/* The rail keeps the page's own margin rather than running to the
-          edge of the screen: a card cut off by the bezel reads as a mistake,
-          not as an invitation. What says it can be pushed is the next card
-          showing at the right, which is what the narrower card buys. A
-          full-bleed rail also broke the tablet widths outright — w-screen
-          inside a centred column starts at the column's edge and runs a whole
-          viewport from there. */}
-      <motion.div
-        ref={railRef}
-        {...fadeInProps}
-        className="mt-[40px] flex w-full snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        aria-label="Reasons families stay"
-      >
-        {CARDS.map((card) => (
-          <div key={card.title} className="w-[min(300px,82%)] shrink-0 snap-start">
+      <div className="mt-[40px] flex w-full flex-col gap-3">
+        {CARDS.slice(0, 2).map((card) => (
+          <Reveal key={card.title} className="w-full">
             <CardFace card={card} />
-          </div>
+          </Reveal>
         ))}
-      </motion.div>
+
+        <motion.div {...fadeInProps} className="w-full">
+          <CyclingFrame />
+        </motion.div>
+
+        {CARDS.slice(2).map((card) => (
+          <Reveal key={card.title} className="w-full">
+            <CardFace card={card} />
+          </Reveal>
+        ))}
+      </div>
     </div>
   )
 }
