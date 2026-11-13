@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
+import { useBookVisit } from '../components/BookVisit'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import { EASE_OUT, VIEWPORT } from '../lib/motion'
@@ -9,6 +10,7 @@ import ctaMobile from '../assets/cta-mobile.webp'
 
 export function Cta() {
   const reduceMotion = useReducedMotion()
+  const openBooking = useBookVisit()
 
   // The photograph travels against its own frame as the section crosses the
   // screen, the way the hero lags the page. It is cut taller than the section
@@ -71,7 +73,14 @@ export function Cta() {
           </div>
 
           <Reveal delay={0.25}>
-            <ArrowButton variant="light" href="#plan-a-visit">
+            <ArrowButton
+              variant="light"
+              href="#plan-a-visit"
+              onClick={(event) => {
+                event.preventDefault()
+                openBooking()
+              }}
+            >
               Book a visit
             </ArrowButton>
           </Reveal>

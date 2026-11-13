@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
+import { useBookVisit } from '../components/BookVisit'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import iconCalendar from '../assets/icon-journey-calendar.svg'
@@ -275,6 +276,7 @@ function useOpenBodyHeights() {
 export function Journey() {
   // One card is always open; leaving the row hands it back to the first step.
   const [open, setOpen] = useState(0)
+  const openBooking = useBookVisit()
   const { rowRef, measureRef, heights } = useOpenBodyHeights()
 
   return (
@@ -309,7 +311,14 @@ export function Journey() {
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
-                <ArrowButton variant="primary" href="#contact">
+                <ArrowButton
+                  variant="primary"
+                  href="#contact"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    openBooking()
+                  }}
+                >
                   Book a visit
                 </ArrowButton>
               </Reveal>

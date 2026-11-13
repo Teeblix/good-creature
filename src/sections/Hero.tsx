@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
+import { useBookVisit } from '../components/BookVisit'
 import { StaggerLines } from '../components/StaggerLines'
 import { StaggerText } from '../components/StaggerText'
 import { EASE_OUT } from '../lib/motion'
@@ -46,6 +47,7 @@ const FACTS = [
 
 export function Hero() {
   const reduceMotion = useReducedMotion()
+  const openBooking = useBookVisit()
   const { scrollY } = useScroll()
 
   // The hero scrolls at 90% of the page's pace, so the sections that follow
@@ -193,6 +195,10 @@ export function Hero() {
                 <ArrowButton
                   variant="light"
                   href="#plan-a-visit"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    openBooking()
+                  }}
                   className="w-full justify-between lg:w-auto lg:justify-center"
                 >
                   Book a visit
