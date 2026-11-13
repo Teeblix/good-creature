@@ -4,7 +4,8 @@ import { ArrowButton } from '../components/ArrowButton'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import { EASE_OUT, VIEWPORT } from '../lib/motion'
-import ctaImage from '../assets/cta.webp'
+import ctaDesktop from '../assets/cta.webp'
+import ctaMobile from '../assets/cta-mobile.webp'
 
 export function Cta() {
   const reduceMotion = useReducedMotion()
@@ -23,7 +24,7 @@ export function Cta() {
     <section
       id="plan-your-visit"
       ref={sectionRef}
-      className="relative flex min-h-dvh w-full items-center overflow-hidden"
+      className="relative flex min-h-dvh w-full items-start overflow-hidden lg:items-center"
       // A photograph, not a fill: the bar goes clear and its type goes white.
       data-bar="over-image"
       data-node-id="61:53897"
@@ -34,37 +35,26 @@ export function Cta() {
         style={reduceMotion ? undefined : { y: parallaxY }}
         className="pointer-events-none absolute inset-x-0 -inset-y-[12%]"
       >
-        <motion.img
-          src={ctaImage}
-          alt=""
+        <motion.picture
           initial={reduceMotion ? { opacity: 1 } : { scale: 1.06, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={VIEWPORT}
           transition={{ duration: reduceMotion ? 0.3 : 1.4, ease: EASE_OUT }}
-          className="size-full max-w-none object-cover"
-        />
+          className="block size-full"
+        >
+          <source media="(min-width: 1024px)" srcSet={ctaDesktop} />
+          <img src={ctaMobile} alt="" className="size-full max-w-none object-cover" />
+        </motion.picture>
       </motion.div>
 
-      {/* The photograph is dark where the words sit, but only at the width it
-          was shot for. Narrower than that the crop walks the lit doorway in
-          under the type, so a scrim holds the left side down. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 lg:hidden"
-        style={{
-          background:
-            'linear-gradient(90deg, rgba(40,26,20,0.82) 0%, rgba(40,26,20,0.6) 45%, rgba(40,26,20,0.15) 100%)',
-        }}
-      />
-
-      <div className="relative mx-auto w-full max-w-[1920px] px-4 py-15 lg:p-20">
+      <div className="relative mx-auto w-full max-w-[1920px] px-4 py-20 lg:p-20">
         <div className="flex w-full max-w-[700px] flex-col items-start gap-[30px]">
           <div className="flex w-full flex-col items-start gap-3">
             <StaggerLines
               as="h2"
               id="cta-heading"
               lines={['Your Pet’s Next Visit', 'Starts at Our Door']}
-              className="w-full font-grotesk text-[36px] leading-[1.14] text-cream sm:text-[52px] lg:text-[80px] lg:leading-[1.08]"
+              className="w-full font-grotesk text-[38px] leading-[1.14] text-cream sm:text-[52px] lg:text-[80px] lg:leading-[1.08]"
             />
             <Reveal delay={0.15}>
               <p className="w-full max-w-[450px] text-[16px] leading-normal text-[#f7f7f7]">
