@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
-import { Eyebrow } from '../components/Eyebrow'
 import { Reveal } from '../components/Reveal'
+import { StaggerLines } from '../components/StaggerLines'
 import { StaggerText } from '../components/StaggerText'
 import { EASE_OUT } from '../lib/motion'
 import arrowLeft from '../assets/icon-arrow-left.svg'
@@ -99,8 +99,19 @@ export function Testimonials() {
       aria-label="Client stories"
     >
       <div className="mx-auto flex w-full max-w-[1920px] flex-col items-start px-4 py-15 lg:p-20">
-        <div className="flex w-full flex-col items-center gap-[50px]">
-          <Eyebrow tone="dark">Client stories</Eyebrow>
+        <div className="flex w-full flex-col items-center gap-[80px]">
+          <StaggerLines
+            as="h2"
+            id="stories-heading"
+            label="What Families Say About Us"
+            lines={[
+              <>
+                What Families <span className="text-ember">Say</span>
+              </>,
+              'About Us',
+            ]}
+            className="max-w-[650px] text-center font-grotesk text-[36px] leading-[1.17] text-ink lg:text-[60px] lg:leading-[70px]"
+          />
 
           <div className="flex w-full flex-col items-center gap-[50px]">
             {/* Portraits — the active one sits centre at 128px, neighbours at 60px.
