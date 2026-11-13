@@ -247,7 +247,7 @@ function CyclingFrame() {
 
   useEffect(() => {
     if (reduceMotion) return
-    const id = window.setInterval(() => setActive((i) => (i + 1) % CARDS.length), 3600)
+    const id = window.setInterval(() => setActive((i) => (i + 1) % CARDS.length), 2000)
     return () => window.clearInterval(id)
   }, [reduceMotion])
 
@@ -271,7 +271,7 @@ function CyclingFrame() {
             filter: active === index ? 'blur(0px)' : 'blur(10px)',
             scale: active === index ? 1 : 1.04,
           }}
-          transition={{ duration: reduceMotion ? 0 : 0.9, ease: EASE_OUT }}
+          transition={{ duration: reduceMotion ? 0 : 0.7, ease: EASE_OUT }}
           className="absolute inset-0 size-full object-cover"
         />
       ))}
