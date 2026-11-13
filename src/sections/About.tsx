@@ -200,11 +200,24 @@ function Statement() {
           className="col-start-1 row-start-1 w-full max-w-[1000px] text-center font-sans text-[18px] leading-[1.5] text-ink-soft [--statement-blur:5px] sm:text-[27px] lg:text-[40px] lg:leading-[1.35] lg:[--statement-blur:9px]"
           aria-label={BODY.join(' ')}
         >
-          {BODY.map((line, index) => (
-            <BodyLine key={line} progress={scrollYProgress} index={index} count={BODY.length}>
-              {line}
+          {/* The authored breaks are where the sentence falls on its own in
+              the design's 1000px measure. Below that measure they are just
+              hard breaks in the wrong places, so a phone gets the sentence
+              whole and lets it wrap where it likes — one block resolving in
+              rather than four lines after each other. */}
+          <span className="block lg:hidden">
+            <BodyLine progress={scrollYProgress} index={0} count={1}>
+              {BODY.join(' ')}
             </BodyLine>
-          ))}
+          </span>
+
+          <span className="hidden lg:block">
+            {BODY.map((line, index) => (
+              <BodyLine key={line} progress={scrollYProgress} index={index} count={BODY.length}>
+                {line}
+              </BodyLine>
+            ))}
+          </span>
         </p>
       </div>
     </div>
