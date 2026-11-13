@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
 import { useContactUs } from '../components/FormPanel'
+import { FadeIn } from '../components/FadeIn'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import { EASE_OUT } from '../lib/motion'
@@ -253,7 +254,9 @@ export function Faq() {
           {/* The questions themselves, grouped */}
           <div className="flex w-full flex-col items-start gap-[30px] lg:min-w-0 lg:flex-1 lg:px-[7px] lg:py-[15px]">
             {CATEGORIES.map((category) => (
-              <CategoryBlock key={category.title} category={category} />
+              <FadeIn key={category.title} className="w-full">
+                <CategoryBlock category={category} />
+              </FadeIn>
             ))}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Reveal } from '../components/Reveal'
+import { FadeIn } from '../components/FadeIn'
 import { StaggerLines } from '../components/StaggerLines'
 import { StaggerText } from '../components/StaggerText'
 import { EASE_OUT } from '../lib/motion'
@@ -113,7 +114,7 @@ export function Testimonials() {
             className="max-w-[650px] text-center font-grotesk text-[36px] leading-[1.17] text-ink lg:text-[60px] lg:leading-[70px]"
           />
 
-          <div className="flex w-full flex-col items-center gap-[50px]">
+          <FadeIn className="flex w-full flex-col items-center gap-[50px]">
             {/* Portraits — the active one sits centre at 128px, neighbours at 60px.
                 Moving on slides each portrait into its new slot. */}
             <div className="relative h-[128px] w-[274px] overflow-hidden" aria-hidden>
@@ -187,7 +188,7 @@ export function Testimonials() {
                 <img src={arrowRight} alt="" className="size-6" />
               </button>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>

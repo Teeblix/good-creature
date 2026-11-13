@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
+import { fadeInProps } from '../components/FadeIn'
 import { StaggerLines } from '../components/StaggerLines'
 import { StaggerText } from '../components/StaggerText'
 import { EASE_OUT } from '../lib/motion'
@@ -103,7 +104,10 @@ export function Services() {
         <div className="flex w-full flex-col gap-3 lg:h-[90dvh] lg:flex-row">
           {/* The card. Headline, list and detail sit at the top, middle and
               bottom of its height, which is the design's three equal gaps. */}
-          <div className="flex h-[578px] w-full flex-col justify-between gap-12 rounded-lg bg-navy p-4 lg:h-full lg:p-10 lg:flex-1">
+          <motion.div
+            {...fadeInProps}
+            className="flex h-[578px] w-full flex-col justify-between gap-12 rounded-lg bg-navy p-4 lg:h-full lg:p-10 lg:flex-1"
+          >
             <StaggerLines
               as="h2"
               lines={['Care for Every', 'Stage of Life']}
@@ -144,13 +148,17 @@ export function Services() {
                 />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* The photographs, stacked. Only the active one is sharp. */}
           {/* First on a phone, where the frame leads with the photograph, and
               cut to the same height as the card under it. From lg it goes back
               beside the card and takes its height from the row. */}
-          <div className="relative order-first h-[578px] w-full overflow-hidden rounded-lg bg-navy/5 lg:order-none lg:aspect-auto lg:h-full lg:flex-1">
+          <motion.div
+            {...fadeInProps}
+            transition={{ ...fadeInProps.transition, delay: 0.12 }}
+            className="relative order-first h-[578px] w-full overflow-hidden rounded-lg bg-navy/5 lg:order-none lg:aspect-auto lg:h-full lg:flex-1"
+          >
             {SERVICES.map((service, index) => (
               <motion.img
                 key={service.title}
@@ -167,7 +175,7 @@ export function Services() {
                 transition={{ duration: reduceMotion ? 0 : 0.8, ease: EASE_OUT }}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

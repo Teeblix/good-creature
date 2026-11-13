@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { MotionValue } from 'motion/react'
 import { motion, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from 'motion/react'
+import { fadeInProps } from '../components/FadeIn'
 import { Reveal } from '../components/Reveal'
 import { EASE_OUT } from '../lib/motion'
 import { StaggerLines } from '../components/StaggerLines'
@@ -294,8 +295,9 @@ function MobileStrip() {
 
       {/* Full-bleed rail: the cards reach the edge of the screen rather than
           stopping at the text column, so it reads as something to push. */}
-      <div
+      <motion.div
         ref={railRef}
+        {...fadeInProps}
         className="mt-[40px] -mx-4 flex w-screen max-w-[100vw] snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Reasons families stay"
       >
@@ -304,7 +306,7 @@ function MobileStrip() {
             <CardFace card={card} />
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   )
 }

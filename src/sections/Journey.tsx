@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowButton } from '../components/ArrowButton'
 import { useBookVisit } from '../components/FormPanel'
+import { fadeInProps } from '../components/FadeIn'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import iconCalendar from '../assets/icon-journey-calendar.svg'
@@ -335,8 +336,9 @@ export function Journey() {
             ))}
           </div>
 
-          <div
+          <motion.div
             ref={rowRef}
+            {...fadeInProps}
             className="hidden w-full items-center justify-center gap-2 lg:flex lg:h-[clamp(500px,calc(45vw-83px),740px)]"
             onMouseLeave={() => setOpen(0)}
           >
@@ -349,7 +351,7 @@ export function Journey() {
                 onOpen={() => setOpen(index)}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

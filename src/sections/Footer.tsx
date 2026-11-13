@@ -1,3 +1,4 @@
+import { FadeIn } from '../components/FadeIn'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
 import instagramIcon from '../assets/icon-instagram.svg'
@@ -101,7 +102,7 @@ export function Footer() {
             </Reveal>
           </div>
 
-          <div className="flex w-full items-start justify-between gap-6 text-[16px] leading-normal text-ink">
+          <FadeIn className="flex w-full items-start justify-between gap-6 text-[16px] leading-normal text-ink">
             <p>© 2026 Good Creature</p>
             <a
               href="#top"
@@ -109,7 +110,7 @@ export function Footer() {
             >
               Back to top
             </a>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </footer>
