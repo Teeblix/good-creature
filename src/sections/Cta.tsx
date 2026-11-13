@@ -27,8 +27,11 @@ export function Cta() {
       id="plan-your-visit"
       ref={sectionRef}
       className="relative flex min-h-lvh w-full items-start overflow-hidden lg:items-center"
-      // A photograph, not a fill: the bar goes clear and its type goes white.
-      data-bar="over-image"
+      // Deliberately not marked over-image, unlike the hero. The hero is
+      // transparent because the bar is sitting at the top of the page and has
+      // not arrived yet; here it has — it is flying back in over a section
+      // you have already scrolled past, and a bar with no fill over a
+      // photograph reads as a bar that failed to draw.
       data-node-id="61:53897"
       aria-labelledby="cta-heading"
     >
