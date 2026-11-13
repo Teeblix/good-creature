@@ -538,27 +538,34 @@ function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
     >
       {/* Header — stays while the fields scroll under it. */}
       <div className="flex w-full shrink-0 flex-col gap-[18px] p-6 pb-0">
-        <div className="flex w-full items-start justify-between gap-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
+        {/* The cross sits on the title's line, not beside the whole block, so
+            the standfirst below runs the full width of the panel instead of
+            stopping short where the button used to be. On a phone that width
+            is all there is; once the panel reaches its full 560 the line gets
+            long enough to want holding back, hence the 90%. */}
+        <div className="flex w-full flex-col gap-3">
+          <div className="flex w-full items-start justify-between gap-4">
             <h2 className="font-grotesk text-[36px] leading-[1.19] text-ink">{form.title}</h2>
-            <p className="text-[18px] leading-normal text-pretty text-ink-soft">{form.intro}</p>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="-m-2 shrink-0 cursor-pointer p-2 transition-opacity duration-200 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden className="size-6 text-ink">
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="-m-2 shrink-0 cursor-pointer p-2 transition-opacity duration-200 hover:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden className="size-6 text-ink">
-              <path
-                d="M6 6l12 12M18 6L6 18"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
+          <p className="w-full text-[18px] leading-normal text-pretty text-ink-soft sm:max-w-[90%]">
+            {form.intro}
+          </p>
         </div>
         <span aria-hidden className="h-px w-full bg-line" />
       </div>
