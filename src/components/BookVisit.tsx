@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { EASE_OUT } from '../lib/motion'
+import { pauseSmoothScroll, resumeSmoothScroll } from './SmoothScroll'
 import calendarIcon from '../assets/icon-journey-calendar.svg'
 import tickIcon from '../assets/icon-tick-circle.svg'
 
@@ -281,14 +282,17 @@ function Panel({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-label="Book a visit"
-      initial={reduceMotion ? { opacity: 0 } : { x: '100%' }}
+      initial={reduceMotion ? { opacity: 0 } : { x: 'calc(100% + 20px)' }}
       animate={reduceMotion ? { opacity: 1 } : { x: 0 }}
-      exit={reduceMotion ? { opacity: 0 } : { x: '100%' }}
+      exit={reduceMotion ? { opacity: 0 } : { x: 'calc(100% + 20px)' }}
       transition={{ duration: reduceMotion ? 0.2 : 0.55, ease: [0.33, 0.06, 0.2, 1] }}
-      className="fixed inset-y-0 right-0 z-[70] flex w-full max-w-[560px] flex-col overflow-y-auto overscroll-contain bg-white p-6 focus:outline-none sm:rounded-l-xl"
+      // The smooth scroller claims the wheel for the whole document, so
+      // without this the panel's own body would not scroll.
+      data-lenis-prevent
+      className="fixed inset-y-5 right-5 z-[70] flex w-[calc(100%-40px)] max-w-[560px] flex-col overflow-hidden rounded-xl bg-white focus:outline-none"
     >
-      {/* Header */}
-      <div className="flex w-full shrink-0 flex-col gap-[18px]">
+      {/* Header — stays while the fields scroll under it. */}
+      <div className="flex w-full shrink-0 flex-col gap-[18px] p-6 pb-0">
         <div className="flex w-full items-start justify-between gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-3">
             <h2 className="font-grotesk text-[36px] leading-[1.19] text-ink">Book a Visit</h2>
@@ -322,7 +326,7 @@ function Panel({ onClose }: { onClose: () => void }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0.2 : 0.5, ease: EASE_OUT }}
-          className="flex flex-1 flex-col items-start justify-center gap-4 py-12"
+          className="flex min-h-0 flex-1 flex-col items-start justify-center gap-4 overflow-y-auto p-6"
           role="status"
         >
           <img src={tickIcon} alt="" className="size-10" />
@@ -342,12 +346,13 @@ function Panel({ onClose }: { onClose: () => void }) {
           </button>
         </motion.div>
       ) : (
-        <form onSubmit={submit} noValidate className="flex w-full flex-col gap-[31px] pt-[31px]">
+        <form onSubmit={submit} noValidate className="flex min-h-0 w-full flex-1 flex-col">
           <motion.div
             variants={stagger}
             initial="hidden"
             animate="visible"
-            className="flex w-full flex-col gap-5"
+            data-lenis-prevent
+            className="flex min-h-0 w-full flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-6 py-[31px]"
           >
             {FIELDS.map((field) => {
               const error = errors[field.name]
@@ -385,10 +390,17 @@ function Panel({ onClose }: { onClose: () => void }) {
             })}
           </motion.div>
 
-          <motion.div variants={rise} initial="hidden" animate="visible">
+          {/* Always in view: the form is taller than any screen, and a submit
+              you have to go looking for is a submit people do not find. */}
+          <motion.div
+            variants={rise}
+            initial="hidden"
+            animate="visible"
+            className="shrink-0 border-t border-line p-6"
+          >
             <button
               type="submit"
-              className="flex w-full cursor-pointer items-center justify-center gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy sm:w-auto"
+              className="flex w-full cursor-pointer items-center justify-center gap-5 rounded-full bg-navy py-0.5 pr-0.5 pl-6 text-[18px] font-medium text-cream transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
             >
               Submit
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cream">
@@ -424,8 +436,10 @@ export function BookVisitProvider({ children }: { children: ReactNode }) {
     if (!open) return
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    pauseSmoothScroll()
     return () => {
       document.body.style.overflow = previous
+      resumeSmoothScroll()
     }
   }, [open])
 

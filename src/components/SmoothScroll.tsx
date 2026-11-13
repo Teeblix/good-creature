@@ -9,6 +9,17 @@ import 'lenis/dist/lenis.css'
  *
  * Nothing is rendered; the component exists so App can mount the effect once.
  */
+let instance: Lenis | null = null
+
+/** Freeze the page's smooth scrolling — for an overlay that owns the screen. */
+export function pauseSmoothScroll() {
+  instance?.stop()
+}
+
+export function resumeSmoothScroll() {
+  instance?.start()
+}
+
 export function SmoothScroll() {
   useEffect(() => {
     // Anyone who asks for reduced motion keeps the browser's own scrolling.
@@ -25,7 +36,11 @@ export function SmoothScroll() {
       autoRaf: true,
     })
 
-    return () => lenis.destroy()
+    instance = lenis
+    return () => {
+      instance = null
+      lenis.destroy()
+    }
   }, [])
 
   return null

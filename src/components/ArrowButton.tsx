@@ -6,6 +6,12 @@ import arrowDark from '../assets/icon-arrow-up-dark.svg'
 type ArrowButtonProps = ComponentPropsWithoutRef<'a'> & {
   /** light = white pill with a dark badge; primary = navy pill with a cream badge. */
   variant?: 'light' | 'primary'
+  /**
+   * Makes this a button rather than a link. Use it for anything that opens
+   * something on the page: an anchor would be navigation, and the smooth
+   * scroller claims anchor clicks before React sees them.
+   */
+  onPress?: () => void
 }
 
 const variants = {
@@ -28,6 +34,7 @@ export function ArrowButton({
   variant = 'light',
   className = '',
   children,
+  onPress,
   ...props
 }: ArrowButtonProps) {
   const style = variants[variant]
@@ -35,10 +42,15 @@ export function ArrowButton({
   // centre the pair when the caller has not asked for a different alignment.
   const justify = className.includes('justify-') ? '' : 'justify-center'
 
+  const Tag = onPress ? 'button' : 'a'
+  const tagProps = onPress
+    ? ({ type: 'button', onClick: onPress } as const)
+    : (props as Record<string, unknown>)
+
   return (
-    <a
-      className={`group inline-flex items-center ${justify} gap-5 rounded-full py-0.5 pr-0.5 pl-6 text-[18px] font-medium transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 ${style.pill} ${className}`}
-      {...props}
+    <Tag
+      className={`group inline-flex cursor-pointer items-center ${justify} gap-5 rounded-full py-0.5 pr-0.5 pl-6 text-[18px] font-medium transition-transform duration-300 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 ${style.pill} ${className}`}
+      {...tagProps}
     >
       <RollingText>{children}</RollingText>
 
@@ -59,6 +71,6 @@ export function ArrowButton({
           <img src={style.arrow} alt="" className="size-5 rotate-45" />
         </span>
       </span>
-    </a>
+    </Tag>
   )
 }

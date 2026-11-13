@@ -311,14 +311,7 @@ export function Journey() {
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
-                <ArrowButton
-                  variant="primary"
-                  href="#contact"
-                  onClick={(event) => {
-                    event.preventDefault()
-                    openBooking()
-                  }}
-                >
+                <ArrowButton variant="primary" onPress={openBooking}>
                   Book a visit
                 </ArrowButton>
               </Reveal>

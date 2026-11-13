@@ -194,11 +194,7 @@ export function Hero() {
               >
                 <ArrowButton
                   variant="light"
-                  href="#plan-a-visit"
-                  onClick={(event) => {
-                    event.preventDefault()
-                    openBooking()
-                  }}
+                  onPress={openBooking}
                   className="w-full justify-between lg:w-auto lg:justify-center"
                 >
                   Book a visit

@@ -73,14 +73,7 @@ export function Cta() {
           </div>
 
           <Reveal delay={0.25}>
-            <ArrowButton
-              variant="light"
-              href="#plan-a-visit"
-              onClick={(event) => {
-                event.preventDefault()
-                openBooking()
-              }}
-            >
+            <ArrowButton variant="light" onPress={openBooking}>
               Book a visit
             </ArrowButton>
           </Reveal>
