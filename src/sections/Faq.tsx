@@ -127,7 +127,7 @@ function Question({
         aria-controls={id}
         className="flex w-full cursor-pointer items-center gap-5 py-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy"
       >
-        <span className="min-w-0 flex-1 font-grotesk text-[18px] leading-normal text-black lg:text-[22px]">
+        <span className="min-w-0 flex-1 font-grotesk text-[22px] leading-normal text-black">
           {item.question}
         </span>
 

@@ -80,7 +80,7 @@ function ServiceName({
           transition={transition}
         />
         <motion.span
-          className="block font-grotesk text-[36px] leading-none whitespace-nowrap"
+          className="block font-grotesk text-[22px] leading-none whitespace-nowrap lg:text-[36px]"
           initial={false}
           animate={{ x: isActive ? 30 : 0, color: isActive ? '#f5f5f5' : '#878787' }}
           transition={transition}

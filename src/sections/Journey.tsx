@@ -221,7 +221,7 @@ function StackedSteps() {
           <span className="mt-[30px] flex size-[36.8px] items-center justify-center rounded-full bg-ember">
             <img src={step.icon} alt="" className="size-[19.2px]" />
           </span>
-          <h3 className="mt-2 font-grotesk text-[28px] leading-tight text-ink">{step.title}</h3>
+          <h3 className="mt-2 font-grotesk text-[22px] leading-tight text-ink">{step.title}</h3>
           <p className="mt-6 text-[16px] leading-normal text-black">{step.body}</p>
         </Reveal>
       ))}
