@@ -5,6 +5,8 @@ import { useBookVisit } from '../components/FormPanel'
 import { fadeInProps } from '../components/FadeIn'
 import { Reveal } from '../components/Reveal'
 import { StaggerLines } from '../components/StaggerLines'
+import { StaggerText } from '../components/StaggerText'
+import { EASE_OUT } from '../lib/motion'
 import iconCalendar from '../assets/icon-journey-calendar.svg'
 import iconHeart from '../assets/icon-journey-heart.svg'
 import iconHealth from '../assets/icon-journey-health.svg'
@@ -138,6 +140,13 @@ function StepCard({
   const wide = useMinWidth('(min-width: 1280px)')
   const transition = { duration: reduceMotion ? 0 : 0.55, ease: OPEN_EASE }
 
+  // Counts the opens. Each one gives the body a new key, so it is built
+  // again and the lines resolve in from the start.
+  const [plays, setPlays] = useState(0)
+  useEffect(() => {
+    if (isOpen) setPlays((count) => count + 1)
+  }, [isOpen])
+
   return (
     <motion.button
       type="button"
@@ -193,27 +202,41 @@ function StepCard({
 
       <motion.div
         initial={false}
-        animate={{ height: isOpen ? bodyHeight : 0, marginTop: isOpen ? 32 : 0 }}
-        transition={transition}
+        animate={{
+          height: isOpen ? bodyHeight : 0,
+          marginTop: isOpen ? 32 : 0,
+          opacity: isOpen ? 1 : 0,
+        }}
+        transition={{
+          ...transition,
+          // Up quickly, so the stagger underneath is what you notice; down
+          // slowly, so the words are still there while the card collapses.
+          opacity: { duration: reduceMotion ? 0 : isOpen ? 0.2 : 0.4, ease: EASE_OUT },
+        }}
         className="w-full overflow-hidden"
       >
-        <motion.p
-          /* Held at the width it will have once the card is open, rather than
-             the width the card has right now. The card grows for 550ms, and a
-             paragraph that takes its width from the card re-wraps on every one
-             of those frames — you watch the lines rebuild themselves. Fixed,
-             it is typeset once and only fades in. The card clips the overflow
-             while it is still narrow.
-
-             Same reasoning as the picture: no filter on a box that is
-             resizing. */
+        {/* Held at the width it will have once the card is open, rather than
+            the width the card has right now. The card grows for 550ms, and a
+            paragraph that takes its width from the card re-wraps on every one
+            of those frames — you watch the lines rebuild themselves. Fixed, it
+            is typeset once. The card clips the overflow while it is narrow. */}
+        <div
           style={{ width: bodyWidth || undefined }}
-          animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 8 }}
-          transition={{ ...transition, delay: isOpen && !reduceMotion ? 0.12 : 0 }}
           className="text-[18px] leading-normal text-pretty text-black"
         >
-          {step.body}
-        </motion.p>
+          {/* Keyed on the count, not on isOpen: the lines have to stay on
+              screen while the card closes, so the block is never unmounted —
+              it is replaced, which is what makes it play again. */}
+          {plays > 0 && (
+            <StaggerText
+              key={plays}
+              text={step.body}
+              playOnMount
+              stagger={0.08}
+              delay={0.18}
+            />
+          )}
+        </div>
       </motion.div>
     </motion.button>
   )
