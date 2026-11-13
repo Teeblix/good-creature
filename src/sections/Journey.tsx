@@ -222,7 +222,7 @@ function StepCard({
 /** The same four steps stacked and fully open, for tablet and mobile. */
 function StackedSteps() {
   return (
-    <div className="flex w-full flex-col gap-2 lg:hidden">
+    <div className="flex w-full flex-col gap-4 lg:hidden">
       {STEPS.map((step) => (
         <Reveal
           key={step.number}

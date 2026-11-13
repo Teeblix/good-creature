@@ -304,7 +304,7 @@ function MobileStrip() {
         </Reveal>
       </div>
 
-      <div className="mt-[40px] flex w-full flex-col gap-3">
+      <div className="mt-[40px] flex w-full flex-col gap-4">
         {CARDS.slice(0, 2).map((card) => (
           <Reveal key={card.title} className="w-full">
             <CardFace card={card} />
