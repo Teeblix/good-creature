@@ -27,7 +27,7 @@ type Form = {
   intro: string
   fields: Field[]
   submitLabel: string
-  success: (values: Values) => { heading: string; body: string }
+  success: () => { heading: string; body: string }
 }
 
 /* ------------------------------------------------------------------- forms */
@@ -100,9 +100,9 @@ const BOOK: Form = {
       placeholder: 'Tell us if your pet is nervous, has health needs or needs extra time',
     },
   ],
-  success: (values) => ({
-    heading: `Thank you, ${values.name.split(' ')[0] || 'and see you soon'}`,
-    body: `Your request is with us. We’ll confirm ${values.petName || 'your pet'}’s appointment within one working day.`,
+  success: () => ({
+    heading: 'Thank you.',
+    body: 'We have your request and will confirm your appointment within one working day.',
   }),
 }
 
@@ -139,9 +139,9 @@ const CONTACT: Form = {
       rows: 4,
     },
   ],
-  success: (values) => ({
-    heading: `Thank you, ${values.name.split(' ')[0] || 'we’ve got your message'}`,
-    body: 'Your message is with us. A member of our team will reply within one working day.',
+  success: () => ({
+    heading: 'Thank you.',
+    body: 'Your message is with our team and we will reply within one working day.',
   }),
 }
 
@@ -354,7 +354,7 @@ function Panel({ form, onClose }: { form: Form; onClose: () => void }) {
     },
   }
 
-  const done = form.success(values)
+  const done = form.success()
 
   return (
     <motion.div
