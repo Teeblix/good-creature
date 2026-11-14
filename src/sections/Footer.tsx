@@ -64,15 +64,15 @@ function Column({ title, links }: { title: string; links: Link[] }) {
 export function Footer() {
   return (
     <footer id="contact" className="relative z-10 w-full" data-node-id="61:53961">
-      <div className="mx-auto w-full max-w-[1920px] px-4 pt-12 pb-5 lg:px-20 lg:pt-16">
+      <div className="mx-auto w-full max-w-[1920px] px-4 pt-10 pb-5 lg:px-20 lg:pt-14">
         {/* Navigate sits with Contact rather than with the headline: the two
             columns butt together as one pair, held well off the headline by a
             gap of their own. That gap is paid for out of the long run before
             the social buttons, so the columns keep their width and the buttons
             do not move. */}
-        <div className="flex w-full flex-col items-start gap-14 xl:gap-[150px]">
-          <div className="flex w-full flex-col items-start gap-10 xl:flex-row xl:items-start xl:gap-[150px]">
-            <div className="flex w-full flex-1 flex-col items-start gap-10 xl:flex-row xl:gap-[140px]">
+        <div className="flex w-full flex-col items-start gap-10 xl:gap-24">
+          <div className="flex w-full flex-col items-start gap-8 xl:flex-row xl:items-start xl:gap-[150px]">
+            <div className="flex w-full flex-1 flex-col items-start gap-8 xl:flex-row xl:gap-[140px]">
               <StaggerLines
                 as="h2"
                 label="Small steps for a kinder visit"
@@ -80,7 +80,7 @@ export function Footer() {
                 className="w-full shrink-0 font-grotesk text-[28px] leading-[1.2] text-ink lg:text-[36px] xl:w-[403px]"
               />
 
-              <div className="flex w-full flex-1 flex-col items-start gap-10 sm:flex-row sm:gap-0">
+              <div className="flex w-full flex-1 flex-col items-start gap-8 sm:flex-row sm:gap-0">
                 <Reveal delay={0.1} className="w-full flex-1">
                   <Column title="Navigate" links={NAVIGATE} />
                 </Reveal>

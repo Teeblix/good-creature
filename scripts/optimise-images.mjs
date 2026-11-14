@@ -51,6 +51,49 @@ const WIDTHS = {
   logo: 128, // 41×46
 }
 
+/**
+ * Exports whose figure must sit on the floor of its frame.
+ *
+ * The four approach illustrations are drawn cut off at the bottom so they
+ * bleed off the edge of their card — except this one, which tapers to a close
+ * and leaves 55px of empty canvas beneath it. Rendered into a fixed box that
+ * is narrower than the artwork, `object-cover` fills the height exactly, so
+ * that emptiness survives as a gap under the figure while the other three sit
+ * flush. Scaling her up to close it would crop the open hand she is
+ * explaining with, so the blank is moved from under her to above her instead:
+ * the frame keeps its size and she keeps every pixel.
+ */
+const BOTTOM_FLUSH = new Set(['approach-plain'])
+
+/** Rows of fully transparent pixels at the bottom of an RGBA buffer. */
+function blankRows({ data, info }) {
+  const { width, height, channels } = info
+  let rows = 0
+  for (let y = height - 1; y >= 0; y--) {
+    let empty = true
+    for (let x = 0; x < width; x++) {
+      if (data[(y * width + x) * channels + 3] > 24) {
+        empty = false
+        break
+      }
+    }
+    if (!empty) break
+    rows++
+  }
+  return rows
+}
+
+/** Drops the empty rows under the figure and gives them back above it. */
+async function sitOnTheFloor(input) {
+  const image = sharp(input).ensureAlpha()
+  const raw = await image.raw().toBuffer({ resolveWithObject: true })
+  const gap = blankRows(raw)
+  if (gap === 0) return sharp(input)
+  const { width, height } = raw.info
+  return sharp(await sharp(input).extract({ left: 0, top: 0, width, height: height - gap }).png().toBuffer())
+    .extend({ top: gap, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+}
+
 const bytes = (n) => `${(n / 1024 / 1024).toFixed(2)} MB`
 
 await mkdir(ARCHIVE, { recursive: true })
@@ -72,7 +115,9 @@ for (const file of files) {
   const output = join(SRC, `${name}.webp`)
   const inSize = (await stat(input)).size
 
-  await sharp(input)
+  const source = BOTTOM_FLUSH.has(name) ? await sitOnTheFloor(input) : sharp(input)
+
+  await source
     .resize({ width, withoutEnlargement: true })
     .webp({ quality: 80, effort: 6 })
     .toFile(output)

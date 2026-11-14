@@ -135,6 +135,11 @@ export function NavigationBar() {
   // shows through them is the page's own light background.
   const onDark = open || overImage
   const textTone = onDark ? 'text-cream' : 'text-ink'
+  // The logotype takes the mark's own navy wherever the background allows it,
+  // so the lockup reads as one object rather than as a word set beside a
+  // picture. Over the photographs and the open menu it goes cream with
+  // everything else, because navy on those is unreadable.
+  const wordTone = onDark ? 'text-cream' : 'text-navy'
   const barTone = onDark ? 'bg-cream' : 'bg-ink'
 
   const item = {
@@ -190,7 +195,7 @@ export function NavigationBar() {
               }`}
             />
             <span
-              className={`font-grotesk text-[18px] font-medium whitespace-nowrap transition-colors duration-300 ${textTone}`}
+              className={`font-grotesk text-[18px] font-medium tracking-[-0.01em] whitespace-nowrap transition-colors duration-300 ${wordTone}`}
             >
               Good Creature
             </span>
